@@ -1,0 +1,48 @@
+'use client'
+
+import ConsortiumLogo from './ConsortiumLogo'
+
+export default function Hero() {
+  return (
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
+      {/* Radial glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-accent-purple/5 rounded-full blur-3xl" />
+      <div className="absolute top-1/3 left-1/3 w-[600px] h-[600px] bg-accent-blue/5 rounded-full blur-3xl animate-float" />
+      
+      <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
+        <div className="flex justify-center mb-8 animate-fade-in">
+          <ConsortiumLogo className="w-20 h-20 md:w-24 md:h-24" />
+        </div>
+        
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
+          <span className="gradient-text">Consortium</span>{' '}
+          <span className="text-white">Lab</span>
+        </h1>
+        
+        <p className="text-xl md:text-2xl lg:text-3xl text-white/70 font-light mb-4 animate-fade-in-up" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
+          Designing governance systems for the AI&nbsp;and&nbsp;crypto&nbsp;age
+        </p>
+        
+        <p className="text-lg md:text-xl text-white/40 max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
+          Technology evolves fast. Organizational design must catch&nbsp;up.
+        </p>
+        
+        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
+          <a href="#problem" className="px-8 py-4 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white font-medium hover:opacity-90 transition-opacity">
+            Explore the Vision
+          </a>
+          <a href="#solution" className="px-8 py-4 rounded-full border border-white/10 text-white/70 hover:text-white hover:border-white/20 transition-all">
+            Our Approach
+          </a>
+        </div>
+      </div>
+
+      {/* Scroll indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
+        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
+          <div className="w-1 h-2 bg-white/40 rounded-full" />
+        </div>
+      </div>
+    </section>
+  )
+}

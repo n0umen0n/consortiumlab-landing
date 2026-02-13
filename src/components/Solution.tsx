@@ -1,0 +1,78 @@
+'use client'
+
+import ScrollReveal from './ScrollReveal'
+import DaoLogo from './DaoLogo'
+
+const pillars = [
+  {
+    icon: '◆',
+    title: 'Research',
+    desc: 'Deep analysis of governance failures, organizational theory, and legal frameworks across jurisdictions.',
+  },
+  {
+    icon: '◈',
+    title: 'Design',
+    desc: 'Architecting new organizational primitives purpose-built for tokenized communities and DAOs.',
+  },
+  {
+    icon: '◇',
+    title: 'Deploy',
+    desc: 'Live experimentation through DAO OF THE APES — testing structures in real conditions with real stakes.',
+  },
+]
+
+export default function Solution() {
+  return (
+    <section id="solution" className="relative py-32 md:py-40">
+      {/* Accent glow */}
+      <div className="absolute top-1/2 right-0 w-[500px] h-[500px] bg-accent-gold/5 rounded-full blur-3xl -translate-y-1/2" />
+      
+      <div className="relative z-10 max-w-7xl mx-auto px-6">
+        <ScrollReveal>
+          <p className="text-accent-gold text-sm font-semibold uppercase tracking-widest mb-4">The Solution</p>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight mb-6 max-w-4xl">
+            A new primitive:<br />
+            <span className="gradient-text">the Consortium</span>
+          </h2>
+          <p className="text-lg md:text-xl text-white/50 max-w-3xl mb-16 leading-relaxed">
+            Consortium Lab researches, designs, and develops new organizational structures for the token economy.
+            We&apos;re defining a new primitive — the <em className="text-white/70 not-italic font-medium">consortium</em> — a structured coordination entity purpose-built for token holders.
+          </p>
+        </ScrollReveal>
+
+        {/* Three pillars */}
+        <div className="grid md:grid-cols-3 gap-8 mb-24">
+          {pillars.map((p, i) => (
+            <ScrollReveal key={i} delay={i}>
+              <div className="bg-dark-700/30 border border-white/5 rounded-2xl p-8 hover:border-white/10 transition-colors h-full">
+                <div className="text-3xl mb-4 text-accent-gold">{p.icon}</div>
+                <h3 className="text-xl font-bold mb-3">{p.title}</h3>
+                <p className="text-white/50 leading-relaxed">{p.desc}</p>
+              </div>
+            </ScrollReveal>
+          ))}
+        </div>
+
+        {/* DAO OF THE APES callout */}
+        <ScrollReveal>
+          <div className="bg-gradient-to-br from-dark-700/80 to-dark-800/80 border border-accent-gold/10 rounded-2xl p-10 md:p-14 flex flex-col md:flex-row items-center gap-8">
+            <DaoLogo className="w-24 h-24 md:w-32 md:h-32 shrink-0" />
+            <div>
+              <h3 className="text-2xl md:text-3xl font-bold mb-3">
+                DAO OF THE APES
+              </h3>
+              <p className="text-white/50 text-lg leading-relaxed mb-4">
+                Our live experimental environment. A real community, real governance, real stakes — 
+                testing consortium structures before they&apos;re ready for the world.
+              </p>
+              <span className="inline-flex items-center gap-2 text-accent-gold text-sm font-medium">
+                <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
+                Live Experiment
+              </span>
+            </div>
+          </div>
+        </ScrollReveal>
+      </div>
+    </section>
+  )
+}
