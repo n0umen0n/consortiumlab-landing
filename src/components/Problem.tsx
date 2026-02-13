@@ -5,7 +5,7 @@ import ScrollReveal from './ScrollReveal'
 const stats = [
   { label: 'Legal entities for equity holders', value: 'Dozens', sub: 'LLCs, Corps, S-Corps, Cooperatives…' },
   { label: 'Structured entities for token holders', value: 'Zero', sub: 'A complete vacuum' },
-  { label: 'In tokenized treasuries', value: '$50B+', sub: 'Capital without governance' },
+  { label: 'New tokens launched daily', value: '5,000+', sub: 'Each one needs an organizational structure' },
 ]
 
 export default function Problem() {
