@@ -3,7 +3,7 @@
 import ScrollReveal from './ScrollReveal'
 
 const stats = [
-  { label: 'Legal entities for equity holders', value: 'Dozens', sub: 'LLCs, Corps, LPs, DAOs…' },
+  { label: 'Legal entities for equity holders', value: 'Dozens', sub: 'LLCs, Corps, S-Corps, Cooperatives…' },
   { label: 'Structured entities for token holders', value: 'Zero', sub: 'A complete vacuum' },
   { label: 'In tokenized treasuries', value: '$50B+', sub: 'Capital without governance' },
 ]
