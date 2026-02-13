@@ -29,10 +29,9 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-widest text-white/60 mb-4">Connect</h4>
             <ul className="space-y-3 text-white/40">
-              <li><a href="#" className="hover:text-white transition-colors">Twitter / X</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Discord</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Mirror</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">GitHub</a></li>
+              <li><a href="https://x.com/DAOOFTHEAPES" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Twitter / X</a></li>
+              <li><a href="https://github.com/n0umen0n" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a></li>
+              <li><a href="https://medium.com/@vladislavhramtsov" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Medium</a></li>
             </ul>
           </div>
         </div>
