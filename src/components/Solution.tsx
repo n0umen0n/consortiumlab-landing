@@ -65,10 +65,10 @@ export default function Solution() {
                 Our live experimental environment. A real community, real governance, real stakes — 
                 testing consortium structures before they&apos;re ready for the world.
               </p>
-              <span className="inline-flex items-center gap-2 text-accent-gold text-sm font-medium">
+              <a href="https://respectgame.app" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 text-accent-gold text-sm font-medium hover:text-accent-gold/80 transition-colors">
                 <span className="w-2 h-2 rounded-full bg-accent-gold animate-pulse" />
-                Live Experiment
-              </span>
+                Live Experiment →
+              </a>
             </div>
           </div>
         </ScrollReveal>
