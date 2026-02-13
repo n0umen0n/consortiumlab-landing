@@ -6,18 +6,18 @@ import DaoLogo from './DaoLogo'
 const pillars = [
   {
     icon: '◆',
-    title: 'Research',
-    desc: 'Deep analysis of governance failures, organizational theory, and legal frameworks across jurisdictions.',
+    title: 'Meritocratic Decision-Making',
+    desc: 'Elections and governance powered by the Respect Game — where influence is earned through contribution, not capital.',
   },
   {
     icon: '◈',
-    title: 'Design',
-    desc: 'Architecting new organizational primitives purpose-built for tokenized communities and DAOs.',
+    title: 'AI-Centric Execution',
+    desc: 'Operations and execution driven by AI agents, while strategic direction and oversight remain firmly in human hands.',
   },
   {
     icon: '◇',
-    title: 'Deploy',
-    desc: 'Live experimentation through DAO OF THE APES — testing structures in real conditions with real stakes.',
+    title: 'Fully On-Chain Governance',
+    desc: 'Every decision, vote, and organizational action is recorded and executed on-chain — transparent, verifiable, and unstoppable.',
   },
 ]
 
