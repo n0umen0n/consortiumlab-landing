@@ -11,7 +11,7 @@ export default function Hero() {
       
       <div className="relative z-10 max-w-5xl mx-auto px-6 text-center">
         <div className="flex justify-center mb-8 animate-fade-in">
-          <ConsortiumLogo className="w-20 h-20 md:w-24 md:h-24" />
+          <ConsortiumLogo className="w-20 h-20 md:w-24 md:h-24 animate-spin-slow" />
         </div>
         
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
