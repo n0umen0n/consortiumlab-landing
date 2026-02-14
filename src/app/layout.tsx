@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: 'Designing organizational structures for tokenized communities. Researching, building, and deploying the governance layer the crypto ecosystem needs.',
   openGraph: {
     title: 'Consortium Lab',
-    description: 'Designing governance systems for the AI and crypto age.',
+    description: 'Building governance systems for the AI and crypto age.',
     type: 'website',
   },
 }

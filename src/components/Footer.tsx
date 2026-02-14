@@ -11,7 +11,7 @@ export default function Footer() {
               <span className="text-lg font-semibold">Consortium Lab</span>
             </div>
             <p className="text-white/40 max-w-sm leading-relaxed">
-              Designing governance systems for the AI and crypto age. 
+              Building governance systems for the AI and crypto age. 
               Building the organizational layer the token economy needs.
             </p>
           </div>

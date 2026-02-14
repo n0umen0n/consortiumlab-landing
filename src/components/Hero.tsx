@@ -20,7 +20,7 @@ export default function Hero() {
         </h1>
         
         <p className="text-xl md:text-2xl lg:text-3xl text-white/70 font-light mb-4 animate-fade-in-up" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>
-          Designing governance systems for the AI&nbsp;and&nbsp;crypto&nbsp;age
+          Building governance systems for the AI&nbsp;and&nbsp;crypto&nbsp;age
         </p>
         
         <p className="text-lg md:text-xl text-white/40 max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
