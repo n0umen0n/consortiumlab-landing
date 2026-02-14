@@ -12,7 +12,7 @@ const pillars = [
   {
     icon: '◈',
     title: 'AI-Centric',
-    desc: 'Hire agents via your Consortium. Let humans and AI collaborate efficiently — execution at machine speed, direction at human wisdom.',
+    desc: 'Hire agents via your Consortium. Execution at machine speed, oversight by humans.',
   },
   {
     icon: '◇',
@@ -22,7 +22,7 @@ const pillars = [
   {
     icon: '◎',
     title: 'Token Holder Signaling',
-    desc: 'Token holders continuously provide direction through polls and voting — a constant signal layer that keeps the organization aligned with its community.',
+    desc: 'A constant signal layer delivering valuable information from token holders to human decision-makers and AI agents.',
   },
 ]
 
@@ -40,8 +40,8 @@ export default function Solution() {
             <span className="gradient-text">the Consortium</span>
           </h2>
           <p className="text-lg md:text-xl text-white/50 max-w-3xl mb-16 leading-relaxed">
-            Consortium Lab researches, designs, and develops new organizational structures for the token economy.
-            We&apos;re defining a new primitive — the <em className="text-white/70 not-italic font-medium">consortium</em> — a structured coordination entity purpose-built for token holders.
+            Consortium Lab builds new organizational structures for the token economy.
+            We&apos;re defining a new primitive — the <em className="text-white/70 not-italic font-medium">consortium</em> — a structured coordination entity purpose-built for the AI and crypto age.
           </p>
         </ScrollReveal>
 
