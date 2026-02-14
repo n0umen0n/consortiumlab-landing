@@ -6,18 +6,18 @@ import DaoLogo from './DaoLogo'
 const pillars = [
   {
     icon: '◆',
-    title: 'Meritocratic Decision-Making',
-    desc: 'Elections and governance powered by the Respect Game — where influence is earned through contribution, not capital.',
+    title: 'Meritocratic Governance',
+    desc: 'Decision-makers chosen based on merit — not capital, not politics, not tenure.',
   },
   {
     icon: '◈',
-    title: 'AI-Centric Execution',
-    desc: 'Operations and execution driven by AI agents, while strategic direction and oversight remain firmly in human hands.',
+    title: 'AI-Centric',
+    desc: 'Hire agents via Consortium. Execution at the speed of AI, direction at the wisdom of humans.',
   },
   {
     icon: '◇',
-    title: 'Fully On-Chain Governance',
-    desc: 'Every decision, vote, and organizational action is recorded and executed on-chain — transparent, verifiable, and unstoppable.',
+    title: 'Fully On-Chain',
+    desc: 'Organizational assets managed on-chain. Transparent by design, verifiable by default.',
   },
 ]
 
