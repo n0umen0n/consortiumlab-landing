@@ -52,7 +52,7 @@ export default function Solution() {
               <div className="bg-dark-700/30 border border-white/5 rounded-2xl p-8 hover:border-white/10 transition-colors h-full">
                 <div className="text-3xl mb-4 text-accent-gold">{p.icon}</div>
                 <h3 className="text-xl font-bold mb-3">{p.title}</h3>
-                <p className="text-white/50 leading-relaxed">{p.desc}</p>
+                <p className="text-white/50 leading-relaxed" dangerouslySetInnerHTML={{ __html: p.desc }} />
               </div>
             </ScrollReveal>
           ))}
