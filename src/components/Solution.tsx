@@ -7,17 +7,22 @@ const pillars = [
   {
     icon: '◆',
     title: 'Meritocratic Governance',
-    desc: 'Decision-makers chosen based on merit — not capital, not politics, not tenure.',
+    desc: 'Decision-makers chosen based on merit. Powered by the <a href="https://medium.com/@vladislavhramtsov/respect-game-meritocratic-governance-in-practice-e50a8f42288e" target="_blank" rel="noopener noreferrer" class="text-accent-gold hover:text-accent-gold/80 transition-colors">Respect Game</a> — a system that surfaces the people who earn trust through contribution.',
   },
   {
     icon: '◈',
     title: 'AI-Centric',
-    desc: 'Hire agents via Consortium. Execution at the speed of AI, direction at the wisdom of humans.',
+    desc: 'Hire agents via your Consortium. Let humans and AI collaborate efficiently — execution at machine speed, direction at human wisdom.',
   },
   {
     icon: '◇',
     title: 'Fully On-Chain',
-    desc: 'Organizational assets managed on-chain. Transparent by design, verifiable by default.',
+    desc: 'Treasury and assets managed on-chain. Transparent by design, resilient by nature — the organization cannot be shut down.',
+  },
+  {
+    icon: '◎',
+    title: 'Token Holder Signaling',
+    desc: 'Token holders continuously provide direction through polls and voting — a constant signal layer that keeps the organization aligned with its community.',
   },
 ]
 
