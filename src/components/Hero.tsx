@@ -24,7 +24,7 @@ export default function Hero() {
         </p>
         
         <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
-          <a href="#why-consortium" className="px-8 py-4 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white font-medium hover:opacity-90 transition-opacity">
+          <a href="/org" className="px-8 py-4 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white font-medium hover:opacity-90 transition-opacity">
             Launch Your Consortium
           </a>
         </div>
