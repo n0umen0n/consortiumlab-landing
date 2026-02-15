@@ -254,12 +254,31 @@ export default function OrgPage() {
             <span className="gradient-text">NeonVault</span>
           </h1>
           <p className="text-sm text-accent-cyan/60 uppercase tracking-[0.3em] mb-6 font-medium">DeFi Collective</p>
-          <p className="max-w-2xl mx-auto text-white/50 leading-relaxed text-base">
-            NeonVault is a DeFi-native collective building automated yield strategies,
-            delta-neutral vaults, and cross-chain liquidity infrastructure. Governed entirely
-            by NEON token holders through signal-weighted consensus, we deploy AI agents
-            to optimize capital efficiency while keeping risk parameters under community control.
-          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-4">
+            <div className="rounded-2xl border border-accent-cyan/10 bg-accent-cyan/[0.03] backdrop-blur px-6 py-6 text-left">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-accent-cyan text-lg">◎</span>
+                <h3 className="text-sm font-bold uppercase tracking-widest text-accent-cyan">Mission</h3>
+              </div>
+              <p className="text-sm text-white/50 leading-relaxed">
+                Build and operate automated yield strategies, delta-neutral vaults, and cross-chain
+                liquidity infrastructure — governed by NEON token holders through signal-weighted
+                consensus. We deploy AI agents to optimize capital efficiency while keeping risk
+                parameters under community control.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-accent-purple/10 bg-accent-purple/[0.03] backdrop-blur px-6 py-6 text-left">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-accent-purple text-lg">✦</span>
+                <h3 className="text-sm font-bold uppercase tracking-widest text-accent-purple">Vision</h3>
+              </div>
+              <p className="text-sm text-white/50 leading-relaxed">
+                A future where decentralized collectives autonomously manage institutional-grade
+                capital — transparently, permissionlessly, and at scale — making sophisticated
+                DeFi strategies accessible to every token holder on every chain.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -278,12 +297,27 @@ export default function OrgPage() {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.3; }
           }
+          @keyframes agent-pulse-amber {
+            0%, 100% { box-shadow: 0 0 8px 0 rgba(245, 158, 11, 0.3), inset 0 0 8px 0 rgba(245, 158, 11, 0.05); }
+            50% { box-shadow: 0 0 20px 4px rgba(245, 158, 11, 0.5), inset 0 0 12px 0 rgba(245, 158, 11, 0.1); }
+          }
+          @keyframes dot-blink-amber {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+          }
           .agent-active {
             animation: agent-pulse 2.5s ease-in-out infinite;
             border-color: rgba(52, 211, 153, 0.3);
           }
+          .agent-idle {
+            animation: agent-pulse-amber 2.5s ease-in-out infinite;
+            border-color: rgba(245, 158, 11, 0.3);
+          }
           .dot-active {
             animation: dot-blink 1.5s ease-in-out infinite;
+          }
+          .dot-idle {
+            animation: dot-blink-amber 1.5s ease-in-out infinite;
           }
         `}</style>
         <div className="max-w-5xl mx-auto px-6">
@@ -323,30 +357,33 @@ export default function OrgPage() {
                           className={`rounded-xl border px-4 py-3 transition-all ${
                             agent.active
                               ? 'agent-active bg-emerald-400/[0.03] border-emerald-400/20'
-                              : 'bg-white/[0.01] border-white/[0.04] opacity-50'
+                              : 'agent-idle bg-amber-500/[0.03] border-amber-500/20'
                           }`}
                         >
                           <div className="flex items-center gap-3">
                             <div className="relative shrink-0">
-                              <div className={`w-2 h-2 rounded-full ${agent.active ? 'bg-emerald-400 dot-active' : 'bg-white/20'}`} />
+                              <div className={`w-2 h-2 rounded-full ${agent.active ? 'bg-emerald-400 dot-active' : 'bg-amber-400 dot-idle'}`} />
                               {agent.active && (
                                 <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-400/40 animate-ping" />
+                              )}
+                              {!agent.active && (
+                                <div className="absolute inset-0 w-2 h-2 rounded-full bg-amber-400/40 animate-ping" />
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <div className="flex items-center gap-2">
-                                <span className={`text-sm font-semibold ${agent.active ? 'text-white/90' : 'text-white/40'}`}>
+                                <span className={`text-sm font-semibold ${agent.active ? 'text-white/90' : 'text-white/85'}`}>
                                   {agent.name}
                                 </span>
                                 <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
                                   agent.active
                                     ? 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/20'
-                                    : 'bg-white/5 text-white/20 border border-white/5'
+                                    : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
                                 }`}>
                                   {agent.active ? 'RUNNING' : 'IDLE'}
                                 </span>
                               </div>
-                              <div className={`text-xs mt-0.5 ${agent.active ? 'text-white/50' : 'text-white/20'}`}>
+                              <div className={`text-xs mt-0.5 ${agent.active ? 'text-white/50' : 'text-white/45'}`}>
                                 {agent.task}
                               </div>
                             </div>
