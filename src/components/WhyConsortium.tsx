@@ -156,7 +156,7 @@ export default function WhyConsortium() {
 
             <div className="grid sm:grid-cols-3 gap-4">
               {[
-                { icon: 'treasury', title: 'Community-Owned Treasury', desc: 'Shared assets governed by token holders, not a single wallet' },
+                { icon: 'treasury', title: 'Community-Owned Treasury', desc: 'Shared assets governed most active contributors.' },
                 { icon: 'proposals', title: 'On-Chain Proposals', desc: 'Contributors propose, vote, and execute — fully transparent' },
                 { icon: 'contributors', title: 'Attract Contributors', desc: 'Token incentives align everyone toward the same goal' },
               ].map((item) => (
