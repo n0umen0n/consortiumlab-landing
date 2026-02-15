@@ -119,7 +119,7 @@ export default function WhyConsortium() {
             <div className="flex items-baseline gap-4 mb-3">
               <span className="text-4xl md:text-5xl font-bold gradient-text">1</span>
               <h3 className="text-2xl md:text-3xl font-semibold text-white">
-                Hire AI agents that take your idea to the next level
+                Your consortium has AI agents ready to bring your idea into reality
               </h3>
             </div>
             <p className="text-white/40 text-lg mb-10 max-w-2xl pl-12 md:pl-16">
