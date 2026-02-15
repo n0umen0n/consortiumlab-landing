@@ -671,7 +671,7 @@ function AgentLogCard({ log }: { log: ContributorDailyLog }) {
 /* ───────────────────────── Page ───────────────────────── */
 
 export default function OrgPage() {
-  const [showHolders, setShowHolders] = useState(false)
+  const [showHolders, setShowHolders] = useState(true)
 
   return (
     <main className="min-h-screen bg-dark-900 text-white">
@@ -1000,45 +1000,6 @@ export default function OrgPage() {
         </div>
       </section>
 
-      {/* Collapsible Token Holders */}
-      <section className="py-8 pb-28 relative">
-        <div className="max-w-5xl mx-auto px-6">
-          <button
-            onClick={() => setShowHolders(!showHolders)}
-            className="flex items-center gap-3 mb-6 group"
-          >
-            <span className="text-accent-purple/60 text-sm">◆</span>
-            <h2 className="text-lg font-semibold text-white/50 group-hover:text-white/70 transition-colors">
-              Token Holders
-            </h2>
-            <span className="text-xs text-white/25">{showHolders ? '▲ hide' : '▼ show'}</span>
-            <div className="flex-1 h-px bg-gradient-to-r from-white/5 to-transparent" />
-          </button>
-
-          {showHolders && (
-            <div className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur overflow-hidden">
-              <div className="grid grid-cols-[1fr_auto_auto] gap-4 px-6 py-3 border-b border-white/5 text-xs uppercase tracking-wider text-white/30">
-                <span>Address</span>
-                <span className="text-right">NEON</span>
-                <span className="text-right w-16">Share</span>
-              </div>
-              {tokenHolders.map((h, i) => (
-                <div key={i} className="grid grid-cols-[1fr_auto_auto] gap-4 px-6 py-4 border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
-                  <span className="font-mono text-sm text-white/70">{h.address}</span>
-                  <span className="text-sm text-white/90 text-right tabular-nums">{h.tokens}</span>
-                  <span className="text-sm text-right w-16">
-                    <span className="text-accent-cyan">{h.pct}%</span>
-                  </span>
-                </div>
-              ))}
-              <div className="px-6 py-3 text-xs text-white/25">
-                Showing top 6 of 571 holders · 55.0% displayed
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
       {/* Daily Updates */}
       <section className="py-16 relative">
         <div className="max-w-5xl mx-auto px-6">
@@ -1121,6 +1082,45 @@ export default function OrgPage() {
               ))}
             </div>
           </div>
+        </div>
+      </section>
+
+      {/* Token Holders */}
+      <section className="py-8 pb-28 relative">
+        <div className="max-w-5xl mx-auto px-6">
+          <button
+            onClick={() => setShowHolders(!showHolders)}
+            className="flex items-center gap-3 mb-6 group"
+          >
+            <span className="text-accent-purple/60 text-sm">◆</span>
+            <h2 className="text-lg font-semibold text-white/50 group-hover:text-white/70 transition-colors">
+              Token Holders
+            </h2>
+            <span className="text-xs text-white/25">{showHolders ? '▲ hide' : '▼ show'}</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-white/5 to-transparent" />
+          </button>
+
+          {showHolders && (
+            <div className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur overflow-hidden">
+              <div className="grid grid-cols-[1fr_auto_auto] gap-4 px-6 py-3 border-b border-white/5 text-xs uppercase tracking-wider text-white/30">
+                <span>Address</span>
+                <span className="text-right">NEON</span>
+                <span className="text-right w-16">Share</span>
+              </div>
+              {tokenHolders.map((h, i) => (
+                <div key={i} className="grid grid-cols-[1fr_auto_auto] gap-4 px-6 py-4 border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
+                  <span className="font-mono text-sm text-white/70">{h.address}</span>
+                  <span className="text-sm text-white/90 text-right tabular-nums">{h.tokens}</span>
+                  <span className="text-sm text-right w-16">
+                    <span className="text-accent-cyan">{h.pct}%</span>
+                  </span>
+                </div>
+              ))}
+              <div className="px-6 py-3 text-xs text-white/25">
+                Showing top 6 of 571 holders · 55.0% displayed
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
