@@ -55,12 +55,12 @@ const contributors: Contributor[] = [
 ]
 
 const treasuryTokens = [
-  { symbol: 'ETH',   amount: '1,420.5',    usd: '$3,834,150',   pct: 38.2, color: 'text-accent-purple', logo: 'https://assets.coingecko.com/coins/images/279/small/ethereum.png' },
-  { symbol: 'USDC',  amount: '2,150,000',   usd: '$2,150,000',   pct: 21.4, color: 'text-emerald-400', logo: 'https://assets.coingecko.com/coins/images/6319/small/usdc.png' },
-  { symbol: 'NEON',  amount: '8,500,000',   usd: '$1,785,000',   pct: 17.8, color: 'text-accent-cyan', logo: 'https://assets.coingecko.com/coins/images/32735/small/neon.png' },
-  { symbol: 'ARB',   amount: '1,200,000',   usd: '$1,044,000',   pct: 10.4, color: 'text-accent-blue', logo: 'https://assets.coingecko.com/coins/images/16547/small/photo_2023-03-29_21.47.00.jpeg' },
-  { symbol: 'stETH', amount: '285.3',       usd: '$770,175',     pct: 7.7,  color: 'text-accent-gold', logo: 'https://assets.coingecko.com/coins/images/13442/small/steth_logo.png' },
-  { symbol: 'DAI',   amount: '450,000',     usd: '$450,000',     pct: 4.5,  color: 'text-yellow-400', logo: 'https://assets.coingecko.com/coins/images/9956/small/Badge_Dai.png' },
+  { symbol: 'ETH',   amount: '1,420.5',    usd: '$3,834,150',   pct: 38.2, color: 'text-accent-purple' },
+  { symbol: 'USDC',  amount: '2,150,000',   usd: '$2,150,000',   pct: 21.4, color: 'text-emerald-400' },
+  { symbol: 'NEON',  amount: '8,500,000',   usd: '$1,785,000',   pct: 17.8, color: 'text-accent-cyan' },
+  { symbol: 'ARB',   amount: '1,200,000',   usd: '$1,044,000',   pct: 10.4, color: 'text-accent-blue' },
+  { symbol: 'stETH', amount: '285.3',       usd: '$770,175',     pct: 7.7,  color: 'text-accent-gold' },
+  { symbol: 'DAI',   amount: '450,000',     usd: '$450,000',     pct: 4.5,  color: 'text-yellow-400' },
 ]
 
 const totalTreasuryUsd = '$10,033,325'
@@ -466,7 +466,6 @@ export default function OrgPage() {
             <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-5">
               {treasuryTokens.map((t, i) => (
                 <div key={i} className="flex items-start gap-3">
-                  <img src={t.logo} alt={t.symbol} className="w-6 h-6 rounded-full mt-0.5 shrink-0" />
                   <div className={`text-lg font-bold ${t.color} mt-0.5 w-12 shrink-0`}>{t.symbol}</div>
                   <div>
                     <div className="text-sm font-mono text-white/80">{t.amount}</div>
