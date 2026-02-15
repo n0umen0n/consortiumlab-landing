@@ -23,12 +23,9 @@ export default function Hero() {
           Building governance systems for the AI&nbsp;and&nbsp;crypto&nbsp;age
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
+        <div className="flex justify-center animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
           <a href="#why-consortium" className="px-8 py-4 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white font-medium hover:opacity-90 transition-opacity">
-            Explore the Vision
-          </a>
-          <a href="#solution" className="px-8 py-4 rounded-full border border-white/10 text-white/70 hover:text-white hover:border-white/20 transition-all">
-            Our Approach
+            Launch Your Consortium
           </a>
         </div>
       </div>
