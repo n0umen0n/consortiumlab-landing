@@ -93,8 +93,7 @@ interface RankingEntry {
 interface AgentProductivity {
   agentName: string
   tasksCompleted: number
-  uptime: string
-  efficiency: string
+  runtimeHours: number
 }
 
 interface WeeklyUpdate {
@@ -210,9 +209,9 @@ const weeklyUpdates: WeeklyUpdate[] = [
     receivedRank: 1,
     respectEarned: 187,
     agentStats: [
-      { agentName: 'Nexus', tasksCompleted: 47, uptime: '99.2%', efficiency: '94%' },
-      { agentName: 'Sentinel', tasksCompleted: 21, uptime: '100%', efficiency: '88%' },
-      { agentName: 'Archivist', tasksCompleted: 3, uptime: '12%', efficiency: '97%' },
+      { agentName: 'Nexus', tasksCompleted: 47, runtimeHours: 142 },
+      { agentName: 'Sentinel', tasksCompleted: 21, runtimeHours: 168 },
+      { agentName: 'Archivist', tasksCompleted: 3, runtimeHours: 18 },
     ],
   },
   {
@@ -226,8 +225,8 @@ const weeklyUpdates: WeeklyUpdate[] = [
     receivedRank: 2,
     respectEarned: 154,
     agentStats: [
-      { agentName: 'Phantom', tasksCompleted: 34, uptime: '98.5%', efficiency: '91%' },
-      { agentName: 'Specter', tasksCompleted: 8, uptime: '22%', efficiency: '85%' },
+      { agentName: 'Phantom', tasksCompleted: 34, runtimeHours: 131 },
+      { agentName: 'Specter', tasksCompleted: 8, runtimeHours: 37 },
     ],
   },
   {
@@ -241,7 +240,7 @@ const weeklyUpdates: WeeklyUpdate[] = [
     receivedRank: 3,
     respectEarned: 128,
     agentStats: [
-      { agentName: 'Drift', tasksCompleted: 52, uptime: '97.8%', efficiency: '96%' },
+      { agentName: 'Drift', tasksCompleted: 52, runtimeHours: 156 },
     ],
   },
   {
@@ -255,9 +254,9 @@ const weeklyUpdates: WeeklyUpdate[] = [
     receivedRank: 4,
     respectEarned: 112,
     agentStats: [
-      { agentName: 'Echo', tasksCompleted: 12, uptime: '45%', efficiency: '82%' },
-      { agentName: 'Pulse', tasksCompleted: 38, uptime: '95%', efficiency: '89%' },
-      { agentName: 'Chronicle', tasksCompleted: 1, uptime: '5%', efficiency: '100%' },
+      { agentName: 'Echo', tasksCompleted: 12, runtimeHours: 76 },
+      { agentName: 'Pulse', tasksCompleted: 38, runtimeHours: 159 },
+      { agentName: 'Chronicle', tasksCompleted: 1, runtimeHours: 8 },
     ],
   },
 ]
@@ -1101,8 +1100,7 @@ export default function OrgPage() {
                           <span className="text-white/60 font-medium">{a.agentName}</span>
                           <div className="flex items-center gap-3 text-white/40">
                             <span><span className="text-white/60 font-mono">{a.tasksCompleted}</span> tasks</span>
-                            <span><span className="text-emerald-400/80 font-mono">{a.uptime}</span> uptime</span>
-                            <span><span className="text-accent-cyan/80 font-mono">{a.efficiency}</span> eff.</span>
+                            <span><span className="text-accent-cyan/80 font-mono">{a.runtimeHours}h</span> runtime</span>
                           </div>
                         </div>
                       ))}
