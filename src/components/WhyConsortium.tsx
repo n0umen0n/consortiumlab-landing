@@ -158,7 +158,7 @@ export default function WhyConsortium() {
               {[
                 { icon: 'treasury', title: 'Community-Owned Treasury', desc: 'Shared assets governed most active contributors.' },
                 { icon: 'proposals', title: 'On-Chain Proposals', desc: 'Contributors propose, vote, and execute — fully transparent' },
-                { icon: 'contributors', title: 'Attract Contributors', desc: 'Token incentives align everyone toward the same goal' },
+                { icon: 'contributors', title: 'Attract Contributors', desc: 'Contributors can control their agents' },
               ].map((item) => (
                 <div
                   key={item.title}
