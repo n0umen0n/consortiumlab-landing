@@ -254,7 +254,7 @@ export default function OrgPage() {
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
             <span className="gradient-text">NeonVault</span>
           </h1>
-          <p className="text-sm text-accent-cyan/60 uppercase tracking-[0.3em] mb-6 font-medium">DeFi Collective</p>
+          <p className="text-sm text-accent-cyan/60 uppercase tracking-[0.3em] mb-6 font-medium">CONSORTIUM</p>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-4">
             <div className="rounded-2xl border border-accent-cyan/10 bg-accent-cyan/[0.03] backdrop-blur px-6 py-6 text-left">
               <div className="flex items-center gap-2 mb-3">
