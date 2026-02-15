@@ -6,12 +6,51 @@ import Footer from '@/components/Footer'
 
 /* ───────────────────────── Data ───────────────────────── */
 
-const contributors = [
-  { name: 'Zara Okafor', initials: 'ZO', role: 'Protocol Architect', respect: 1_243, color: 'from-accent-blue to-accent-purple', agents: ['Nexus — Yield Optimizer'] },
-  { name: 'Luca Ferrante', initials: 'LF', role: 'Vault Strategist', respect: 1_087, color: 'from-accent-purple to-accent-gold', agents: ['Phantom — Risk Engine'] },
-  { name: 'Mika Tanaka', initials: 'MT', role: 'Smart Contract Lead', respect: 948, color: 'from-accent-gold to-accent-cyan', agents: ['Drift — Rebalancer'] },
-  { name: 'Ren Castillo', initials: 'RC', role: 'Community & Governance', respect: 812, color: 'from-accent-cyan to-accent-blue', agents: ['Echo — Forum Curator'] },
-  { name: 'Aisha Mensah', initials: 'AM', role: 'Tokenomics Lead', respect: 734, color: 'from-accent-blue to-accent-gold', agents: [] },
+interface Agent {
+  name: string
+  task: string
+  active: boolean
+}
+
+interface Contributor {
+  name: string
+  initials: string
+  role: string
+  respect: number
+  color: string
+  agents: Agent[]
+}
+
+const contributors: Contributor[] = [
+  {
+    name: 'Zara Okafor', initials: 'ZO', role: 'Protocol Architect', respect: 1_243, color: 'from-accent-blue to-accent-purple',
+    agents: [
+      { name: 'Nexus', task: 'Yield optimization across 4 chains', active: true },
+      { name: 'Sentinel', task: 'Protocol health monitoring', active: true },
+      { name: 'Archivist', task: 'Governance proposal drafting', active: false },
+    ],
+  },
+  {
+    name: 'Luca Ferrante', initials: 'LF', role: 'Vault Strategist', respect: 1_087, color: 'from-accent-purple to-accent-gold',
+    agents: [
+      { name: 'Phantom', task: 'Risk engine & liquidation guard', active: true },
+      { name: 'Specter', task: 'Volatility surface modeling', active: false },
+    ],
+  },
+  {
+    name: 'Mika Tanaka', initials: 'MT', role: 'Smart Contract Lead', respect: 948, color: 'from-accent-gold to-accent-cyan',
+    agents: [
+      { name: 'Drift', task: 'Delta-neutral rebalancer', active: true },
+    ],
+  },
+  {
+    name: 'Ren Castillo', initials: 'RC', role: 'Community & Governance', respect: 812, color: 'from-accent-cyan to-accent-blue',
+    agents: [
+      { name: 'Echo', task: 'Forum curation & sentiment analysis', active: false },
+      { name: 'Pulse', task: 'Discord community engagement', active: true },
+      { name: 'Chronicle', task: 'Weekly digest generation', active: false },
+    ],
+  },
 ]
 
 const treasuryTokens = [
@@ -226,43 +265,98 @@ export default function OrgPage() {
 
       {/* Contributors */}
       <section className="py-16 relative">
+        <style jsx>{`
+          @keyframes agent-pulse {
+            0%, 100% { box-shadow: 0 0 8px 0 rgba(52, 211, 153, 0.3), inset 0 0 8px 0 rgba(52, 211, 153, 0.05); }
+            50% { box-shadow: 0 0 20px 4px rgba(52, 211, 153, 0.5), inset 0 0 12px 0 rgba(52, 211, 153, 0.1); }
+          }
+          @keyframes border-spin {
+            from { --angle: 0deg; }
+            to { --angle: 360deg; }
+          }
+          @keyframes dot-blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+          }
+          .agent-active {
+            animation: agent-pulse 2.5s ease-in-out infinite;
+            border-color: rgba(52, 211, 153, 0.3);
+          }
+          .dot-active {
+            animation: dot-blink 1.5s ease-in-out infinite;
+          }
+        `}</style>
         <div className="max-w-5xl mx-auto px-6">
           <SectionHeading icon="★" label="Contributors" />
-          <div className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur overflow-hidden">
-            <div className="grid grid-cols-[auto_1fr_auto_1fr] gap-4 px-6 py-3 border-b border-white/5 text-xs uppercase tracking-wider text-white/30">
-              <span className="w-10"></span>
-              <span>Contributor</span>
-              <span className="text-right">Respect</span>
-              <span>AI Agents</span>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {contributors
               .sort((a, b) => b.respect - a.respect)
-              .map((c, i) => (
-                <div key={i} className="grid grid-cols-[auto_1fr_auto_1fr] gap-4 px-6 py-4 border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors items-center">
-                  <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${c.color} flex items-center justify-center text-xs font-bold text-white/90 shrink-0`}>
-                    {c.initials}
+              .map((c, i) => {
+                const activeCount = c.agents.filter(a => a.active).length
+                return (
+                  <div key={i} className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur p-6 hover:bg-dark-800/70 transition-all">
+                    {/* Contributor header */}
+                    <div className="flex items-center gap-4 mb-5">
+                      <div className={`w-12 h-12 rounded-full bg-gradient-to-br ${c.color} flex items-center justify-center text-sm font-bold text-white/90 shrink-0`}>
+                        {c.initials}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="font-semibold text-[15px] text-white/90">{c.name}</div>
+                        <div className="text-xs text-white/40">{c.role}</div>
+                      </div>
+                      <div className="text-right shrink-0">
+                        <div className="font-mono text-sm text-accent-gold">{c.respect}</div>
+                        <div className="text-[10px] text-white/25 uppercase tracking-wider">respect</div>
+                      </div>
+                    </div>
+
+                    {/* Agents */}
+                    <div className="space-y-2.5">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-[10px] uppercase tracking-wider text-white/25">Agents</span>
+                        <div className="flex-1 h-px bg-white/5" />
+                        <span className="text-[10px] text-emerald-400/70">{activeCount} active</span>
+                      </div>
+                      {c.agents.map((agent, j) => (
+                        <div
+                          key={j}
+                          className={`rounded-xl border px-4 py-3 transition-all ${
+                            agent.active
+                              ? 'agent-active bg-emerald-400/[0.03] border-emerald-400/20'
+                              : 'bg-white/[0.01] border-white/[0.04] opacity-50'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <div className="relative shrink-0">
+                              <div className={`w-2 h-2 rounded-full ${agent.active ? 'bg-emerald-400 dot-active' : 'bg-white/20'}`} />
+                              {agent.active && (
+                                <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-400/40 animate-ping" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className={`text-sm font-semibold ${agent.active ? 'text-white/90' : 'text-white/40'}`}>
+                                  {agent.name}
+                                </span>
+                                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                                  agent.active
+                                    ? 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/20'
+                                    : 'bg-white/5 text-white/20 border border-white/5'
+                                }`}>
+                                  {agent.active ? 'RUNNING' : 'IDLE'}
+                                </span>
+                              </div>
+                              <div className={`text-xs mt-0.5 ${agent.active ? 'text-white/50' : 'text-white/20'}`}>
+                                {agent.task}
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                  <div>
-                    <div className="font-semibold text-sm text-white/90">{c.name}</div>
-                    <div className="text-xs text-white/40">{c.role}</div>
-                  </div>
-                  <div className="text-right">
-                    <span className="font-mono text-sm text-accent-gold">{c.respect}</span>
-                  </div>
-                  <div>
-                    {c.agents.length > 0 ? (
-                      c.agents.map((agent, j) => (
-                        <span key={j} className="inline-flex items-center gap-1.5 text-xs text-accent-cyan/80 bg-accent-cyan/5 border border-accent-cyan/10 rounded-full px-2.5 py-1">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
-                          {agent}
-                        </span>
-                      ))
-                    ) : (
-                      <span className="text-xs text-white/20">—</span>
-                    )}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
           </div>
         </div>
       </section>
