@@ -65,6 +65,157 @@ const treasuryTokens = [
 
 const totalTreasuryUsd = '$10,033,325'
 
+/* ───────────────────────── Daily Updates Data ───────────────────────── */
+
+interface AgentLogEntry {
+  time: string
+  action: string
+}
+
+interface AgentDailyLog {
+  agentName: string
+  active: boolean
+  entries: AgentLogEntry[]
+}
+
+interface ContributorDailyLog {
+  name: string
+  initials: string
+  color: string
+  agents: AgentDailyLog[]
+}
+
+interface WeeklyUpdate {
+  name: string
+  initials: string
+  role: string
+  color: string
+  updateText: string
+  ranking: number
+  respectEarned: number
+  isTopPerformer: boolean
+}
+
+const agentActivityLogs: ContributorDailyLog[] = [
+  {
+    name: 'Zara Okafor', initials: 'ZO', color: 'from-accent-blue to-accent-purple',
+    agents: [
+      {
+        agentName: 'Nexus', active: true,
+        entries: [
+          { time: '14:32', action: 'Rebalanced 3 vaults across Arbitrum and Base — net +0.4% APY' },
+          { time: '12:15', action: 'Migrated $120K USDC from Aave v3 to Pendle PT pool (higher yield)' },
+          { time: '09:47', action: 'Deployed new yield route: ETH/stETH recursive on Scroll' },
+          { time: '07:03', action: 'Scanned 14 protocols for rate changes — updated internal oracle' },
+        ],
+      },
+      {
+        agentName: 'Sentinel', active: true,
+        entries: [
+          { time: '13:58', action: 'Flagged anomalous gas spike on Arbitrum — paused deposits for 12 min' },
+          { time: '10:22', action: 'Health check passed: all 7 vaults within risk parameters' },
+          { time: '06:00', action: 'Daily protocol health report generated and posted to governance forum' },
+        ],
+      },
+      {
+        agentName: 'Archivist', active: false,
+        entries: [
+          { time: '—', action: 'Last active 2h ago — drafted governance proposal #47 (Base vault deployment)' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Luca Ferrante', initials: 'LF', color: 'from-accent-purple to-accent-gold',
+    agents: [
+      {
+        agentName: 'Phantom', active: true,
+        entries: [
+          { time: '15:01', action: 'Adjusted liquidation thresholds on ETH/USDC vault — buffer increased to 8%' },
+          { time: '11:44', action: 'Processed 6 risk assessments for new collateral types' },
+          { time: '08:30', action: 'Generated daily risk report: overall portfolio VaR decreased 3.2%' },
+        ],
+      },
+      {
+        agentName: 'Specter', active: false,
+        entries: [
+          { time: '—', action: 'Last active 14m ago — updated volatility surface for ETH, ARB, and OP' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Mika Tanaka', initials: 'MT', color: 'from-accent-gold to-accent-cyan',
+    agents: [
+      {
+        agentName: 'Drift', active: true,
+        entries: [
+          { time: '14:47', action: 'Executed delta-neutral rebalance: hedged 45 ETH via Aave short' },
+          { time: '12:03', action: 'Closed profitable ARB basis trade — realized +$8.2K' },
+          { time: '09:15', action: 'Opened new hedge position on Scroll ETH/USDC perp' },
+          { time: '06:30', action: 'Morning scan: all delta-neutral positions within ±0.5% tolerance' },
+        ],
+      },
+    ],
+  },
+  {
+    name: 'Ren Castillo', initials: 'RC', color: 'from-accent-cyan to-accent-blue',
+    agents: [
+      {
+        agentName: 'Echo', active: false,
+        entries: [
+          { time: '—', action: 'Last active 45m ago — processed 12 forum threads, flagged 2 for governance review' },
+        ],
+      },
+      {
+        agentName: 'Pulse', active: true,
+        entries: [
+          { time: '14:10', action: 'Responded to 23 Discord questions across #support and #governance' },
+          { time: '11:30', action: 'Published community poll: "Which L2 should we deploy next?"' },
+          { time: '08:45', action: 'Sent daily GM + protocol stats summary to 4 community channels' },
+        ],
+      },
+      {
+        agentName: 'Chronicle', active: false,
+        entries: [
+          { time: '—', action: 'Last active 3d ago — weekly digest scheduled for Monday' },
+        ],
+      },
+    ],
+  },
+]
+
+const weeklyUpdates: WeeklyUpdate[] = [
+  {
+    name: 'Zara Okafor', initials: 'ZO', role: 'Protocol Architect', color: 'from-accent-blue to-accent-purple',
+    updateText: 'Shipped the Base vault adapter and coordinated the audit kickoff with Trail of Bits. Nexus agent now live on 4 chains with automated yield routing. Preparing the governance proposal for cross-chain expansion.',
+    ranking: 1,
+    respectEarned: 187,
+    isTopPerformer: true,
+  },
+  {
+    name: 'Luca Ferrante', initials: 'LF', role: 'Vault Strategist', color: 'from-accent-purple to-accent-gold',
+    updateText: 'Overhauled the risk engine parameters after the ETH volatility spike. Phantom agent now auto-adjusts liquidation buffers based on real-time IV. Backtested new collateral types for Q2 expansion.',
+    ranking: 2,
+    respectEarned: 154,
+    isTopPerformer: true,
+  },
+  {
+    name: 'Mika Tanaka', initials: 'MT', role: 'Smart Contract Lead', color: 'from-accent-gold to-accent-cyan',
+    updateText: 'Finished the delta-neutral vault v3 contracts and deployed to Scroll testnet. Drift agent rebalancing logic improved — 23% better capital efficiency in backtests.',
+    ranking: 3,
+    respectEarned: 128,
+    isTopPerformer: false,
+  },
+  {
+    name: 'Ren Castillo', initials: 'RC', role: 'Community & Governance', color: 'from-accent-cyan to-accent-blue',
+    updateText: 'Ran the temp check vote for Base deployment (84% approval). Organized two community calls and onboarded 3 new contributors to the grants program.',
+    ranking: 4,
+    respectEarned: 112,
+    isTopPerformer: false,
+  },
+]
+
 interface SignalComment {
   author: string
   text: string
@@ -412,6 +563,60 @@ function ProposalCard({ proposal }: { proposal: Proposal }) {
               ))}
             </div>
           </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function AgentLogCard({ log }: { log: ContributorDailyLog }) {
+  const [expanded, setExpanded] = useState(false)
+  const totalEntries = log.agents.reduce((sum, a) => sum + a.entries.length, 0)
+  const activeAgents = log.agents.filter(a => a.active).length
+
+  return (
+    <div className="rounded-xl border border-white/5 bg-dark-800/60 backdrop-blur overflow-hidden">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left px-6 py-4 hover:bg-white/[0.02] transition-colors"
+      >
+        <div className="flex items-center gap-4">
+          <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${log.color} flex items-center justify-center text-xs font-bold text-white/90 shrink-0`}>
+            {log.initials}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="font-semibold text-sm text-white/90">{log.name}</div>
+            <div className="text-xs text-white/40">{activeAgents} active agent{activeAgents !== 1 ? 's' : ''} · {totalEntries} log entries today</div>
+          </div>
+          <span className="text-xs text-white/25">{expanded ? '▲' : '▼'}</span>
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="border-t border-white/5 px-6 py-4 space-y-4 bg-dark-900/30">
+          {log.agents.map((agent, ai) => (
+            <div key={ai}>
+              <div className="flex items-center gap-2 mb-2">
+                <div className={`w-1.5 h-1.5 rounded-full ${agent.active ? 'bg-emerald-400' : 'bg-amber-400'}`} />
+                <span className="text-sm font-semibold text-white/80">{agent.agentName}</span>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                  agent.active
+                    ? 'bg-emerald-400/10 text-emerald-400 border border-emerald-400/20'
+                    : 'bg-amber-500/10 text-amber-400 border border-amber-500/20'
+                }`}>
+                  {agent.active ? 'RUNNING' : 'IDLE'}
+                </span>
+              </div>
+              <div className="space-y-1.5 ml-4">
+                {agent.entries.map((entry, ei) => (
+                  <div key={ei} className="flex items-start gap-3">
+                    <span className="text-[11px] font-mono text-white/25 shrink-0 w-10 text-right">{entry.time}</span>
+                    <span className="text-xs text-white/50 leading-relaxed">{entry.action}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       )}
     </div>
@@ -786,6 +991,67 @@ export default function OrgPage() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Daily Updates */}
+      <section className="py-16 relative">
+        <div className="max-w-5xl mx-auto px-6">
+          <SectionHeading icon="⚡" label="Daily Updates" />
+
+          {/* Agent Activity Log */}
+          <div className="mb-12">
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-emerald-400 text-sm">●</span>
+              <h3 className="text-lg font-semibold text-white/80">Agent Activity Log</h3>
+              <span className="text-xs text-white/25 ml-2">Today — Feb 15, 2026</span>
+            </div>
+            <div className="space-y-4">
+              {agentActivityLogs.map((contrib, ci) => (
+                <AgentLogCard key={ci} log={contrib} />
+              ))}
+            </div>
+          </div>
+
+          {/* Weekly Contributor Updates */}
+          <div>
+            <div className="flex items-center gap-2 mb-6">
+              <span className="text-accent-gold text-sm">★</span>
+              <h3 className="text-lg font-semibold text-white/80">Weekly Contributor Updates</h3>
+              <span className="text-xs text-white/25 ml-2">Week of Feb 10–16</span>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {weeklyUpdates.map((update, i) => (
+                <div key={i} className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur p-6 hover:bg-dark-800/70 transition-all relative overflow-hidden">
+                  {update.isTopPerformer && (
+                    <div className="absolute top-3 right-3 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-accent-gold/10 text-accent-gold border border-accent-gold/20">
+                      ★ Top Performer
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${update.color} flex items-center justify-center text-xs font-bold text-white/90 shrink-0`}>
+                      {update.initials}
+                    </div>
+                    <div>
+                      <div className="font-semibold text-sm text-white/90">{update.name}</div>
+                      <div className="text-xs text-white/40">{update.role}</div>
+                    </div>
+                  </div>
+                  <p className="text-sm text-white/50 leading-relaxed mb-4">{update.updateText}</p>
+                  <div className="flex items-center gap-4 pt-3 border-t border-white/5">
+                    <div>
+                      <div className="text-[10px] text-white/25 uppercase tracking-wider">Ranking</div>
+                      <div className="text-sm font-bold text-accent-cyan">#{update.ranking}</div>
+                    </div>
+                    <div>
+                      <div className="text-[10px] text-white/25 uppercase tracking-wider">Respect Earned</div>
+                      <div className="text-sm font-bold text-accent-gold">+{update.respectEarned}</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
