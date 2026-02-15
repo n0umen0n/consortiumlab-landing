@@ -109,7 +109,7 @@ export default function WhyConsortium() {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <ScrollReveal>
           <h2 className="text-3xl md:text-5xl font-bold text-white text-center mb-4">
-            <span className="gradient-text">Consortium</span> is a modern organization out of the box optimize for maximum productivity
+            <span className="gradient-text">Consortium</span> is a modern organization out of the box optimized for maximum productivity
           </h2>
         </ScrollReveal>
 
