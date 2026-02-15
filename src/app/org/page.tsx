@@ -261,10 +261,7 @@ export default function OrgPage() {
                 <h3 className="text-sm font-bold uppercase tracking-widest text-accent-cyan">Mission</h3>
               </div>
               <p className="text-sm text-white/50 leading-relaxed">
-                Build and operate automated yield strategies, delta-neutral vaults, and cross-chain
-                liquidity infrastructure — governed by NEON token holders through signal-weighted
-                consensus. We deploy AI agents to optimize capital efficiency while keeping risk
-                parameters under community control.
+                AI-powered DeFi vaults governed by NEON holders through signal-weighted consensus.
               </p>
             </div>
             <div className="rounded-2xl border border-accent-purple/10 bg-accent-purple/[0.03] backdrop-blur px-6 py-6 text-left">
