@@ -156,9 +156,9 @@ export default function WhyConsortium() {
 
             <div className="grid sm:grid-cols-3 gap-4">
               {[
-                { icon: 'treasury', title: 'Community-Owned Treasury', desc: 'Shared assets governed most active contributors.' },
-                { icon: 'proposals', title: 'On-Chain Proposals', desc: 'Contributors propose, vote, and execute — fully transparent' },
-                { icon: 'contributors', title: 'Attract Contributors', desc: 'Contributors can control their agents' },
+                { icon: 'treasury', title: 'Collectively Owned Treasury', desc: 'Shared assets governed by the most active contributors.' },
+                { icon: 'proposals', title: 'Signals Module', desc: 'Enabling investors and token holders to give their feedback' },
+                { icon: 'contributors', title: 'Attract Contributors', desc: 'Token vesting for contributors who drive the project forward' },
               ].map((item) => (
                 <div
                   key={item.title}
