@@ -151,7 +151,7 @@ export default function WhyConsortium() {
               </h3>
             </div>
             <p className="text-white/40 text-lg max-w-3xl mb-8 pl-12 md:pl-16">
-              Community-owned assets, transparent decisions, and token-aligned incentives — built to attract talent and outlast any single founder.
+              Collectively owned assets, transparent decisions, and token-aligned incentives — built to attract talent and outlast any single founder.
             </p>
 
             <div className="grid sm:grid-cols-3 gap-4">
