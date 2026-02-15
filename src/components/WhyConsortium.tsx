@@ -79,6 +79,19 @@ export default function WhyConsortium() {
           </div>
         </ScrollReveal>
       </div>
+
+      {/* Launch CTA */}
+      <ScrollReveal>
+        <div className="mt-28 text-center">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold">
+            Launch{' '}
+            <span className="bg-gradient-to-r from-[#7B8CDE] via-[#B07CC3] via-[#D4A0A0] to-[#C9A84C] bg-clip-text text-transparent">
+              consortium
+            </span>{' '}
+            <span className="text-white">together with your&nbsp;token</span>
+          </h2>
+        </div>
+      </ScrollReveal>
     </section>
   )
 }
