@@ -10,6 +10,7 @@ interface Agent {
   name: string
   task: string
   active: boolean
+  lastRan?: string
 }
 
 interface Contributor {
@@ -27,14 +28,14 @@ const contributors: Contributor[] = [
     agents: [
       { name: 'Nexus', task: 'Yield optimization across 4 chains', active: true },
       { name: 'Sentinel', task: 'Protocol health monitoring', active: true },
-      { name: 'Archivist', task: 'Governance proposal drafting', active: false },
+      { name: 'Archivist', task: 'Governance proposal drafting', active: false, lastRan: '2h ago' },
     ],
   },
   {
     name: 'Luca Ferrante', initials: 'LF', role: 'Vault Strategist', respect: 1_087, color: 'from-accent-purple to-accent-gold',
     agents: [
       { name: 'Phantom', task: 'Risk engine & liquidation guard', active: true },
-      { name: 'Specter', task: 'Volatility surface modeling', active: false },
+      { name: 'Specter', task: 'Volatility surface modeling', active: false, lastRan: '14m ago' },
     ],
   },
   {
@@ -46,9 +47,9 @@ const contributors: Contributor[] = [
   {
     name: 'Ren Castillo', initials: 'RC', role: 'Community & Governance', respect: 812, color: 'from-accent-cyan to-accent-blue',
     agents: [
-      { name: 'Echo', task: 'Forum curation & sentiment analysis', active: false },
+      { name: 'Echo', task: 'Forum curation & sentiment analysis', active: false, lastRan: '45m ago' },
       { name: 'Pulse', task: 'Discord community engagement', active: true },
-      { name: 'Chronicle', task: 'Weekly digest generation', active: false },
+      { name: 'Chronicle', task: 'Weekly digest generation', active: false, lastRan: '3d ago' },
     ],
   },
 ]
@@ -261,7 +262,7 @@ export default function OrgPage() {
                 <h3 className="text-sm font-bold uppercase tracking-widest text-accent-cyan">Mission</h3>
               </div>
               <p className="text-sm text-white/50 leading-relaxed">
-                AI-powered DeFi vaults governed by NEON holders through signal-weighted consensus.
+                Maximize yield for our community by building and operating automated vaults across chains — every strategy transparent, every parameter governed by token holders.
               </p>
             </div>
             <div className="rounded-2xl border border-accent-purple/10 bg-accent-purple/[0.03] backdrop-blur px-6 py-6 text-left">
@@ -383,6 +384,9 @@ export default function OrgPage() {
                               <div className={`text-xs mt-0.5 ${agent.active ? 'text-white/50' : 'text-white/45'}`}>
                                 {agent.task}
                               </div>
+                              {!agent.active && agent.lastRan && (
+                                <div className="text-[10px] text-amber-400/60 mt-0.5">Last ran {agent.lastRan}</div>
+                              )}
                             </div>
                           </div>
                         </div>
