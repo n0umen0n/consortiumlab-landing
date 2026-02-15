@@ -109,5 +109,48 @@
   to { transform: rotate(360deg); }
 }
 .animate-spin-slow {
-  animation: spin-slow 20s linear infinite;
+  animation: spin-slow 8s linear infinite;
+}
+
+@keyframes icon-bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.animate-icon-bounce {
+  animation: icon-bounce 2s ease-in-out infinite;
+}
+
+@keyframes icon-glow {
+  0%, 100% { opacity: 0.5; filter: drop-shadow(0 0 2px currentColor); }
+  50% { opacity: 1; filter: drop-shadow(0 0 8px currentColor); }
+}
+.animate-icon-glow {
+  animation: icon-glow 2s ease-in-out infinite;
+}
+
+@keyframes icon-draw {
+  0% { stroke-dashoffset: 60; }
+  50% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 60; }
+}
+.animate-icon-draw {
+  stroke-dasharray: 60;
+  animation: icon-draw 3s ease-in-out infinite;
+}
+
+@keyframes icon-scale {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+}
+.animate-icon-scale {
+  animation: icon-scale 2s ease-in-out infinite;
+}
+
+@keyframes bar-grow {
+  0%, 100% { transform: scaleY(0.7); }
+  50% { transform: scaleY(1); }
+}
+.animate-bar-grow {
+  transform-origin: bottom;
+  animation: bar-grow 1.5s ease-in-out infinite;
 }
