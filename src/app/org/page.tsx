@@ -1093,7 +1093,7 @@ export default function OrgPage() {
             className="flex items-center gap-3 mb-6 group"
           >
             <span className="text-accent-purple/60 text-sm">◆</span>
-            <h2 className="text-lg font-semibold text-white/50 group-hover:text-white/70 transition-colors">
+            <h2 className="text-2xl font-bold text-white/90">
               Token Holders
             </h2>
             <span className="text-xs text-white/25">{showHolders ? '▲ hide' : '▼ show'}</span>
