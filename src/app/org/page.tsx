@@ -153,6 +153,87 @@ const tokenHolders = [
   { address: '0x5bC6...d2A8', tokens: '410,000', pct: 4.8 },
 ]
 
+/* ───────────────────────── Proposals Data ───────────────────────── */
+
+interface Proposal {
+  id: number
+  title: string
+  author: string
+  token: string
+  amount: string
+  recipient: string
+  recipientLabel: string
+  description: string
+  status: 'pending' | 'executed' | 'rejected'
+  signers: string[]
+  requiredSignatures: number
+  totalSigners: number
+  createdAt: string
+}
+
+const proposals: Proposal[] = [
+  {
+    id: 1,
+    title: 'Q1 Developer Payment — Mika Tanaka',
+    author: 'Zara Okafor',
+    token: 'USDC',
+    amount: '45,000',
+    recipient: '0x3dA8...7e6F',
+    recipientLabel: 'Mika Tanaka',
+    description: 'Compensation for smart contract development and audit coordination in Q1 2026 — vault v3 architecture, Base deployment adapter, and emergency pause module.',
+    status: 'executed',
+    signers: ['Zara Okafor', 'Luca Ferrante', 'Ren Castillo'],
+    requiredSignatures: 3,
+    totalSigners: 5,
+    createdAt: 'Feb 3, 2026',
+  },
+  {
+    id: 2,
+    title: 'Seed ETH/USDC Liquidity on Base',
+    author: 'Luca Ferrante',
+    token: 'ETH',
+    amount: '120',
+    recipient: '0xBa5e...LP01',
+    recipientLabel: 'NeonVault Base LP Contract',
+    description: 'Seed the ETH/USDC liquidity pool on Base to bootstrap the new cross-chain vault. Liquidity will be protocol-owned and managed by the Drift rebalancing agent.',
+    status: 'pending',
+    signers: ['Luca Ferrante', 'Zara Okafor'],
+    requiredSignatures: 3,
+    totalSigners: 5,
+    createdAt: 'Feb 12, 2026',
+  },
+  {
+    id: 3,
+    title: 'Ecosystem Grant — ChainScope Analytics',
+    author: 'Ren Castillo',
+    token: 'NEON',
+    amount: '75,000',
+    recipient: '0xC5c0...a3D7',
+    recipientLabel: 'ChainScope Team',
+    description: 'First milestone payment for the ChainScope analytics dashboard — real-time vault performance tracking, TVL breakdown by chain, and public API for integrators.',
+    status: 'pending',
+    signers: ['Ren Castillo'],
+    requiredSignatures: 3,
+    totalSigners: 5,
+    createdAt: 'Feb 14, 2026',
+  },
+  {
+    id: 4,
+    title: 'Marketing Budget — Token2049 Sponsorship',
+    author: 'Zara Okafor',
+    token: 'USDC',
+    amount: '30,000',
+    recipient: '0x7a3F...8b2E',
+    recipientLabel: 'Events Multisig',
+    description: 'Sponsorship and booth at Token2049 Dubai. Covers venue, swag, travel for 3 team members, and side-event co-hosting with partner protocols.',
+    status: 'rejected',
+    signers: ['Zara Okafor'],
+    requiredSignatures: 3,
+    totalSigners: 5,
+    createdAt: 'Jan 28, 2026',
+  },
+]
+
 /* ───────────────────────── Helpers ───────────────────────── */
 
 function formatVotes(n: number) {
@@ -238,6 +319,105 @@ function SignalCard({ signal }: { signal: Signal }) {
   )
 }
 
+function ProposalCard({ proposal }: { proposal: Proposal }) {
+  const [expanded, setExpanded] = useState(false)
+
+  const statusConfig = {
+    pending: { label: 'PENDING', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
+    executed: { label: 'EXECUTED', color: 'bg-emerald-400/10 text-emerald-400 border-emerald-400/20' },
+    rejected: { label: 'REJECTED', color: 'bg-red-400/10 text-red-400 border-red-400/20' },
+  }
+
+  const status = statusConfig[proposal.status]
+  const signatureProgress = proposal.signers.length / proposal.requiredSignatures
+
+  return (
+    <div className="rounded-xl border border-white/5 bg-dark-800/60 backdrop-blur overflow-hidden transition-all">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left px-6 py-5 hover:bg-white/[0.02] transition-colors"
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className={`text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full border ${status.color}`}>
+                {status.label}
+              </span>
+              <span className="text-xs text-white/30">by {proposal.author}</span>
+              <span className="text-xs text-white/20">· {proposal.createdAt}</span>
+            </div>
+            <h3 className="text-[15px] font-semibold text-white/90 mb-1">{proposal.title}</h3>
+            <p className="text-sm text-white/40 leading-relaxed line-clamp-2">{proposal.description}</p>
+          </div>
+          <div className="shrink-0 text-right pl-4">
+            <div className="text-lg font-bold tabular-nums text-accent-gold">{proposal.amount}</div>
+            <div className="text-[10px] text-white/30 uppercase tracking-wider">{proposal.token}</div>
+            <div className="text-xs text-white/40 mt-1">{proposal.signers.length}/{proposal.totalSigners} signed</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 mt-3">
+          <div className="flex-1 h-1 rounded-full bg-white/5 overflow-hidden">
+            <div
+              className={`h-full rounded-full ${
+                proposal.status === 'executed' ? 'bg-emerald-400' :
+                proposal.status === 'rejected' ? 'bg-red-400' :
+                'bg-gradient-to-r from-amber-400 to-accent-gold'
+              }`}
+              style={{ width: `${Math.min(signatureProgress * 100, 100)}%` }}
+            />
+          </div>
+          <span className="text-[10px] text-white/25 shrink-0">
+            {proposal.signers.length}/{proposal.requiredSignatures} required
+            <span className="ml-2">{expanded ? '▲' : '▼'}</span>
+          </span>
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="border-t border-white/5 px-6 py-4 space-y-4 bg-dark-900/30">
+          {/* Transfer details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3">
+              <div className="text-[10px] uppercase tracking-wider text-white/30 mb-1">Transfer</div>
+              <div className="text-sm text-white/80 font-mono">{proposal.amount} {proposal.token}</div>
+            </div>
+            <div className="rounded-lg border border-white/5 bg-white/[0.02] px-4 py-3">
+              <div className="text-[10px] uppercase tracking-wider text-white/30 mb-1">Recipient</div>
+              <div className="text-sm text-white/80">{proposal.recipientLabel}</div>
+              <div className="text-xs text-white/30 font-mono">{proposal.recipient}</div>
+            </div>
+          </div>
+
+          {/* Description */}
+          <div>
+            <div className="text-[10px] uppercase tracking-wider text-white/30 mb-1">Reason</div>
+            <p className="text-sm text-white/50 leading-relaxed">{proposal.description}</p>
+          </div>
+
+          {/* Signers */}
+          <div>
+            <div className="text-[10px] uppercase tracking-wider text-white/30 mb-2">
+              Signatures ({proposal.signers.length}/{proposal.requiredSignatures} required)
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {proposal.signers.map((signer, i) => (
+                <span key={i} className="text-xs px-2.5 py-1 rounded-full bg-emerald-400/10 text-emerald-400 border border-emerald-400/20">
+                  ✓ {signer}
+                </span>
+              ))}
+              {Array.from({ length: proposal.totalSigners - proposal.signers.length }).map((_, i) => (
+                <span key={`empty-${i}`} className="text-xs px-2.5 py-1 rounded-full bg-white/[0.03] text-white/20 border border-white/5">
+                  Awaiting…
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  )
+}
+
 /* ───────────────────────── Page ───────────────────────── */
 
 export default function OrgPage() {
@@ -255,6 +435,8 @@ export default function OrgPage() {
             <span className="gradient-text">NeonVault</span>
           </h1>
           <p className="text-sm text-accent-cyan/60 uppercase tracking-[0.3em] mb-6 font-medium">CONSORTIUM</p>
+
+          {/* Mission & Vision */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-4">
             <div className="rounded-2xl border border-accent-cyan/10 bg-accent-cyan/[0.03] backdrop-blur px-6 py-6 text-left">
               <div className="flex items-center gap-2 mb-3">
@@ -275,6 +457,34 @@ export default function OrgPage() {
                 capital — transparently, permissionlessly, and at scale — making sophisticated
                 DeFi strategies accessible to every token holder on every chain.
               </p>
+            </div>
+          </div>
+
+          {/* Strategy Boxes */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-6">
+            <div className="rounded-2xl border border-emerald-400/10 bg-emerald-400/[0.03] backdrop-blur px-6 py-6 text-left">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-emerald-400 text-lg">⚡</span>
+                <h3 className="text-sm font-bold uppercase tracking-widest text-emerald-400">Short-term Strategy</h3>
+              </div>
+              <ul className="text-sm text-white/50 leading-relaxed space-y-2">
+                <li className="flex items-start gap-2"><span className="text-emerald-400/60 mt-0.5">›</span>Deploy vaults on Base and Scroll — capture L2 TVL growth</li>
+                <li className="flex items-start gap-2"><span className="text-emerald-400/60 mt-0.5">›</span>Grow protocol TVL to $25M by end of Q2 2026</li>
+                <li className="flex items-start gap-2"><span className="text-emerald-400/60 mt-0.5">›</span>Launch co-vaults with Aave, Pendle, and Ethena integrations</li>
+                <li className="flex items-start gap-2"><span className="text-emerald-400/60 mt-0.5">›</span>Ship grants program and onboard 5 ecosystem builders</li>
+              </ul>
+            </div>
+            <div className="rounded-2xl border border-rose-400/10 bg-rose-400/[0.03] backdrop-blur px-6 py-6 text-left">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-rose-400 text-lg">✧</span>
+                <h3 className="text-sm font-bold uppercase tracking-widest text-rose-400">Long-term Strategy</h3>
+              </div>
+              <ul className="text-sm text-white/50 leading-relaxed space-y-2">
+                <li className="flex items-start gap-2"><span className="text-rose-400/60 mt-0.5">›</span>Become the leading cross-chain automated vault protocol</li>
+                <li className="flex items-start gap-2"><span className="text-rose-400/60 mt-0.5">›</span>Full AI-driven rebalancing — zero manual intervention</li>
+                <li className="flex items-start gap-2"><span className="text-rose-400/60 mt-0.5">›</span>Institutional custody partnerships and compliance tooling</li>
+                <li className="flex items-start gap-2"><span className="text-rose-400/60 mt-0.5">›</span>DAO-governed protocol with on-chain treasury allocation</li>
+              </ul>
             </div>
           </div>
 
@@ -427,6 +637,37 @@ export default function OrgPage() {
                   </div>
                 )
               })}
+          </div>
+        </div>
+      </section>
+
+      {/* Proposals */}
+      <section className="py-16 relative">
+        <div className="max-w-5xl mx-auto px-6">
+          <SectionHeading icon="⬢" label="Proposals" />
+          <p className="text-sm text-white/30 -mt-4 mb-6">
+            Treasury transfer proposals requiring multisig approval. Expand to see details and signer status.
+          </p>
+          <div className="space-y-3">
+            {proposals.map((p) => (
+              <ProposalCard key={p.id} proposal={p} />
+            ))}
+          </div>
+
+          {/* Proposal Stats */}
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'Total Proposals', value: '4', sub: 'all time' },
+              { label: 'Pending', value: '2', sub: 'awaiting signatures' },
+              { label: 'Executed', value: '1', sub: 'transferred' },
+              { label: 'Threshold', value: '3/5', sub: 'multisig required' },
+            ].map((stat, i) => (
+              <div key={i} className="rounded-xl border border-white/5 bg-dark-800/30 px-5 py-4">
+                <div className="text-xs text-white/30 uppercase tracking-wider mb-1">{stat.label}</div>
+                <div className="text-2xl font-bold tabular-nums text-white/90">{stat.value}</div>
+                <div className="text-[10px] text-white/20">{stat.sub}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
