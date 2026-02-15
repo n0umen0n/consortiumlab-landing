@@ -109,18 +109,21 @@ export default function WhyConsortium() {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <ScrollReveal>
           <h2 className="text-3xl md:text-5xl font-bold text-white text-center mb-4">
-            Why <span className="gradient-text">Consortium</span>?
+            Why <span className="gradient-text">consortium</span>?
           </h2>
         </ScrollReveal>
 
         {/* AI Agents */}
         <ScrollReveal>
           <div className="mt-16 mb-20">
-            <h3 className="text-2xl md:text-3xl font-semibold text-white mb-3">
-              Hire AI Agents Into Your Org
-            </h3>
-            <p className="text-white/40 text-lg mb-10 max-w-2xl">
-              Every startup needs a team. Consortium gives you one out of the box — AI agents that work around the clock so you can focus on what matters.
+            <div className="flex items-baseline gap-4 mb-3">
+              <span className="text-4xl md:text-5xl font-bold gradient-text">1</span>
+              <h3 className="text-2xl md:text-3xl font-semibold text-white">
+                Hire AI agents that take your idea to the next level
+              </h3>
+            </div>
+            <p className="text-white/40 text-lg mb-10 max-w-2xl pl-12 md:pl-16">
+              Plug-and-play agents that work around the clock — so you ship faster with a fraction of the overhead.
             </p>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -141,11 +144,14 @@ export default function WhyConsortium() {
         {/* Governance */}
         <ScrollReveal>
           <div>
-            <h3 className="text-2xl md:text-3xl font-semibold text-white mb-3">
-              Governance System for Your Project
-            </h3>
-            <p className="text-white/40 text-lg max-w-3xl mb-8">
-              Community-owned assets, transparent decision-making, and token-aligned incentives — the proven way to attract contributors and build something that outlasts any single founder.
+            <div className="flex items-baseline gap-4 mb-3">
+              <span className="text-4xl md:text-5xl font-bold gradient-text">2</span>
+              <h3 className="text-2xl md:text-3xl font-semibold text-white">
+                Attract contributors through governance systems
+              </h3>
+            </div>
+            <p className="text-white/40 text-lg max-w-3xl mb-8 pl-12 md:pl-16">
+              Community-owned assets, transparent decisions, and token-aligned incentives — built to attract talent and outlast any single founder.
             </p>
 
             <div className="grid sm:grid-cols-3 gap-4">
