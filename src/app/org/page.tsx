@@ -1,57 +1,230 @@
+"use client"
+
+import { useState } from 'react'
 import Navbar from '@/components/Navbar'
-import ConsortiumLogo from '@/components/ConsortiumLogo'
 import Footer from '@/components/Footer'
 
-const tokenHolders = [
-  { address: '0x7a3F...8b2E', tokens: '625,000', pct: 25.0 },
-  { address: '0x1cD4...3f9A', tokens: '500,000', pct: 20.0 },
-  { address: '0xeB72...a1C5', tokens: '375,000', pct: 15.0 },
-  { address: '0x3dA8...7e6F', tokens: '250,000', pct: 10.0 },
-  { address: '0x9fE1...c4B3', tokens: '187,500', pct: 7.5 },
-  { address: '0x5bC6...d2A8', tokens: '125,000', pct: 5.0 },
-]
+/* ───────────────────────── Data ───────────────────────── */
 
 const contributors = [
-  { name: 'Alex Rivera', initials: 'AR', role: 'Protocol Architect', respect: 847, color: 'from-accent-blue to-accent-purple', agents: ['Atlas — Business Mentor'] },
-  { name: 'Sam Chen', initials: 'SC', role: 'Governance Lead', respect: 723, color: 'from-accent-purple to-accent-gold', agents: ['Sentinel — Treasury Guard'] },
-  { name: 'Jordan Lee', initials: 'JL', role: 'Smart Contract Dev', respect: 691, color: 'from-accent-gold to-accent-cyan', agents: ['Pulse — Market Analyst'] },
-  { name: 'Maya Patel', initials: 'MP', role: 'Community Strategist', respect: 584, color: 'from-accent-cyan to-accent-blue', agents: ['Echo — Community Manager'] },
-  { name: 'Kai Nakamura', initials: 'KN', role: 'Tokenomics Researcher', respect: 512, color: 'from-accent-blue to-accent-gold', agents: [] },
+  { name: 'Zara Okafor', initials: 'ZO', role: 'Protocol Architect', respect: 1_243, color: 'from-accent-blue to-accent-purple', agents: ['Nexus — Yield Optimizer'] },
+  { name: 'Luca Ferrante', initials: 'LF', role: 'Vault Strategist', respect: 1_087, color: 'from-accent-purple to-accent-gold', agents: ['Phantom — Risk Engine'] },
+  { name: 'Mika Tanaka', initials: 'MT', role: 'Smart Contract Lead', respect: 948, color: 'from-accent-gold to-accent-cyan', agents: ['Drift — Rebalancer'] },
+  { name: 'Ren Castillo', initials: 'RC', role: 'Community & Governance', respect: 812, color: 'from-accent-cyan to-accent-blue', agents: ['Echo — Forum Curator'] },
+  { name: 'Aisha Mensah', initials: 'AM', role: 'Tokenomics Lead', respect: 734, color: 'from-accent-blue to-accent-gold', agents: [] },
 ]
 
-const treasury = [
-  { label: 'Operations', amount: '750,000', pct: 30 },
-  { label: 'Development Fund', amount: '625,000', pct: 25 },
-  { label: 'Community Grants', amount: '500,000', pct: 20 },
-  { label: 'Reserves', amount: '375,000', pct: 15 },
-  { label: 'AI Agent Budget', amount: '250,000', pct: 10 },
+const treasuryTokens = [
+  { symbol: 'ETH',   amount: '1,420.5',    usd: '$3,834,150',   pct: 38.2, color: 'text-accent-purple' },
+  { symbol: 'USDC',  amount: '2,150,000',   usd: '$2,150,000',   pct: 21.4, color: 'text-emerald-400' },
+  { symbol: 'NEON',  amount: '8,500,000',   usd: '$1,785,000',   pct: 17.8, color: 'text-accent-cyan' },
+  { symbol: 'ARB',   amount: '1,200,000',   usd: '$1,044,000',   pct: 10.4, color: 'text-accent-blue' },
+  { symbol: 'stETH', amount: '285.3',       usd: '$770,175',     pct: 7.7,  color: 'text-accent-gold' },
+  { symbol: 'DAI',   amount: '450,000',     usd: '$450,000',     pct: 4.5,  color: 'text-yellow-400' },
 ]
+
+const totalTreasuryUsd = '$10,033,325'
+
+interface SignalComment {
+  author: string
+  text: string
+  tokenVotes: number
+  voters: number
+}
+
+interface Signal {
+  id: number
+  title: string
+  summary: string
+  author: string
+  tokenVotes: number
+  voters: number
+  tag: string
+  tagColor: string
+  comments: SignalComment[]
+}
+
+const signals: Signal[] = [
+  {
+    id: 1,
+    title: 'Deploy cross-chain vault on Base',
+    summary: 'Expand NeonVault strategies to Base L2 to capture growing TVL and reduce gas costs for smaller depositors.',
+    author: 'Zara Okafor',
+    tokenVotes: 2_340_000,
+    voters: 187,
+    tag: 'Strategy',
+    tagColor: 'bg-accent-purple/10 text-accent-purple border-accent-purple/20',
+    comments: [
+      { author: 'Luca F.', text: 'Base fees are 10x cheaper — this would unlock sub-$500 deposits profitably.', tokenVotes: 890_000, voters: 62 },
+      { author: 'Mika T.', text: 'Auditing the bridge adapter will take ~3 weeks. Worth it.', tokenVotes: 410_000, voters: 38 },
+      { author: 'Ren C.', text: 'Community sentiment is very positive — 84% approval in the temp check.', tokenVotes: 245_000, voters: 41 },
+    ],
+  },
+  {
+    id: 2,
+    title: 'Increase NEON staking rewards to 12% APY',
+    summary: 'Boost staking incentives for the next quarter to attract long-term holders and reduce circulating supply.',
+    author: 'Aisha Mensah',
+    tokenVotes: 1_870_000,
+    voters: 154,
+    tag: 'Tokenomics',
+    tagColor: 'bg-accent-gold/10 text-accent-gold border-accent-gold/20',
+    comments: [
+      { author: 'Zara O.', text: 'Sustainable only if we cap it at 90 days. Perpetual 12% would drain reserves.', tokenVotes: 720_000, voters: 55 },
+      { author: 'Aisha M.', text: 'Agreed — proposing a tiered decay: 12% → 9% → 6% over three quarters.', tokenVotes: 530_000, voters: 48 },
+    ],
+  },
+  {
+    id: 3,
+    title: 'Integrate AI rebalancing agent for delta-neutral vaults',
+    summary: 'Let the Drift agent autonomously rebalance hedged positions using real-time volatility feeds.',
+    author: 'Mika Tanaka',
+    tokenVotes: 1_560_000,
+    voters: 132,
+    tag: 'Engineering',
+    tagColor: 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/20',
+    comments: [
+      { author: 'Luca F.', text: 'Backtested across 6 months of ETH data — 23% improvement in capital efficiency.', tokenVotes: 680_000, voters: 47 },
+      { author: 'Ren C.', text: 'Need a kill-switch governance vote mechanism if the agent deviates >5%.', tokenVotes: 390_000, voters: 52 },
+      { author: 'Mika T.', text: 'Kill-switch is already in the spec. 3-of-5 multisig can pause within one block.', tokenVotes: 310_000, voters: 29 },
+    ],
+  },
+  {
+    id: 4,
+    title: 'Launch grants program for ecosystem tooling',
+    summary: 'Allocate 200,000 NEON from treasury to fund dashboards, analytics, and integration tooling built by the community.',
+    author: 'Ren Castillo',
+    tokenVotes: 1_120_000,
+    voters: 98,
+    tag: 'Community',
+    tagColor: 'bg-emerald-400/10 text-emerald-400 border-emerald-400/20',
+    comments: [
+      { author: 'Aisha M.', text: 'Should require milestone-based disbursement — not lump sum.', tokenVotes: 410_000, voters: 34 },
+    ],
+  },
+]
+
+const tokenHolders = [
+  { address: '0x7a3F...8b2E', tokens: '1,250,000', pct: 14.7 },
+  { address: '0x1cD4...3f9A', tokens: '980,000', pct: 11.5 },
+  { address: '0xeB72...a1C5', tokens: '875,000', pct: 10.3 },
+  { address: '0x3dA8...7e6F', tokens: '620,000', pct: 7.3 },
+  { address: '0x9fE1...c4B3', tokens: '540,000', pct: 6.4 },
+  { address: '0x5bC6...d2A8', tokens: '410,000', pct: 4.8 },
+]
+
+/* ───────────────────────── Helpers ───────────────────────── */
+
+function formatVotes(n: number) {
+  if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
+  if (n >= 1_000) return (n / 1_000).toFixed(0) + 'K'
+  return n.toString()
+}
+
+/* ───────────────────────── Components ───────────────────────── */
+
+function SectionHeading({ icon, label }: { icon: string; label: string }) {
+  return (
+    <div className="flex items-center gap-3 mb-8">
+      <span className="text-accent-purple/60 text-sm">{icon}</span>
+      <h2 className="text-2xl font-bold text-white/90">{label}</h2>
+      <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
+    </div>
+  )
+}
+
+function SignalCard({ signal }: { signal: Signal }) {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <div className="rounded-xl border border-white/5 bg-dark-800/60 backdrop-blur overflow-hidden transition-all">
+      <button
+        onClick={() => setExpanded(!expanded)}
+        className="w-full text-left px-6 py-5 hover:bg-white/[0.02] transition-colors"
+      >
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-2 flex-wrap">
+              <span className={`text-[10px] uppercase tracking-wider font-semibold px-2 py-0.5 rounded-full border ${signal.tagColor}`}>
+                {signal.tag}
+              </span>
+              <span className="text-xs text-white/30">by {signal.author}</span>
+            </div>
+            <h3 className="text-[15px] font-semibold text-white/90 mb-1">{signal.title}</h3>
+            <p className="text-sm text-white/40 leading-relaxed">{signal.summary}</p>
+          </div>
+          <div className="shrink-0 text-right pl-4">
+            <div className="text-lg font-bold tabular-nums text-accent-cyan">{formatVotes(signal.tokenVotes)}</div>
+            <div className="text-[10px] text-white/30 uppercase tracking-wider">NEON voted</div>
+            <div className="text-xs text-white/40 mt-1">{signal.voters} voters</div>
+          </div>
+        </div>
+        <div className="flex items-center gap-2 mt-3">
+          <div className="flex-1 h-1 rounded-full bg-white/5 overflow-hidden">
+            <div
+              className="h-full rounded-full bg-gradient-to-r from-accent-cyan to-accent-purple"
+              style={{ width: `${Math.min((signal.tokenVotes / 2_500_000) * 100, 100)}%` }}
+            />
+          </div>
+          <span className="text-[10px] text-white/25 shrink-0">
+            {signal.comments.length} comment{signal.comments.length !== 1 ? 's' : ''}
+            <span className="ml-2">{expanded ? '▲' : '▼'}</span>
+          </span>
+        </div>
+      </button>
+
+      {expanded && (
+        <div className="border-t border-white/5 px-6 py-4 space-y-3 bg-dark-900/30">
+          {signal.comments
+            .sort((a, b) => b.tokenVotes - a.tokenVotes)
+            .map((c, i) => (
+              <div key={i} className="flex items-start gap-3 group">
+                <div className="shrink-0 mt-0.5 w-1 h-1 rounded-full bg-accent-purple/40" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-baseline gap-2 flex-wrap">
+                    <span className="text-xs font-semibold text-white/70">{c.author}</span>
+                    <span className="text-[10px] text-white/20">·</span>
+                    <span className="text-[10px] text-accent-cyan/70 font-mono">{formatVotes(c.tokenVotes)} NEON</span>
+                    <span className="text-[10px] text-white/20">·</span>
+                    <span className="text-[10px] text-white/25">{c.voters} voters</span>
+                  </div>
+                  <p className="text-sm text-white/50 mt-0.5 leading-relaxed">{c.text}</p>
+                </div>
+              </div>
+            ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+/* ───────────────────────── Page ───────────────────────── */
 
 export default function OrgPage() {
+  const [showHolders, setShowHolders] = useState(false)
+
   return (
     <main className="min-h-screen bg-dark-900 text-white">
       <Navbar />
 
-      {/* Org Header: Name → Logo → Description */}
+      {/* Org Header */}
       <section className="pt-32 pb-16 relative">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent-purple/5 rounded-full blur-3xl" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-accent-cyan/5 rounded-full blur-3xl" />
         <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
-            <span className="gradient-text">Consortium Lab</span>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">
+            <span className="gradient-text">NeonVault</span>
           </h1>
-          <div className="flex justify-center mb-6">
-            <ConsortiumLogo className="w-16 h-16" />
-          </div>
+          <p className="text-sm text-accent-cyan/60 uppercase tracking-[0.3em] mb-6 font-medium">DeFi Collective</p>
           <p className="max-w-2xl mx-auto text-white/50 leading-relaxed text-base">
-            A next-generation governance collective pioneering tools and frameworks
-            that let communities, DAOs, and AI agents coordinate transparently. We build open-source
-            protocols for token-weighted decision-making, respect-based contribution tracking,
-            and autonomous treasury management.
+            NeonVault is a DeFi-native collective building automated yield strategies,
+            delta-neutral vaults, and cross-chain liquidity infrastructure. Governed entirely
+            by NEON token holders through signal-weighted consensus, we deploy AI agents
+            to optimize capital efficiency while keeping risk parameters under community control.
           </p>
         </div>
       </section>
 
-      {/* Contributors Table — sorted by highest respect, with agents */}
+      {/* Contributors */}
       <section className="py-16 relative">
         <div className="max-w-5xl mx-auto px-6">
           <SectionHeading icon="★" label="Contributors" />
@@ -94,81 +267,124 @@ export default function OrgPage() {
         </div>
       </section>
 
-      {/* Treasury */}
+      {/* Treasury — Multi-Token */}
       <section className="py-16 relative">
         <div className="max-w-5xl mx-auto px-6">
           <SectionHeading icon="⬡" label="Treasury" />
           <div className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur p-8">
             <div className="flex flex-col md:flex-row md:items-end gap-6 mb-8">
               <div>
-                <div className="text-sm text-white/30 uppercase tracking-wider mb-1">Total Balance</div>
+                <div className="text-sm text-white/30 uppercase tracking-wider mb-1">Total Value</div>
                 <div className="text-4xl md:text-5xl font-bold tabular-nums">
-                  <span className="gradient-text">2,500,000</span>
-                  <span className="text-lg text-white/40 ml-2">CLAB</span>
+                  <span className="gradient-text">{totalTreasuryUsd}</span>
                 </div>
               </div>
-              <div className="text-white/30 text-sm pb-2">≈ $125,000 USD</div>
+              <div className="text-white/30 text-sm pb-2">across 6 tokens · 4 chains</div>
             </div>
-            <div className="flex h-3 rounded-full overflow-hidden mb-6 gap-0.5">
-              <div className="bg-accent-blue rounded-l-full" style={{ width: '30%' }} />
-              <div className="bg-accent-purple" style={{ width: '25%' }} />
-              <div className="bg-accent-gold" style={{ width: '20%' }} />
-              <div className="bg-accent-cyan" style={{ width: '15%' }} />
-              <div className="bg-white/20 rounded-r-full" style={{ width: '10%' }} />
-            </div>
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-              {treasury.map((t, i) => {
-                const colors = ['text-accent-blue', 'text-accent-purple', 'text-accent-gold', 'text-accent-cyan', 'text-white/40']
+
+            {/* Bar */}
+            <div className="flex h-3 rounded-full overflow-hidden mb-8 gap-0.5">
+              {treasuryTokens.map((t, i) => {
+                const barColors = ['bg-accent-purple', 'bg-emerald-400', 'bg-accent-cyan', 'bg-accent-blue', 'bg-accent-gold', 'bg-yellow-400']
+                const isFirst = i === 0
+                const isLast = i === treasuryTokens.length - 1
                 return (
-                  <div key={i}>
-                    <div className="text-xs text-white/30 mb-1">{t.label}</div>
-                    <div className={`text-sm font-mono ${colors[i]}`}>{t.amount}</div>
-                    <div className="text-xs text-white/20">{t.pct}%</div>
-                  </div>
+                  <div
+                    key={i}
+                    className={`${barColors[i]} ${isFirst ? 'rounded-l-full' : ''} ${isLast ? 'rounded-r-full' : ''}`}
+                    style={{ width: `${t.pct}%` }}
+                  />
                 )
               })}
+            </div>
+
+            {/* Token Grid */}
+            <div className="grid grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-5">
+              {treasuryTokens.map((t, i) => (
+                <div key={i} className="flex items-start gap-3">
+                  <div className={`text-lg font-bold ${t.color} mt-0.5 w-12 shrink-0`}>{t.symbol}</div>
+                  <div>
+                    <div className="text-sm font-mono text-white/80">{t.amount}</div>
+                    <div className="text-xs text-white/30">{t.usd} · {t.pct}%</div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Token Holders — bottom */}
-      <section className="py-16 pb-28 relative">
+      {/* Signals */}
+      <section className="py-16 relative">
         <div className="max-w-5xl mx-auto px-6">
-          <SectionHeading icon="◆" label="Token Holders" />
-          <div className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur overflow-hidden">
-            <div className="grid grid-cols-[1fr_auto_auto] gap-4 px-6 py-3 border-b border-white/5 text-xs uppercase tracking-wider text-white/30">
-              <span>Address</span>
-              <span className="text-right">CLAB</span>
-              <span className="text-right w-16">Share</span>
-            </div>
-            {tokenHolders.map((h, i) => (
-              <div key={i} className="grid grid-cols-[1fr_auto_auto] gap-4 px-6 py-4 border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
-                <span className="font-mono text-sm text-white/70">{h.address}</span>
-                <span className="text-sm text-white/90 text-right tabular-nums">{h.tokens}</span>
-                <span className="text-sm text-right w-16">
-                  <span className="text-accent-blue">{h.pct}%</span>
-                </span>
+          <SectionHeading icon="◇" label="Signals" />
+          <p className="text-sm text-white/30 -mt-4 mb-6">
+            Community feedback ranked by token-weighted votes. Expand a signal to see discussion.
+          </p>
+          <div className="space-y-3">
+            {signals.map((s) => (
+              <SignalCard key={s.id} signal={s} />
+            ))}
+          </div>
+
+          {/* Voter Stats */}
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'Total NEON Voted', value: '6.9M', sub: 'across all signals' },
+              { label: 'Unique Voters', value: '571', sub: 'token holders' },
+              { label: 'Active Signals', value: '4', sub: 'open for voting' },
+              { label: 'Avg Participation', value: '143', sub: 'voters per signal' },
+            ].map((stat, i) => (
+              <div key={i} className="rounded-xl border border-white/5 bg-dark-800/30 px-5 py-4">
+                <div className="text-xs text-white/30 uppercase tracking-wider mb-1">{stat.label}</div>
+                <div className="text-2xl font-bold tabular-nums text-white/90">{stat.value}</div>
+                <div className="text-[10px] text-white/20">{stat.sub}</div>
               </div>
             ))}
-            <div className="px-6 py-3 text-xs text-white/25">
-              Showing top 6 of 142 holders · 82.5% displayed
-            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Collapsible Token Holders */}
+      <section className="py-8 pb-28 relative">
+        <div className="max-w-5xl mx-auto px-6">
+          <button
+            onClick={() => setShowHolders(!showHolders)}
+            className="flex items-center gap-3 mb-6 group"
+          >
+            <span className="text-accent-purple/60 text-sm">◆</span>
+            <h2 className="text-lg font-semibold text-white/50 group-hover:text-white/70 transition-colors">
+              Token Holders
+            </h2>
+            <span className="text-xs text-white/25">{showHolders ? '▲ hide' : '▼ show'}</span>
+            <div className="flex-1 h-px bg-gradient-to-r from-white/5 to-transparent" />
+          </button>
+
+          {showHolders && (
+            <div className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur overflow-hidden">
+              <div className="grid grid-cols-[1fr_auto_auto] gap-4 px-6 py-3 border-b border-white/5 text-xs uppercase tracking-wider text-white/30">
+                <span>Address</span>
+                <span className="text-right">NEON</span>
+                <span className="text-right w-16">Share</span>
+              </div>
+              {tokenHolders.map((h, i) => (
+                <div key={i} className="grid grid-cols-[1fr_auto_auto] gap-4 px-6 py-4 border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
+                  <span className="font-mono text-sm text-white/70">{h.address}</span>
+                  <span className="text-sm text-white/90 text-right tabular-nums">{h.tokens}</span>
+                  <span className="text-sm text-right w-16">
+                    <span className="text-accent-cyan">{h.pct}%</span>
+                  </span>
+                </div>
+              ))}
+              <div className="px-6 py-3 text-xs text-white/25">
+                Showing top 6 of 571 holders · 55.0% displayed
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
       <Footer />
     </main>
-  )
-}
-
-function SectionHeading({ icon, label }: { icon: string; label: string }) {
-  return (
-    <div className="flex items-center gap-3 mb-8">
-      <span className="text-accent-purple/60 text-sm">{icon}</span>
-      <h2 className="text-2xl font-bold text-white/90">{label}</h2>
-      <div className="flex-1 h-px bg-gradient-to-r from-white/10 to-transparent" />
-    </div>
   )
 }
