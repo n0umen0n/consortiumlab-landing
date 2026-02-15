@@ -85,15 +85,28 @@ interface ContributorDailyLog {
   agents: AgentDailyLog[]
 }
 
+interface RankingEntry {
+  contributor: string
+  place: number
+}
+
+interface AgentProductivity {
+  agentName: string
+  tasksCompleted: number
+  uptime: string
+  efficiency: string
+}
+
 interface WeeklyUpdate {
   name: string
   initials: string
   role: string
   color: string
   updateText: string
-  ranking: number
+  rankingsGiven: RankingEntry[]
   respectEarned: number
-  isTopPerformer: boolean
+  receivedRank: number
+  agentStats: AgentProductivity[]
 }
 
 const agentActivityLogs: ContributorDailyLog[] = [
@@ -188,31 +201,64 @@ const agentActivityLogs: ContributorDailyLog[] = [
 const weeklyUpdates: WeeklyUpdate[] = [
   {
     name: 'Zara Okafor', initials: 'ZO', role: 'Protocol Architect', color: 'from-accent-blue to-accent-purple',
-    updateText: 'Shipped the Base vault adapter and coordinated the audit kickoff with Trail of Bits. Nexus agent now live on 4 chains with automated yield routing. Preparing the governance proposal for cross-chain expansion.',
-    ranking: 1,
+    updateText: 'Shipped the Base vault adapter and coordinated the audit kickoff with Trail of Bits. Nexus agent now live on 4 chains with automated yield routing.',
+    rankingsGiven: [
+      { contributor: 'Luca Ferrante', place: 1 },
+      { contributor: 'Mika Tanaka', place: 2 },
+      { contributor: 'Ren Castillo', place: 3 },
+    ],
+    receivedRank: 1,
     respectEarned: 187,
-    isTopPerformer: true,
+    agentStats: [
+      { agentName: 'Nexus', tasksCompleted: 47, uptime: '99.2%', efficiency: '94%' },
+      { agentName: 'Sentinel', tasksCompleted: 21, uptime: '100%', efficiency: '88%' },
+      { agentName: 'Archivist', tasksCompleted: 3, uptime: '12%', efficiency: '97%' },
+    ],
   },
   {
     name: 'Luca Ferrante', initials: 'LF', role: 'Vault Strategist', color: 'from-accent-purple to-accent-gold',
-    updateText: 'Overhauled the risk engine parameters after the ETH volatility spike. Phantom agent now auto-adjusts liquidation buffers based on real-time IV. Backtested new collateral types for Q2 expansion.',
-    ranking: 2,
+    updateText: 'Overhauled the risk engine parameters after the ETH volatility spike. Phantom agent now auto-adjusts liquidation buffers based on real-time IV.',
+    rankingsGiven: [
+      { contributor: 'Zara Okafor', place: 1 },
+      { contributor: 'Mika Tanaka', place: 2 },
+      { contributor: 'Ren Castillo', place: 3 },
+    ],
+    receivedRank: 2,
     respectEarned: 154,
-    isTopPerformer: true,
+    agentStats: [
+      { agentName: 'Phantom', tasksCompleted: 34, uptime: '98.5%', efficiency: '91%' },
+      { agentName: 'Specter', tasksCompleted: 8, uptime: '22%', efficiency: '85%' },
+    ],
   },
   {
     name: 'Mika Tanaka', initials: 'MT', role: 'Smart Contract Lead', color: 'from-accent-gold to-accent-cyan',
-    updateText: 'Finished the delta-neutral vault v3 contracts and deployed to Scroll testnet. Drift agent rebalancing logic improved — 23% better capital efficiency in backtests.',
-    ranking: 3,
+    updateText: 'Finished the delta-neutral vault v3 contracts and deployed to Scroll testnet. Drift agent rebalancing logic improved — 23% better capital efficiency.',
+    rankingsGiven: [
+      { contributor: 'Zara Okafor', place: 1 },
+      { contributor: 'Luca Ferrante', place: 2 },
+      { contributor: 'Ren Castillo', place: 3 },
+    ],
+    receivedRank: 3,
     respectEarned: 128,
-    isTopPerformer: false,
+    agentStats: [
+      { agentName: 'Drift', tasksCompleted: 52, uptime: '97.8%', efficiency: '96%' },
+    ],
   },
   {
     name: 'Ren Castillo', initials: 'RC', role: 'Community & Governance', color: 'from-accent-cyan to-accent-blue',
     updateText: 'Ran the temp check vote for Base deployment (84% approval). Organized two community calls and onboarded 3 new contributors to the grants program.',
-    ranking: 4,
+    rankingsGiven: [
+      { contributor: 'Zara Okafor', place: 1 },
+      { contributor: 'Luca Ferrante', place: 2 },
+      { contributor: 'Mika Tanaka', place: 3 },
+    ],
+    receivedRank: 4,
     respectEarned: 112,
-    isTopPerformer: false,
+    agentStats: [
+      { agentName: 'Echo', tasksCompleted: 12, uptime: '45%', efficiency: '82%' },
+      { agentName: 'Pulse', tasksCompleted: 38, uptime: '95%', efficiency: '89%' },
+      { agentName: 'Chronicle', tasksCompleted: 1, uptime: '5%', efficiency: '100%' },
+    ],
   },
 ]
 
@@ -1022,12 +1068,7 @@ export default function OrgPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {weeklyUpdates.map((update, i) => (
-                <div key={i} className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur p-6 hover:bg-dark-800/70 transition-all relative overflow-hidden">
-                  {update.isTopPerformer && (
-                    <div className="absolute top-3 right-3 text-[10px] uppercase tracking-wider font-bold px-2 py-0.5 rounded-full bg-accent-gold/10 text-accent-gold border border-accent-gold/20">
-                      ★ Top Performer
-                    </div>
-                  )}
+                <div key={i} className="rounded-2xl border border-white/5 bg-dark-800/50 backdrop-blur p-6 hover:bg-dark-800/70 transition-all">
                   <div className="flex items-center gap-3 mb-4">
                     <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${update.color} flex items-center justify-center text-xs font-bold text-white/90 shrink-0`}>
                       {update.initials}
@@ -1038,10 +1079,40 @@ export default function OrgPage() {
                     </div>
                   </div>
                   <p className="text-sm text-white/50 leading-relaxed mb-4">{update.updateText}</p>
+
+                  {/* Rankings Given */}
+                  <div className="mb-4">
+                    <div className="text-[10px] text-white/25 uppercase tracking-wider mb-2">Rankings Submitted</div>
+                    <div className="flex flex-wrap gap-2">
+                      {update.rankingsGiven.map((r, j) => (
+                        <span key={j} className="text-xs px-2 py-1 rounded-lg bg-white/5 text-white/50">
+                          <span className="text-accent-cyan font-bold">#{r.place}</span> → {r.contributor}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Agent Productivity */}
+                  <div className="mb-4">
+                    <div className="text-[10px] text-white/25 uppercase tracking-wider mb-2">Agent Productivity</div>
+                    <div className="space-y-1.5">
+                      {update.agentStats.map((a, j) => (
+                        <div key={j} className="flex items-center justify-between text-xs bg-white/[0.02] rounded-lg px-3 py-1.5">
+                          <span className="text-white/60 font-medium">{a.agentName}</span>
+                          <div className="flex items-center gap-3 text-white/40">
+                            <span><span className="text-white/60 font-mono">{a.tasksCompleted}</span> tasks</span>
+                            <span><span className="text-emerald-400/80 font-mono">{a.uptime}</span> uptime</span>
+                            <span><span className="text-accent-cyan/80 font-mono">{a.efficiency}</span> eff.</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
                   <div className="flex items-center gap-4 pt-3 border-t border-white/5">
                     <div>
-                      <div className="text-[10px] text-white/25 uppercase tracking-wider">Ranking</div>
-                      <div className="text-sm font-bold text-accent-cyan">#{update.ranking}</div>
+                      <div className="text-[10px] text-white/25 uppercase tracking-wider">Received Rank</div>
+                      <div className="text-sm font-bold text-accent-cyan">#{update.receivedRank}</div>
                     </div>
                     <div>
                       <div className="text-[10px] text-white/25 uppercase tracking-wider">Respect Earned</div>
