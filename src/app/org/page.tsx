@@ -464,7 +464,7 @@ export default function OrgPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto mt-6">
             <div className="rounded-2xl border border-emerald-400/10 bg-emerald-400/[0.03] backdrop-blur px-6 py-6 text-left">
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-emerald-400 text-lg">⚡</span>
+                <span className="text-emerald-400 text-lg">◈</span>
                 <h3 className="text-sm font-bold uppercase tracking-widest text-emerald-400">Short-term Strategy</h3>
               </div>
               <ul className="text-sm text-white/50 leading-relaxed space-y-2">
