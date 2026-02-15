@@ -464,7 +464,7 @@ export default function OrgPage() {
             {[
               { label: 'Total NEON Voted', value: '6.9M', sub: 'across all signals' },
               { label: 'Unique Voters', value: '571', sub: 'token holders' },
-              { label: 'Active Signals', value: '4', sub: 'open for voting' },
+              { label: 'Total Signals', value: '4', sub: 'open for voting' },
               { label: 'Avg Participation', value: '143', sub: 'voters per signal' },
             ].map((stat, i) => (
               <div key={i} className="rounded-xl border border-white/5 bg-dark-800/30 px-5 py-4">
