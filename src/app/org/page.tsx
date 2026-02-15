@@ -1043,7 +1043,7 @@ export default function OrgPage() {
       {/* Daily Updates */}
       <section className="py-16 relative">
         <div className="max-w-5xl mx-auto px-6">
-          <SectionHeading icon="⚡" label="Daily Updates" />
+          <SectionHeading icon="◆" label="Daily Updates" />
 
           {/* Agent Activity Log */}
           <div className="mb-12">
