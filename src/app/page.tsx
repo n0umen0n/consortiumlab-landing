@@ -1,5 +1,6 @@
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
+import LaunchCTA from '@/components/LaunchCTA'
 import WhyConsortium from '@/components/WhyConsortium'
 import Problem from '@/components/Problem'
 import Solution from '@/components/Solution'
@@ -12,6 +13,7 @@ export default function Home() {
     <main className="relative">
       <Navbar />
       <Hero />
+      <LaunchCTA />
       <WhyConsortium />
       <Problem />
       <Solution />
