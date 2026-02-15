@@ -23,12 +23,12 @@ export default function Hero() {
           Building governance systems for the AI&nbsp;and&nbsp;crypto&nbsp;age
         </p>
         
-        <p className="text-lg md:text-xl text-white/40 max-w-2xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
-          Technology evolves fast. Organizational design must catch&nbsp;up.
+        <p className="text-2xl md:text-3xl lg:text-4xl text-white font-semibold max-w-3xl mx-auto mb-12 animate-fade-in-up" style={{ animationDelay: '0.6s', animationFillMode: 'both' }}>
+          Launch consortium together with your&nbsp;token
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fade-in-up" style={{ animationDelay: '0.8s', animationFillMode: 'both' }}>
-          <a href="#problem" className="px-8 py-4 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white font-medium hover:opacity-90 transition-opacity">
+          <a href="#why-consortium" className="px-8 py-4 rounded-full bg-gradient-to-r from-accent-blue to-accent-purple text-white font-medium hover:opacity-90 transition-opacity">
             Explore the Vision
           </a>
           <a href="#solution" className="px-8 py-4 rounded-full border border-white/10 text-white/70 hover:text-white hover:border-white/20 transition-all">
