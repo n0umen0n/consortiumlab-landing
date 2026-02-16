@@ -25,6 +25,7 @@ export default function LaunchCTA() {
               { num: '02', question: 'Should I pay tax?' },
               { num: '03', question: 'How do I get funding?' },
               { num: '04', question: 'How do I find people willing to help?' },
+              { num: '05', question: 'How do I get first users?' },
             ].map((item) => (
               <div
                 key={item.num}
@@ -39,7 +40,7 @@ export default function LaunchCTA() {
           <div className="text-center mt-16">
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
               <span className="bg-gradient-to-r from-[#7B8CDE] via-[#B07CC3] via-[#D4A0A0] to-[#C9A84C] bg-clip-text text-transparent">
-                We have solutions for those questions
+                We have best solutions for those questions
               </span>
             </h2>
           </div>
