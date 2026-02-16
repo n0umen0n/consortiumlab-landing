@@ -18,8 +18,8 @@ export default function Footer() {
           <div>
             <h4 className="text-sm font-semibold uppercase tracking-widest text-white/60 mb-4">Navigate</h4>
             <ul className="space-y-3 text-white/40">
-              <li><a href="#why-consortium" className="hover:text-white transition-colors">Why Consortium</a></li>
-              <li><a href="#team" className="hover:text-white transition-colors">Team</a></li>
+              <li><a href="/#why-consortium" className="hover:text-white transition-colors">Why Consortium</a></li>
+              <li><a href="/#team" className="hover:text-white transition-colors">Team</a></li>
             </ul>
           </div>
           
