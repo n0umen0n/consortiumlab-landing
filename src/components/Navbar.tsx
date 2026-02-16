@@ -19,13 +19,11 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
         <a href="#" className="flex items-center gap-3 group">
           <ConsortiumLogo className="w-8 h-8 transition-transform group-hover:scale-110" />
-          <span className="text-lg font-semibold tracking-tight">Consortium Lab</span>
+          <span className="text-lg font-semibold tracking-tight">Consortium Factory</span>
         </a>
         <div className="hidden md:flex items-center gap-8 text-sm text-white/60">
-          <a href="#problem" className="hover:text-white transition-colors">Problem</a>
-          <a href="#solution" className="hover:text-white transition-colors">Solution</a>
-          <a href="#vision" className="hover:text-white transition-colors">Vision</a>
-          <a href="#founder" className="hover:text-white transition-colors">Founder</a>
+          <a href="#why-consortium" className="hover:text-white transition-colors">Why Consortium</a>
+          <a href="#team" className="hover:text-white transition-colors">Team</a>
         </div>
         <a href="#contact" className="hidden md:block text-sm px-5 py-2 rounded-full border border-accent-blue/30 text-accent-blue hover:bg-accent-blue/10 transition-all">
           Get in Touch

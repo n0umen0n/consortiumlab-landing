@@ -16,7 +16,7 @@ export default function Hero() {
         
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-6 animate-fade-in-up" style={{ animationDelay: '0.2s', animationFillMode: 'both' }}>
           <span className="gradient-text">Consortium</span>{' '}
-          <span className="text-white">Lab</span>
+          <span className="text-white">Factory</span>
         </h1>
         
         <p className="text-xl md:text-2xl lg:text-3xl text-white/70 font-light mb-4 animate-fade-in-up" style={{ animationDelay: '0.4s', animationFillMode: 'both' }}>

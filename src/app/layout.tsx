@@ -2,11 +2,11 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'Consortium Lab — Governance for the AI & Crypto Age',
-  description: 'Designing organizational structures for tokenized communities. Researching, building, and deploying the governance layer the crypto ecosystem needs.',
+  title: 'Consortium Factory — Building Business Structures for the AI & Crypto Age',
+  description: 'Building business structures for the AI and crypto age. AI agents guiding you through every step of building a successful business.',
   openGraph: {
-    title: 'Consortium Lab',
-    description: 'Building governance systems for the AI and crypto age.',
+    title: 'Consortium Factory',
+    description: 'Building business structures for the AI and crypto age.',
     type: 'website',
   },
 }
