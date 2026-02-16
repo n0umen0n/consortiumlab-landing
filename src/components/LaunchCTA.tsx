@@ -22,10 +22,9 @@ export default function LaunchCTA() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
               { num: '01', question: 'How do I start my business?' },
-              { num: '02', question: 'Should I pay tax?' },
-              { num: '03', question: 'How do I get funding?' },
-              { num: '04', question: 'How do I find people willing to help?' },
-              { num: '05', question: 'How do I get first users?' },
+              { num: '02', question: 'How do I get funding?' },
+              { num: '03', question: 'How do I find people willing to help?' },
+              { num: '04', question: 'How do I get first users?' },
             ].map((item) => (
               <div
                 key={item.num}
