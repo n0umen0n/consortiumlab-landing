@@ -837,7 +837,7 @@ export default function OrgPage() {
                     {/* Agents */}
                     <div className="space-y-2.5">
                       <div className="flex items-center gap-2 mb-3">
-                        <span className="text-xs font-bold uppercase tracking-widest text-accent-cyan/70">🤖 Agents</span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-accent-cyan/70">Agents</span>
                         <div className="flex-1 h-px bg-accent-cyan/10" />
                         <span className="text-[10px] text-emerald-400/70 font-medium">{activeCount} active</span>
                       </div>
