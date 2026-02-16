@@ -4,78 +4,84 @@ export default function ConsortiumLogo({ className = 'w-10 h-10' }: { className?
   return (
     <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
       <defs>
-        <linearGradient id="cGrad" x1="0" y1="0" x2="1" y2="1">
+        <linearGradient id="lg1" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
           <stop offset="0%" stopColor="#4f7df5" />
           <stop offset="50%" stopColor="#8b5cf6" />
           <stop offset="100%" stopColor="#d4a847" />
         </linearGradient>
-        <linearGradient id="glowGrad" x1="0.5" y1="0" x2="0.5" y2="1">
-          <stop offset="0%" stopColor="#8b5cf6" stopOpacity="0.3" />
-          <stop offset="100%" stopColor="#4f7df5" stopOpacity="0" />
-        </linearGradient>
+        <filter id="glow">
+          <feGaussianBlur stdDeviation="2" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
 
       <style>{`
-        @keyframes draw-c {
-          0% { stroke-dashoffset: 180; }
-          60% { stroke-dashoffset: 0; }
+        @keyframes trace {
+          0% { stroke-dashoffset: 1; }
           100% { stroke-dashoffset: 0; }
         }
-        @keyframes draw-lines {
-          0%, 50% { stroke-dashoffset: 30; opacity: 0; }
-          70% { opacity: 1; }
-          100% { stroke-dashoffset: 0; opacity: 1; }
+        @keyframes fade-in {
+          0% { opacity: 0; }
+          100% { opacity: 1; }
         }
-        @keyframes dot-appear {
-          0%, 60% { r: 0; opacity: 0; }
-          80% { r: 3.5; opacity: 1; }
-          100% { r: 3; opacity: 1; }
+        @keyframes breathe {
+          0%, 100% { opacity: 0.6; }
+          50% { opacity: 1; }
         }
-        @keyframes orbit {
-          from { transform: rotate(0deg); }
-          to { transform: rotate(360deg); }
-        }
-        .c-stroke {
-          stroke-dasharray: 180;
-          animation: draw-c 2s ease-out both;
-        }
-        .circuit-line {
-          stroke-dasharray: 30;
-          animation: draw-lines 2s ease-out both;
-        }
-        .node-dot {
-          animation: dot-appear 2s ease-out both;
-        }
-        .orbit-ring {
-          transform-origin: 50px 50px;
-          animation: orbit 12s linear infinite;
-        }
+        .trace-1 { stroke-dasharray: 1; animation: trace 1.5s ease-out 0.2s both; }
+        .trace-2 { stroke-dasharray: 1; animation: trace 1.5s ease-out 0.5s both; }
+        .trace-3 { stroke-dasharray: 1; animation: trace 1.5s ease-out 0.8s both; }
+        .fade-1 { animation: fade-in 0.6s ease-out 1.2s both; }
+        .fade-2 { animation: fade-in 0.6s ease-out 1.5s both; }
+        .fade-3 { animation: fade-in 0.6s ease-out 1.8s both; }
+        .breathe { animation: breathe 4s ease-in-out infinite; }
       `}</style>
 
-      {/* Subtle orbit ring */}
-      <circle cx="50" cy="50" r="44" stroke="url(#cGrad)" strokeWidth="0.5" opacity="0.1" className="orbit-ring" strokeDasharray="4 8" />
-
-      {/* Main C shape — bold open arc */}
+      {/* Diamond frame — 3 nested diamonds traced in sequence */}
       <path
-        d="M 68 28 A 30 30 0 1 0 68 72"
-        stroke="url(#cGrad)"
-        strokeWidth="6"
-        strokeLinecap="round"
-        className="c-stroke"
+        d="M50 5 L90 50 L50 95 L10 50 Z"
+        stroke="url(#lg1)"
+        strokeWidth="2"
+        pathLength="1"
+        className="trace-1"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M50 18 L78 50 L50 82 L22 50 Z"
+        stroke="url(#lg1)"
+        strokeWidth="1.5"
+        pathLength="1"
+        className="trace-2"
+        opacity="0.6"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M50 31 L66 50 L50 69 L34 50 Z"
+        stroke="url(#lg1)"
+        strokeWidth="1.2"
+        pathLength="1"
+        className="trace-3"
+        opacity="0.4"
+        strokeLinejoin="round"
       />
 
-      {/* Circuit lines branching from C endpoints */}
-      <line x1="68" y1="28" x2="82" y2="16" stroke="#4f7df5" strokeWidth="2" strokeLinecap="round" className="circuit-line" />
-      <line x1="68" y1="72" x2="82" y2="84" stroke="#d4a847" strokeWidth="2" strokeLinecap="round" className="circuit-line" />
-      <line x1="82" y1="16" x2="90" y2="16" stroke="#4f7df5" strokeWidth="2" strokeLinecap="round" className="circuit-line" />
-      <line x1="82" y1="84" x2="90" y2="84" stroke="#d4a847" strokeWidth="2" strokeLinecap="round" className="circuit-line" />
+      {/* Corner accent nodes — appear after trace */}
+      <circle cx="50" cy="5" r="2.5" fill="#4f7df5" className="fade-1" filter="url(#glow)" />
+      <circle cx="90" cy="50" r="2.5" fill="#8b5cf6" className="fade-2" filter="url(#glow)" />
+      <circle cx="50" cy="95" r="2.5" fill="#d4a847" className="fade-1" filter="url(#glow)" />
+      <circle cx="10" cy="50" r="2.5" fill="#8b5cf6" className="fade-2" filter="url(#glow)" />
 
-      {/* Endpoint nodes */}
-      <circle cx="90" cy="16" r="3" fill="#4f7df5" className="node-dot" />
-      <circle cx="90" cy="84" r="3" fill="#d4a847" className="node-dot" />
+      {/* Center core — breathes */}
+      <circle cx="50" cy="50" r="5" fill="url(#lg1)" className="fade-3 breathe" filter="url(#glow)" />
 
-      {/* Center dot */}
-      <circle cx="38" cy="50" r="3" fill="#8b5cf6" className="node-dot" opacity="0.8" />
+      {/* Cross lines from center to mid-diamond corners */}
+      <line x1="50" y1="50" x2="50" y2="18" stroke="#4f7df5" strokeWidth="0.6" opacity="0.3" className="fade-3" />
+      <line x1="50" y1="50" x2="78" y2="50" stroke="#8b5cf6" strokeWidth="0.6" opacity="0.3" className="fade-3" />
+      <line x1="50" y1="50" x2="50" y2="82" stroke="#d4a847" strokeWidth="0.6" opacity="0.3" className="fade-3" />
+      <line x1="50" y1="50" x2="22" y2="50" stroke="#8b5cf6" strokeWidth="0.6" opacity="0.3" className="fade-3" />
     </svg>
   )
 }
