@@ -123,7 +123,7 @@ export default function WhyConsortium() {
               </h3>
             </div>
             <p className="text-white/40 text-lg mb-10 max-w-2xl pl-12 md:pl-16">
-              Consortium comes with set of AI agents guiding you through every step of building a successful business
+              Consortium comes with set of AI agents guiding you through every step of building a successful business.
             </p>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
