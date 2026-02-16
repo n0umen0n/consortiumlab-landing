@@ -9,14 +9,14 @@ const team = [
     role: 'Co-Founder',
     bio: 'Ex-PwC Business transformation. 8 years web3 product design / smart contract development.',
     image: '/lennar.jpg',
-    imageClass: 'w-full h-full object-cover scale-125',
+    imageClass: 'w-full h-full object-cover scale-125 object-top',
   },
   {
     name: 'Lennar Lehestik',
     role: 'Co-Founder',
     bio: 'Led a 20-head AI team for 7 years, Silicon Valley startup. Over a decade in full-stack development.',
     image: '/vlad.jpg',
-    imageClass: 'w-full h-full object-cover',
+    imageClass: 'w-full h-full object-cover object-top',
   },
 ]
 
