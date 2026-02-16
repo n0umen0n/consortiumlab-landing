@@ -35,6 +35,14 @@ export default function LaunchCTA() {
               </div>
             ))}
           </div>
+
+          <div className="text-center mt-16">
+            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
+              <span className="bg-gradient-to-r from-[#7B8CDE] via-[#B07CC3] via-[#D4A0A0] to-[#C9A84C] bg-clip-text text-transparent">
+                We have solutions for those questions
+              </span>
+            </h2>
+          </div>
         </ScrollReveal>
       </div>
     </section>
