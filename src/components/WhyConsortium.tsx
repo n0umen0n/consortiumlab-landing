@@ -156,9 +156,9 @@ export default function WhyConsortium() {
 
             <div className="grid sm:grid-cols-3 gap-4">
               {[
-                { icon: 'treasury', title: 'Collectively Owned Treasury', desc: 'Shared assets governed by the most active contributors.' },
-                { icon: 'proposals', title: 'Signals Module', desc: 'Enabling investors and token holders to give their feedback' },
-                { icon: 'contributors', title: 'Attract Contributors', desc: 'Token vesting for contributors who drive the project forward' },
+                { icon: 'treasury', title: 'Collectively Owned Treasury', desc: 'Multi-token treasury with on-chain multisig proposals. Full transparency — every transfer requires approval from your team.' },
+                { icon: 'proposals', title: 'Signals Module', desc: 'Token-weighted voting where holders rank priorities and leave feedback. Real signal from real stakeholders, not noise.' },
+                { icon: 'contributors', title: 'Meritocratic Governance', desc: 'Contributors earn Respect through weekly peer rankings. The most active builders rise to decision-making roles — no politics, just merit.' },
               ].map((item) => (
                 <div
                   key={item.title}
