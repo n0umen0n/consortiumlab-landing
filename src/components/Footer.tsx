@@ -28,6 +28,7 @@ export default function Footer() {
             <ul className="space-y-3 text-white/40">
               <li><a href="https://x.com/DAOOFTHEAPES" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Twitter / X</a></li>
               <li><a href="https://github.com/n0umen0n" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">GitHub</a></li>
+              <li><a href="https://t.me/respectgameofficial" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Telegram</a></li>
               <li><a href="https://medium.com/@vladislavhramtsov" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">Medium</a></li>
             </ul>
           </div>
