@@ -1,19 +1,20 @@
 'use client'
 
+import Image from 'next/image'
 import ScrollReveal from './ScrollReveal'
 
 const team = [
   {
-    initial: 'V',
     name: 'Vladislav Hramtsov',
     role: 'Co-Founder',
     bio: 'Ex-PwC Business transformation. 8 years web3 product design / smart contract development.',
+    image: '/vlad.jpg',
   },
   {
-    initial: 'L',
     name: 'Lennar Lehestik',
     role: 'Co-Founder',
-    bio: 'Led a 20-head AI team for 7 years, in a Silicon Valley 100m+ valuation startup. Over a decade in full-stack development.',
+    bio: 'Led a 20-head AI team for 7 years, Silicon Valley startup. Over a decade in full-stack development.',
+    image: '/lennar.jpg',
   },
 ]
 
@@ -31,8 +32,14 @@ export default function Team() {
               <div className="bg-dark-700/30 border border-white/5 rounded-2xl p-10">
                 <div className="flex items-start gap-6">
                   <div className="shrink-0">
-                    <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-accent-blue/20 to-accent-purple/20 border border-white/10 flex items-center justify-center">
-                      <span className="text-3xl font-bold gradient-text">{member.initial}</span>
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden border border-white/10">
+                      <Image
+                        src={member.image}
+                        alt={member.name}
+                        width={80}
+                        height={80}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </div>
                   <div>
