@@ -811,7 +811,7 @@ export default function OrgPage() {
           }
         `}</style>
         <div className="max-w-5xl mx-auto px-6">
-          <SectionHeading icon="★" label="Contributors" />
+          <SectionHeading icon="★" label="Contributors & Their Agents" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             {contributors
               .sort((a, b) => b.respect - a.respect)
@@ -837,9 +837,9 @@ export default function OrgPage() {
                     {/* Agents */}
                     <div className="space-y-2.5">
                       <div className="flex items-center gap-2 mb-3">
-                        <span className="text-[10px] uppercase tracking-wider text-white/25">Agents</span>
-                        <div className="flex-1 h-px bg-white/5" />
-                        <span className="text-[10px] text-emerald-400/70">{activeCount} active</span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-accent-cyan/70">🤖 Agents</span>
+                        <div className="flex-1 h-px bg-accent-cyan/10" />
+                        <span className="text-[10px] text-emerald-400/70 font-medium">{activeCount} active</span>
                       </div>
                       {c.agents.map((agent, j) => (
                         <div
@@ -891,37 +891,6 @@ export default function OrgPage() {
         </div>
       </section>
 
-      {/* Proposals */}
-      <section className="py-16 relative">
-        <div className="max-w-5xl mx-auto px-6">
-          <SectionHeading icon="⬢" label="Proposals" />
-          <p className="text-sm text-white/30 -mt-4 mb-6">
-            Treasury transfer proposals requiring multisig approval. Expand to see details and signer status.
-          </p>
-          <div className="space-y-3">
-            {proposals.map((p) => (
-              <ProposalCard key={p.id} proposal={p} />
-            ))}
-          </div>
-
-          {/* Proposal Stats */}
-          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: 'Total Proposals', value: '4', sub: 'all time' },
-              { label: 'Pending', value: '2', sub: 'awaiting signatures' },
-              { label: 'Executed', value: '1', sub: 'transferred' },
-              { label: 'Threshold', value: '3/5', sub: 'multisig required' },
-            ].map((stat, i) => (
-              <div key={i} className="rounded-xl border border-white/5 bg-dark-800/30 px-5 py-4">
-                <div className="text-xs text-white/30 uppercase tracking-wider mb-1">{stat.label}</div>
-                <div className="text-2xl font-bold tabular-nums text-white/90">{stat.value}</div>
-                <div className="text-[10px] text-white/20">{stat.sub}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Treasury — Multi-Token */}
       <section className="py-16 relative">
         <div className="max-w-5xl mx-auto px-6">
@@ -965,6 +934,37 @@ export default function OrgPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Proposals */}
+      <section className="py-16 relative">
+        <div className="max-w-5xl mx-auto px-6">
+          <SectionHeading icon="⬢" label="Proposals" />
+          <p className="text-sm text-white/30 -mt-4 mb-6">
+            Treasury transfer proposals requiring multisig approval. Expand to see details and signer status.
+          </p>
+          <div className="space-y-3">
+            {proposals.map((p) => (
+              <ProposalCard key={p.id} proposal={p} />
+            ))}
+          </div>
+
+          {/* Proposal Stats */}
+          <div className="mt-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: 'Total Proposals', value: '4', sub: 'all time' },
+              { label: 'Pending', value: '2', sub: 'awaiting signatures' },
+              { label: 'Executed', value: '1', sub: 'transferred' },
+              { label: 'Threshold', value: '3/5', sub: 'multisig required' },
+            ].map((stat, i) => (
+              <div key={i} className="rounded-xl border border-white/5 bg-dark-800/30 px-5 py-4">
+                <div className="text-xs text-white/30 uppercase tracking-wider mb-1">{stat.label}</div>
+                <div className="text-2xl font-bold tabular-nums text-white/90">{stat.value}</div>
+                <div className="text-[10px] text-white/20">{stat.sub}</div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
