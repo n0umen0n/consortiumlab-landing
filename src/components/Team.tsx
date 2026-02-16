@@ -8,13 +8,15 @@ const team = [
     name: 'Vladislav Hramtsov',
     role: 'Co-Founder',
     bio: 'Ex-PwC Business transformation. 8 years web3 product design / smart contract development.',
-    image: '/vlad.jpg',
+    image: '/lennar.jpg',
+    imageClass: 'w-full h-full object-cover',
   },
   {
     name: 'Lennar Lehestik',
     role: 'Co-Founder',
     bio: 'Led a 20-head AI team for 7 years, Silicon Valley startup. Over a decade in full-stack development.',
-    image: '/lennar.jpg',
+    image: '/vlad.jpg',
+    imageClass: 'w-full h-full object-cover scale-150',
   },
 ]
 
@@ -38,7 +40,7 @@ export default function Team() {
                         alt={member.name}
                         width={80}
                         height={80}
-                        className="w-full h-full object-cover"
+                        className={member.imageClass}
                       />
                     </div>
                   </div>
