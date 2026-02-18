@@ -138,6 +138,68 @@ export default function WhyConsortium() {
                 </div>
               ))}
             </div>
+
+            {/* Powered by strip */}
+            <div className="mt-12 rounded-xl border border-white/[0.06] bg-white/[0.02] p-6 md:p-8">
+              <p className="text-white/40 text-sm text-center mb-6 uppercase tracking-widest">Powered by</p>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-8">
+                {/* Claude Code */}
+                <div className="flex items-center gap-3 rounded-lg bg-white/[0.04] border border-white/[0.08] px-5 py-3">
+                  <svg className="w-8 h-8 shrink-0" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="12" fill="#D4A27F" fillOpacity="0.15"/>
+                    <path d="M30.5 15L17.5 33" stroke="#D4A27F" strokeWidth="3" strokeLinecap="round"/>
+                    <path d="M20 15L15 24" stroke="#D4A27F" strokeWidth="3" strokeLinecap="round"/>
+                    <path d="M33 24L28 33" stroke="#D4A27F" strokeWidth="3" strokeLinecap="round"/>
+                  </svg>
+                  <div>
+                    <span className="text-white font-semibold text-sm">Claude Code</span>
+                    <span className="block text-white/30 text-xs">by Anthropic</span>
+                  </div>
+                </div>
+
+                {/* Connector */}
+                <svg className="w-6 h-6 text-white/20 shrink-0 hidden sm:block" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-4-4 4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span className="text-white/20 text-lg sm:hidden">↓</span>
+
+                {/* OpenClaw */}
+                <div className="flex items-center gap-3 rounded-lg bg-white/[0.04] border border-white/[0.08] px-5 py-3">
+                  <svg className="w-8 h-8 shrink-0" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="12" fill="#6C8EEF" fillOpacity="0.15"/>
+                    <path d="M16 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#6C8EEF" strokeWidth="2.5" strokeLinecap="round"/>
+                    <path d="M14 26l4-6" stroke="#6C8EEF" strokeWidth="2.5" strokeLinecap="round"/>
+                    <path d="M34 26l-4-6" stroke="#6C8EEF" strokeWidth="2.5" strokeLinecap="round"/>
+                    <path d="M14 26c0 5.5 4.5 10 10 10s10-4.5 10-10" stroke="#A855F7" strokeWidth="2.5" strokeLinecap="round"/>
+                    <circle cx="20" cy="24" r="1.5" fill="#6C8EEF"/>
+                    <circle cx="28" cy="24" r="1.5" fill="#6C8EEF"/>
+                  </svg>
+                  <div>
+                    <span className="text-white font-semibold text-sm">OpenClaw</span>
+                    <span className="block text-white/30 text-xs">Agent Runtime</span>
+                  </div>
+                </div>
+
+                {/* Connector */}
+                <svg className="w-6 h-6 text-white/20 shrink-0 hidden sm:block" viewBox="0 0 24 24" fill="none"><path d="M5 12h14m-4-4 4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                <span className="text-white/20 text-lg sm:hidden">↓</span>
+
+                {/* Telegram - controlled via */}
+                <div className="flex items-center gap-3 rounded-lg bg-[#2AABEE]/10 border border-[#2AABEE]/20 px-5 py-3">
+                  <svg className="w-8 h-8 shrink-0" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="48" height="48" rx="12" fill="#2AABEE" fillOpacity="0.15"/>
+                    <path d="M12 24.5l6.5 2.5 2.5 8 3.5-4.5 6 4.5 6-21-24.5 10.5z" fill="#2AABEE"/>
+                    <path d="M18.5 27l1 6.5 3.5-4.5" fill="#1E96C8"/>
+                    <path d="M18.5 27l10-8.5-7.5 9.5" fill="#2AABEE" fillOpacity="0.6"/>
+                  </svg>
+                  <div>
+                    <span className="text-white font-semibold text-sm">Telegram</span>
+                    <span className="block text-[#2AABEE] text-xs font-medium">Control Center</span>
+                  </div>
+                </div>
+              </div>
+              <p className="text-white/30 text-xs text-center mt-5">
+                All agents are managed and controlled directly through Telegram — no dashboards needed
+              </p>
+            </div>
           </div>
         </ScrollReveal>
 
