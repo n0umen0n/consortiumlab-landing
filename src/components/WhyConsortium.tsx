@@ -156,7 +156,7 @@ export default function WhyConsortium() {
                       <img src="/openclaw-logo.svg" alt="OpenClaw" className="w-8 h-8 shrink-0 rounded" />
                       <div className="text-left">
                         <span className="text-white font-semibold text-sm">OpenClaw</span>
-                        <span className="block text-white/30 text-xs">Conversational Agents</span>
+                        <span className="block text-white/30 text-xs">Autonomous Agents</span>
                       </div>
                     </div>
                     <div className="flex flex-wrap justify-center gap-1.5">
