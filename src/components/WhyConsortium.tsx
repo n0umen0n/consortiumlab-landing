@@ -131,7 +131,7 @@ export default function WhyConsortium() {
               <div className="flex flex-col items-center gap-6">
                 {/* Telegram at top */}
                 <div className="flex items-center gap-3 rounded-lg bg-[#2AABEE]/10 border border-[#2AABEE]/20 px-6 py-3">
-                  <svg className="w-8 h-8 shrink-0" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#2AABEE" fillOpacity="0.15"/><path d="M12 24.5l6.5 2.5 2.5 8 3.5-4.5 6 4.5 6-21-24.5 10.5z" fill="#2AABEE"/><path d="M18.5 27l1 6.5 3.5-4.5" fill="#1E96C8"/><path d="M18.5 27l10-8.5-7.5 9.5" fill="#2AABEE" fillOpacity="0.6"/></svg>
+                  <img src="/telegram-logo.svg" alt="Telegram" className="w-8 h-8 shrink-0 rounded" />
                   <div>
                     <span className="text-white font-semibold">Telegram</span>
                     <span className="block text-[#2AABEE] text-xs font-medium">Your Control Center</span>
@@ -153,7 +153,7 @@ export default function WhyConsortium() {
                   {/* OpenClaw */}
                   <div className="text-center">
                     <div className="flex items-center gap-3 rounded-lg bg-white/[0.04] border border-white/[0.08] px-5 py-3 mb-3">
-                      <svg className="w-8 h-8 shrink-0" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#6C8EEF" fillOpacity="0.15"/><path d="M16 20c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="#6C8EEF" strokeWidth="2.5" strokeLinecap="round"/><path d="M14 26l4-6" stroke="#6C8EEF" strokeWidth="2.5" strokeLinecap="round"/><path d="M34 26l-4-6" stroke="#6C8EEF" strokeWidth="2.5" strokeLinecap="round"/><path d="M14 26c0 5.5 4.5 10 10 10s10-4.5 10-10" stroke="#A855F7" strokeWidth="2.5" strokeLinecap="round"/><circle cx="20" cy="24" r="1.5" fill="#6C8EEF"/><circle cx="28" cy="24" r="1.5" fill="#6C8EEF"/></svg>
+                      <img src="/openclaw-logo.svg" alt="OpenClaw" className="w-8 h-8 shrink-0 rounded" />
                       <div className="text-left">
                         <span className="text-white font-semibold text-sm">OpenClaw</span>
                         <span className="block text-white/30 text-xs">Conversational Agents</span>
@@ -169,7 +169,7 @@ export default function WhyConsortium() {
                   {/* Claude Code */}
                   <div className="text-center">
                     <div className="flex items-center gap-3 rounded-lg bg-white/[0.04] border border-white/[0.08] px-5 py-3 mb-3">
-                      <svg className="w-8 h-8 shrink-0" viewBox="0 0 48 48" fill="none"><rect width="48" height="48" rx="12" fill="#D4A27F" fillOpacity="0.15"/><path d="M30.5 15L17.5 33" stroke="#D4A27F" strokeWidth="3" strokeLinecap="round"/><path d="M20 15L15 24" stroke="#D4A27F" strokeWidth="3" strokeLinecap="round"/><path d="M33 24L28 33" stroke="#D4A27F" strokeWidth="3" strokeLinecap="round"/></svg>
+                      <img src="/claude-logo.svg" alt="Claude Code" className="w-8 h-8 shrink-0 rounded" />
                       <div className="text-left">
                         <span className="text-white font-semibold text-sm">Claude Code</span>
                         <span className="block text-white/30 text-xs">Coding Agents</span>
