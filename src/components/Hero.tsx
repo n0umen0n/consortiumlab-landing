@@ -12,7 +12,7 @@ function StarField() {
         x = Math.random() * 100
         y = Math.random() * 100
       } while (
-        Math.pow(x - 50, 2) / (38 * 38) + Math.pow(y - 48, 2) / (36 * 36) < 1
+        Math.pow(x - 48, 2) / (38 * 38) + Math.pow(y - 48, 2) / (42 * 42) < 1
       )
       s.push({
         x,
