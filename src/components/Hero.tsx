@@ -5,10 +5,18 @@ import { useRef, useEffect, useState, useMemo } from 'react'
 function StarField() {
   const stars = useMemo(() => {
     const s = []
-    for (let i = 0; i < 120; i++) {
+    for (let i = 0; i < 150; i++) {
+      let x, y
+      // Keep generating until outside the planet zone (center ~50%, ~50%, radius ~25%)
+      do {
+        x = Math.random() * 100
+        y = Math.random() * 100
+      } while (
+        Math.pow(x - 50, 2) / (30 * 30) + Math.pow(y - 45, 2) / (28 * 28) < 1
+      )
       s.push({
-        x: Math.random() * 100,
-        y: Math.random() * 100,
+        x,
+        y,
         size: 1 + Math.random() * 2,
         delay: Math.random() * 4,
         duration: 2 + Math.random() * 3,
