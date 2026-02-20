@@ -26,7 +26,7 @@ export default function Hero() {
           width: '100%',
           height: '100%',
           top: 0,
-          left: 0,
+          left: '3%',
           objectPosition: 'center center',
           zIndex: 0,
         }}
@@ -77,14 +77,6 @@ export default function Hero() {
               Building business structures for the AI&nbsp;&&nbsp;crypto&nbsp;age
             </p>
           </div>
-
-          {/* Subtitle */}
-          <p
-            className="mt-6 text-[#f6f7f9]/70 max-w-[613px] leading-[26px]"
-            style={{ fontFamily: 'Manrope, sans-serif', fontSize: '18px' }}
-          >
-            AI agents guiding you through every step of building a successful business.
-          </p>
 
           {/* CTA Buttons */}
           <div className="flex flex-row gap-[22px] items-center mt-10 flex-wrap justify-center">
