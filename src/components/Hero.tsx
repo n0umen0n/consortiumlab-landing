@@ -12,7 +12,7 @@ export default function Hero() {
   }, [])
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden bg-black">
+    <section className="relative w-full min-h-screen overflow-hidden bg-black flex items-center justify-center">
       {/* Background Video */}
       <video
         ref={videoRef}
@@ -59,7 +59,6 @@ export default function Hero() {
           className={`flex flex-col items-center text-center max-w-[871px] mx-auto px-6 transition-all duration-1000 ${
             loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
-          style={{ marginTop: 'clamp(180px, 25vh, 260px)' }}
         >
           {/* Heading */}
           <div className="flex flex-col gap-[10px] items-center">
@@ -69,12 +68,12 @@ export default function Hero() {
             >
               <span className="gradient-text">Consortium</span> Factory
             </h1>
-            <h1
-              className="text-white tracking-[-2px] leading-[1.1] italic"
-              style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(34px, 5vw, 60px)' }}
+            <p
+              className="text-white/70 font-light tracking-[-0.5px] leading-[1.3]"
+              style={{ fontFamily: 'Manrope, sans-serif', fontSize: 'clamp(20px, 3vw, 32px)' }}
             >
               Building business structures for the AI&nbsp;&&nbsp;crypto&nbsp;age
-            </h1>
+            </p>
           </div>
 
           {/* Subtitle */}
@@ -109,65 +108,6 @@ export default function Hero() {
             >
               Learn More ↓
             </a>
-          </div>
-        </div>
-
-        {/* Dashboard preview card */}
-        <div
-          className={`mx-auto mt-20 mb-10 px-4 transition-all duration-1000 delay-300 ${
-            loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-12'
-          }`}
-          style={{ maxWidth: '1163px', width: '90%' }}
-        >
-          <div
-            className="p-[22.5px] rounded-[24px] border border-white/[0.08]"
-            style={{
-              background: 'rgba(255,255,255,0.05)',
-              backdropFilter: 'blur(10px)',
-              WebkitBackdropFilter: 'blur(10px)',
-            }}
-          >
-            {/* Mock dashboard */}
-            <div className="rounded-lg bg-dark-800/80 border border-white/[0.06] overflow-hidden">
-              {/* Top bar */}
-              <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06]">
-                <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
-                <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
-                <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-                <span className="ml-3 text-xs text-white/30 font-mono">dashboard — consortium factory</span>
-              </div>
-              {/* Dashboard content */}
-              <div className="p-6 md:p-8">
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-                  {[
-                    { label: 'Active Agents', value: '8', trend: '+2 this week' },
-                    { label: 'Tasks Completed', value: '1,247', trend: '+89 today' },
-                    { label: 'Contributors', value: '34', trend: '↑ 12%' },
-                    { label: 'Treasury', value: '$482K', trend: '+$18K' },
-                  ].map((stat) => (
-                    <div key={stat.label} className="bg-white/[0.03] rounded-xl p-4 border border-white/[0.04]">
-                      <p className="text-white/40 text-xs font-[Manrope]">{stat.label}</p>
-                      <p className="text-white text-2xl font-bold mt-1 font-[Inter]">{stat.value}</p>
-                      <p className="text-emerald-400/70 text-xs mt-1">{stat.trend}</p>
-                    </div>
-                  ))}
-                </div>
-                {/* Activity bars */}
-                <div className="flex items-end gap-1 h-20">
-                  {Array.from({ length: 30 }).map((_, i) => (
-                    <div
-                      key={i}
-                      className="flex-1 rounded-t bg-gradient-to-t from-[#7b39fc]/60 to-[#7b39fc]/20"
-                      style={{
-                        height: `${20 + Math.sin(i * 0.5) * 30 + Math.random() * 30}%`,
-                        animationDelay: `${i * 0.05}s`,
-                      }}
-                    />
-                  ))}
-                </div>
-                <p className="text-white/20 text-xs mt-2 font-[Manrope]">Agent activity — last 30 days</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
