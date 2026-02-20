@@ -61,36 +61,28 @@ export default function Hero() {
           }`}
           style={{ marginTop: 'clamp(180px, 25vh, 260px)' }}
         >
-          {/* Badge */}
-          <div className="mb-8 px-5 py-2 rounded-full border border-white/10 bg-white/[0.04] backdrop-blur-md">
-            <span className="text-sm font-[Manrope] text-white/70 tracking-wide">
-              🚀 The future of business building
-            </span>
-          </div>
-
           {/* Heading */}
           <div className="flex flex-col gap-[10px] items-center">
             <h1
-              className="text-white font-medium tracking-[-2px] leading-[1.1]"
+              className="text-white font-bold tracking-[-2px] leading-[1.1]"
               style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(40px, 6vw, 76px)' }}
             >
-              Build your business.
+              <span className="gradient-text">Consortium</span> Factory
             </h1>
             <h1
               className="text-white tracking-[-2px] leading-[1.1] italic"
-              style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(40px, 6vw, 76px)' }}
+              style={{ fontFamily: "'Instrument Serif', serif", fontSize: 'clamp(34px, 5vw, 60px)' }}
             >
-              AI does the rest.
+              Building business structures for the AI&nbsp;&&nbsp;crypto&nbsp;age
             </h1>
           </div>
 
           {/* Subtitle */}
           <p
-            className="mt-6 text-[#f6f7f9]/90 max-w-[613px] leading-[26px]"
+            className="mt-6 text-[#f6f7f9]/70 max-w-[613px] leading-[26px]"
             style={{ fontFamily: 'Manrope, sans-serif', fontSize: '18px' }}
           >
-            A full AI-powered organization out of the box — agents for community, content, dev, and growth, 
-            plus built-in governance to attract and reward contributors.
+            AI agents guiding you through every step of building a successful business.
           </p>
 
           {/* CTA Buttons */}
@@ -142,7 +134,7 @@ export default function Hero() {
                 <div className="w-3 h-3 rounded-full bg-[#ff5f57]" />
                 <div className="w-3 h-3 rounded-full bg-[#febc2e]" />
                 <div className="w-3 h-3 rounded-full bg-[#28c840]" />
-                <span className="ml-3 text-xs text-white/30 font-mono">consortium-factory.app</span>
+                <span className="ml-3 text-xs text-white/30 font-mono">dashboard — consortium factory</span>
               </div>
               {/* Dashboard content */}
               <div className="p-6 md:p-8">
