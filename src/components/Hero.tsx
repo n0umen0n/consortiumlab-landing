@@ -1,6 +1,45 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, useMemo } from 'react'
+
+function StarField() {
+  const stars = useMemo(() => {
+    const s = []
+    for (let i = 0; i < 120; i++) {
+      s.push({
+        x: Math.random() * 100,
+        y: Math.random() * 100,
+        size: 1 + Math.random() * 2,
+        delay: Math.random() * 4,
+        duration: 2 + Math.random() * 3,
+        opacity: 0.4 + Math.random() * 0.6,
+      })
+    }
+    return s
+  }, [])
+
+  return (
+    <div className="absolute inset-0" style={{ zIndex: 1 }}>
+      {stars.map((star, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full animate-star-twinkle"
+          style={{
+            left: `${star.x}%`,
+            top: `${star.y}%`,
+            width: `${star.size}px`,
+            height: `${star.size}px`,
+            background: 'white',
+            boxShadow: `0 0 ${star.size * 3}px ${star.size}px rgba(255,255,255,0.8), 0 0 ${star.size * 6}px ${star.size * 2}px rgba(255,255,255,0.3)`,
+            animationDelay: `${star.delay}s`,
+            animationDuration: `${star.duration}s`,
+            opacity: star.opacity,
+          }}
+        />
+      ))}
+    </div>
+  )
+}
 
 export default function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -21,7 +60,7 @@ export default function Hero() {
         muted
         playsInline
         onCanPlay={() => setLoaded(true)}
-        className="absolute object-cover opacity-60"
+        className="absolute object-cover"
         style={{
           width: '100%',
           height: '100%',
@@ -29,6 +68,8 @@ export default function Hero() {
           left: '3%',
           objectPosition: 'center center',
           zIndex: 0,
+          opacity: 0.7,
+          filter: 'contrast(1.3) brightness(1.15)',
         }}
       >
         <source
@@ -36,6 +77,9 @@ export default function Hero() {
           type="video/mp4"
         />
       </video>
+
+      {/* Star field overlay */}
+      <StarField />
 
       {/* Blurred pill overlay */}
       <div
@@ -52,7 +96,7 @@ export default function Hero() {
       />
 
       {/* Gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/80" style={{ zIndex: 1 }} />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" style={{ zIndex: 1 }} />
 
       {/* All content */}
       <div className="relative" style={{ zIndex: 2 }}>
