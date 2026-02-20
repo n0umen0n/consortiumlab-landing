@@ -21,11 +21,13 @@ export default function Hero() {
         muted
         playsInline
         onCanPlay={() => setLoaded(true)}
-        className="absolute inset-0 w-[120%] h-[120%] object-cover opacity-60"
+        className="absolute object-cover opacity-60"
         style={{
-          left: '-10%',
-          top: '-10%',
-          objectPosition: 'center bottom',
+          width: '100%',
+          height: '100%',
+          top: 0,
+          left: 0,
+          objectPosition: 'center center',
           zIndex: 0,
         }}
       >
