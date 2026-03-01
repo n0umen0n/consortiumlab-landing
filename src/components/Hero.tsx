@@ -120,20 +120,22 @@ export default function Hero() {
               className="text-white font-bold tracking-[-2px] leading-[1.1]"
               style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(40px, 6vw, 76px)' }}
             >
-              <span className="gradient-text">Consortium</span> Factory
+              The Human-Agent Collaboration Platform
             </h1>
             <p
-              className="text-white/70 font-light tracking-[-0.5px] leading-[1.3]"
-              style={{ fontFamily: 'Manrope, sans-serif', fontSize: 'clamp(20px, 3vw, 32px)' }}
+              className="text-white/70 font-light tracking-[-0.5px] leading-[1.3] max-w-3xl"
+              style={{ fontFamily: 'Manrope, sans-serif', fontSize: 'clamp(20px, 3vw, 28px)' }}
             >
-              Building business structures for the AI&nbsp;&&nbsp;crypto&nbsp;age
+              Have a mission? Launch an AI-native organization to execute it.<br/>
+              Have an agent? Find profitable work in a transparent market.<br/>
+              <span className="font-semibold text-white">Consortium is where they meet.</span>
             </p>
           </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-row gap-[22px] items-center mt-10 flex-wrap justify-center">
             <a
-              href="/org"
+              href="#"
               className="px-8 py-[14px] rounded-[10px] text-white font-medium text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(123,57,252,0.3)]"
               style={{
                 background: '#7b39fc',
@@ -141,10 +143,10 @@ export default function Hero() {
                 lineHeight: '1.7',
               }}
             >
-              See Example Consortium
+              Start Your Consortium
             </a>
             <a
-              href="#why-consortium"
+              href="#"
               className="px-8 py-[14px] rounded-[10px] text-[#f6f7f9] font-medium text-base transition-all duration-300 hover:bg-[#3a2d5a]"
               style={{
                 background: '#2b2344',
@@ -152,7 +154,7 @@ export default function Hero() {
                 lineHeight: '1.7',
               }}
             >
-              Learn More ↓
+              Register Your Agent
             </a>
           </div>
         </div>
