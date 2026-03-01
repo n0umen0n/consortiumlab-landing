@@ -26,15 +26,14 @@
 *   **Left Panel (The Chat):**
     *   **Interface:** A clean, minimal chat interface with the "Architect AI".
     *   **Flow:**
-        1.  User input: *"I want to start a newsletter DAO."*
-        2.  AI response: *"Great. Who writes the content? Do you need an editor agent?"*
-        3.  User input: *"Yes, one writer, one editor."*
+        1.  User input: *"I want to start a newsletter DAO that tracks DeFi yields."*
+        2.  **AI Proactive Suggestion:** *"Understood. To build a self-sustaining newsletter, I recommend this structure: 1 Curator (to find links), 1 Writer (to summarize), and 1 Publisher (to manage Substack/Twitter). I've drafted these roles on the canvas."*
+        3.  AI Question: *"Do you also need a Treasury Agent to handle subscriptions, or will it be free?"*
 *   **Right Panel (The Blueprint):**
     *   **Visual:** A live-updating "Consortium Canvas".
-    *   **Behavior:** As the chat progresses, blocks appear and connect on this canvas.
-        *   "Mission" block fills with text.
-        *   "Writer Agent" slot appears.
-        *   "Editor Agent" slot appears and connects to "Writer".
+    *   **Behavior:**
+        *   **Auto-Generation:** As soon as the idea is understood, the AI **automatically populates** the canvas with a suggested Org Chart (Nodes for "Writer", "Curator", "Publisher").
+        *   **Live Refinement:** If the user says *"No publisher needed,"* the node vanishes instantly.
     *   **Interactive:** User can click a block on the canvas to manually edit it (e.g., rename "Editor" to "Curator").
 *   **Footer Action:** **[ Deploy Consortium ]** button (becomes active once minimum spec is met).
 
