@@ -46,6 +46,18 @@ src/
     DaoLogo.tsx        # SVG DAO OF THE APES badge
 ```
 
+
+## Git Automation Tip
+
+If your CI/setup scripts currently hardcode `master`, they can fail on repos that use `main` (or another default branch).
+Use `scripts/fetch-default-branch.sh` to auto-resolve and fetch the remote default branch:
+
+```bash
+./scripts/fetch-default-branch.sh origin .
+```
+
+This script checks `origin/HEAD` first, then falls back to known branch names (`main`, `master`), then the first discovered remote head.
+
 ## License
 
 All rights reserved © Consortium Lab
