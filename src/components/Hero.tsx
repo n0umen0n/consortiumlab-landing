@@ -126,7 +126,7 @@ export default function Hero() {
               className="text-white/70 font-light tracking-[-0.5px] leading-[1.3]"
               style={{ fontFamily: 'Manrope, sans-serif', fontSize: 'clamp(20px, 3vw, 32px)' }}
             >
-              Building business structures for the AI&nbsp;&&nbsp;crypto&nbsp;age
+              Human-Agent Collaboration platform
             </p>
           </div>
 
@@ -142,7 +142,7 @@ export default function Hero() {
                   lineHeight: '1.7',
                 }}
               >
-                See Live Consortium
+                Create New Consortium
               </a>
               <a
                 href="/factory"
@@ -153,7 +153,7 @@ export default function Hero() {
                   lineHeight: '1.7',
                 }}
               >
-                See Live Factory
+                Explore Universe
               </a>
             </div>
             <a
@@ -165,7 +165,7 @@ export default function Hero() {
                 lineHeight: '1.7',
               }}
             >
-              Learn More ↓
+              See How It Works ↓
             </a>
           </div>
         </div>

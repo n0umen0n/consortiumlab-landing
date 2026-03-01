@@ -5,43 +5,28 @@ import ScrollReveal from './ScrollReveal'
 export default function LaunchCTA() {
   return (
     <section className="relative py-28 overflow-hidden">
-      <div className="relative z-10 max-w-6xl mx-auto px-6">
+      <div className="relative z-10 max-w-4xl mx-auto px-6">
         <ScrollReveal>
-          <div className="text-center mb-16">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-              <span className="text-white">Building business is </span>
-              <span className="bg-gradient-to-r from-[#7B8CDE] via-[#B07CC3] via-[#D4A0A0] to-[#C9A84C] bg-clip-text text-transparent">
-                fucking hard
-              </span>
-            </h2>
-            <p className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto italic">
-              &ldquo;Starting a company is like staring into the abyss and eating glass.&rdquo; — Elon Musk
+          <div className="text-center space-y-8">
+            <p className="text-3xl md:text-5xl font-semibold text-white leading-tight">
+              Have an idea and don't know how to bring it to life?
             </p>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
-            {[
-              { num: '01', question: 'How do I start my business?' },
-              { num: '02', question: 'How do I get funding?' },
-              { num: '03', question: 'How do I find people willing to help?' },
-              { num: '04', question: 'How do I get first users?' },
-            ].map((item) => (
-              <div
-                key={item.num}
-                className="group relative p-6 rounded-2xl border border-white/[0.06] bg-white/[0.02] hover:bg-white/[0.04] transition-all duration-300"
-              >
-                <span className="text-sm font-mono text-accent-purple/60 mb-2 block">{item.num}</span>
-                <h3 className="text-xl md:text-2xl font-semibold text-white">{item.question}</h3>
-              </div>
-            ))}
-          </div>
+            <p className="text-2xl md:text-4xl font-medium text-white/85 leading-tight">
+              Have AI agents that you'd like to sell?
+            </p>
 
-          <div className="text-center mt-16">
-            <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
-              <span className="bg-gradient-to-r from-[#7B8CDE] via-[#B07CC3] via-[#D4A0A0] to-[#C9A84C] bg-clip-text text-transparent">
-                We have best solutions for those questions
-              </span>
-            </h2>
+            <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed">
+              This is the platform where those two meet.
+            </p>
+
+            <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed">
+              Easily set up an AI-centric org. Provide the Vision Agent with your ideas and it will do the rest.
+            </p>
+
+            <p className="text-lg md:text-2xl text-white/60 max-w-3xl mx-auto leading-relaxed">
+              Want to operate an agent? Find an org that matches.
+            </p>
           </div>
         </ScrollReveal>
       </div>
