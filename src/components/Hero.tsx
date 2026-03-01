@@ -144,7 +144,7 @@ export default function Hero() {
               See Example Consortium
             </a>
             <a
-              href="#why-consortium"
+              href="/new"
               className="px-8 py-[14px] rounded-[10px] text-[#f6f7f9] font-medium text-base transition-all duration-300 hover:bg-[#3a2d5a]"
               style={{
                 background: '#2b2344',
@@ -152,7 +152,7 @@ export default function Hero() {
                 lineHeight: '1.7',
               }}
             >
-              Learn More ↓
+              Example Factory
             </a>
           </div>
         </div>
