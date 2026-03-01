@@ -44,7 +44,7 @@ export default function Navbar() {
           <div className="hidden md:flex items-center gap-1">
             {[
               { label: 'Home', href: '/' },
-              { label: 'What is Consortium?', href: '/#why-consortium' },
+              { label: 'How It Works', href: '/#why-consortium' },
               { label: 'Team', href: '/#team' },
               { label: 'Contact', href: '#contact' },
             ].map((link) => (
@@ -82,7 +82,7 @@ export default function Navbar() {
               boxShadow: '0px 4px 16px rgba(123, 57, 252, 0.2)',
             }}
           >
-            Get Started
+            Launch Consortium
           </a>
         </div>
       </div>

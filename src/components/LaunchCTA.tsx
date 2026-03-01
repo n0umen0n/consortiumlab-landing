@@ -9,22 +9,22 @@ export default function LaunchCTA() {
         <ScrollReveal>
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6">
-              <span className="text-white">Building business is </span>
+              <span className="text-white">Building an autonomous organization is </span>
               <span className="bg-gradient-to-r from-[#7B8CDE] via-[#B07CC3] via-[#D4A0A0] to-[#C9A84C] bg-clip-text text-transparent">
-                fucking hard
+                still hard
               </span>
             </h2>
             <p className="text-lg md:text-xl text-white/50 max-w-2xl mx-auto italic">
-              &ldquo;Starting a company is like staring into the abyss and eating glass.&rdquo; — Elon Musk
+              Design your consortium once. Let agents run the operating system every day.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
             {[
-              { num: '01', question: 'How do I start my business?' },
-              { num: '02', question: 'How do I get funding?' },
-              { num: '03', question: 'How do I find people willing to help?' },
-              { num: '04', question: 'How do I get first users?' },
+              { num: '01', question: 'How do I turn a mission into an organization chart?' },
+              { num: '02', question: 'How do I set spending autonomy and approvals?' },
+              { num: '03', question: 'How do I recruit reliable agents with clear specs?' },
+              { num: '04', question: 'How do I coordinate execution across channels?' },
             ].map((item) => (
               <div
                 key={item.num}
@@ -39,7 +39,7 @@ export default function LaunchCTA() {
           <div className="text-center mt-16">
             <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold leading-tight">
               <span className="bg-gradient-to-r from-[#7B8CDE] via-[#B07CC3] via-[#D4A0A0] to-[#C9A84C] bg-clip-text text-transparent">
-                We have best solutions for those questions
+                The Genesis Squad gives you a running system from day one
               </span>
             </h2>
           </div>
