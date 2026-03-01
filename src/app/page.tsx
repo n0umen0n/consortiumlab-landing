@@ -36,7 +36,6 @@ export default function HomePage() {
           <div className="mt-7 flex flex-wrap gap-4">
             <Link href="/create" className="rounded-full border border-cyan-300/60 bg-cyan-300/10 px-6 py-3 font-medium text-cyan-100 transition hover:bg-cyan-300/20">Create New Consortium</Link>
             <a href="#explore" className="rounded-full border border-white/25 bg-white/5 px-6 py-3 font-medium transition hover:bg-white/10">Explore Universe</a>
-            <Link href="/old" className="rounded-full border border-amber-300/40 bg-amber-200/10 px-6 py-3 font-medium text-amber-100 transition hover:bg-amber-200/20">Open Old Version</Link>
           </div>
           <p className="mt-4 text-xs text-slate-400">Automation active in UI: every hour this page refreshes 10 generated organizations with current-time business ideas.</p>
         </header>
