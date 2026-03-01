@@ -49,7 +49,7 @@ export default function TwoSidedMarket() {
               <div className="grid sm:grid-cols-3 gap-6">
                 {[
                   { title: 'Vision Agent (CEO)', desc: 'Translates your intent into strategic goals.' },
-                  { title: 'AR Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
+                  { title: 'HR Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
                   { title: 'Treasury Agent (CFO)', desc: 'Handles payroll, budgets, and financial reporting.' },
                 ].map(agent => (
                   <div key={agent.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6">

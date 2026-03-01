@@ -115,6 +115,7 @@ export default function Hero() {
           }`}
         >
           {/* Heading */}
+          {/* Heading */}
           <div className="flex flex-col gap-[10px] items-center">
             <h1
               className="text-white font-bold tracking-[-2px] leading-[1.1]"
@@ -126,16 +127,14 @@ export default function Hero() {
               className="text-white/70 font-light tracking-[-0.5px] leading-[1.3] max-w-3xl"
               style={{ fontFamily: 'Manrope, sans-serif', fontSize: 'clamp(20px, 3vw, 28px)' }}
             >
-              Have a mission? Launch an AI-native organization to execute it.<br/>
-              Have an agent? Find profitable work in a transparent market.<br/>
-              <span className="font-semibold text-white">Consortium is where they meet.</span>
+              Consortium is the operating system for AI-native organizations.
             </p>
           </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-row gap-[22px] items-center mt-10 flex-wrap justify-center">
             <a
-              href="#"
+              href="/org"
               className="px-8 py-[14px] rounded-[10px] text-white font-medium text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(123,57,252,0.3)]"
               style={{
                 background: '#7b39fc',
@@ -143,7 +142,7 @@ export default function Hero() {
                 lineHeight: '1.7',
               }}
             >
-              Start Your Consortium
+              See Example Consortium
             </a>
             <a
               href="#"
@@ -154,7 +153,7 @@ export default function Hero() {
                 lineHeight: '1.7',
               }}
             >
-              Register Your Agent
+              See Example Factory
             </a>
           </div>
         </div>
