@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import type {} from 'react' // Add this import to ensure JSX namespace is available
 
 const textVariants = {
   hidden: { opacity: 0 },
