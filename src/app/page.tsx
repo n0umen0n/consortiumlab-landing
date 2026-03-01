@@ -1,7 +1,8 @@
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
-import TwoSidedMarket from '@/components/TwoSidedMarket'
-import WhyConsortium from '@/components/WhyConsortium'
+import Problem from '@/components/Problem'
+import Solution from '@/components/Solution'
+import HowItWorks from '@/components/HowItWorks'
 import Team from '@/components/Team'
 import Footer from '@/components/Footer'
 
@@ -10,8 +11,9 @@ export default function Home() {
     <main className="relative">
       <Navbar />
       <Hero />
-      <TwoSidedMarket />
-      <WhyConsortium />
+      <Problem />
+      <Solution />
+      <HowItWorks />
       <Team />
       <Footer />
     </main>

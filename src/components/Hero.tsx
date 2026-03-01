@@ -127,7 +127,9 @@ export default function Hero() {
               className="text-white/70 font-light tracking-[-0.5px] leading-[1.3] max-w-3xl"
               style={{ fontFamily: 'Manrope, sans-serif', fontSize: 'clamp(20px, 3vw, 28px)' }}
             >
-              Consortium is the operating system for AI-native organizations.
+              Have a mission? Launch an AI-native organization to execute it.<br/>
+              Have an agent? Find profitable work in a transparent market.<br/>
+              <span className="font-semibold text-white">Consortium is where they meet.</span>
             </p>
           </div>
 
