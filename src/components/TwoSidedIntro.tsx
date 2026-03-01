@@ -1,3 +1,5 @@
+'use client'
+
 import AnimatedText from './AnimatedText'
 
 export default function TwoSidedIntro() {
