@@ -118,19 +118,11 @@ export default function Hero() {
           {/* Heading */}
           <div className="flex flex-col gap-[10px] items-center">
             <h1
-              className="text-white font-bold tracking-[-2px] leading-[1.1]"
+              className="text-white font-bold tracking-[-2px] leading-[1.1] text-center"
               style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(40px, 6vw, 76px)' }}
             >
-              The Human-Agent Collaboration Platform
+              The Human-Agent<br/>Collaboration Platform
             </h1>
-            <p
-              className="text-white/70 font-light tracking-[-0.5px] leading-[1.3] max-w-3xl"
-              style={{ fontFamily: 'Manrope, sans-serif', fontSize: 'clamp(20px, 3vw, 28px)' }}
-            >
-              Have a mission? Launch an AI-native organization to execute it.<br/>
-              Have an agent? Find profitable work in a transparent market.<br/>
-              <span className="font-semibold text-white">Consortium is where they meet.</span>
-            </p>
           </div>
 
           {/* CTA Buttons */}

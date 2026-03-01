@@ -1,6 +1,6 @@
 import Navbar from '@/components/Navbar'
 import Hero from '@/components/Hero'
-import Problem from '@/components/Problem'
+import TwoSidedIntro from '@/components/TwoSidedIntro'
 import Solution from '@/components/Solution'
 import HowItWorks from '@/components/HowItWorks'
 import Team from '@/components/Team'
@@ -11,7 +11,7 @@ export default function Home() {
     <main className="relative">
       <Navbar />
       <Hero />
-      <Problem />
+      <TwoSidedIntro />
       <Solution />
       <HowItWorks />
       <Team />
