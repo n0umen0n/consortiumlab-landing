@@ -37,7 +37,7 @@ interface AnimatedTextProps {
   text: string
   className?: string
   once?: boolean
-  el?: keyof JSX.IntrinsicElements
+  el?: keyof React.JSX.IntrinsicElements
 }
 
 export default function AnimatedText({ text, className, once = true, el: Wrapper = 'h2' }: AnimatedTextProps) {
