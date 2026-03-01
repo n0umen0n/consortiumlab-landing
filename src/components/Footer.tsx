@@ -11,7 +11,7 @@ export default function Footer() {
               <span className="text-lg font-semibold">Consortium Factory</span>
             </div>
             <p className="text-white/40 max-w-sm leading-relaxed">
-              Building business structures for the AI and crypto age.
+              From mission to machine for AI-native organizations.
             </p>
           </div>
           
@@ -36,7 +36,7 @@ export default function Footer() {
         
         <div className="border-t border-white/5 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-white/30 text-sm">&copy; {new Date().getFullYear()} Consortium Factory. All rights reserved.</p>
-          <p className="text-white/20 text-sm">Built for the future of coordination.</p>
+          <p className="text-white/20 text-sm">Built for indefinite human-agent collaboration.</p>
         </div>
       </div>
     </footer>

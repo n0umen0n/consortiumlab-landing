@@ -126,23 +126,36 @@ export default function Hero() {
               className="text-white/70 font-light tracking-[-0.5px] leading-[1.3]"
               style={{ fontFamily: 'Manrope, sans-serif', fontSize: 'clamp(20px, 3vw, 32px)' }}
             >
-              Building business structures for the AI&nbsp;&&nbsp;crypto&nbsp;age
+              From mission to machine: launch and scale AI-native consortiums
             </p>
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-row gap-[22px] items-center mt-10 flex-wrap justify-center">
-            <a
-              href="/org"
-              className="px-8 py-[14px] rounded-[10px] text-white font-medium text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(123,57,252,0.3)]"
-              style={{
-                background: '#7b39fc',
-                fontFamily: 'Cabin, sans-serif',
-                lineHeight: '1.7',
-              }}
-            >
-              See Example Consortium
-            </a>
+          <div className="flex flex-row gap-[22px] items-start mt-10 flex-wrap justify-center">
+            <div className="flex flex-col gap-3">
+              <a
+                href="/org"
+                className="px-8 py-[14px] rounded-[10px] text-white font-medium text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(123,57,252,0.3)]"
+                style={{
+                  background: '#7b39fc',
+                  fontFamily: 'Cabin, sans-serif',
+                  lineHeight: '1.7',
+                }}
+              >
+                Create New Consortium
+              </a>
+              <a
+                href="/factory"
+                className="px-8 py-[14px] rounded-[10px] text-white font-medium text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(56,189,248,0.25)]"
+                style={{
+                  background: '#0ea5e9',
+                  fontFamily: 'Cabin, sans-serif',
+                  lineHeight: '1.7',
+                }}
+              >
+                Explore Universe
+              </a>
+            </div>
             <a
               href="#why-consortium"
               className="px-8 py-[14px] rounded-[10px] text-[#f6f7f9] font-medium text-base transition-all duration-300 hover:bg-[#3a2d5a]"
@@ -152,7 +165,7 @@ export default function Hero() {
                 lineHeight: '1.7',
               }}
             >
-              Learn More ↓
+              See How It Works ↓
             </a>
           </div>
         </div>

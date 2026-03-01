@@ -91,14 +91,14 @@ function AgentIcon({ type }: { type: string }) {
 }
 
 const agents = [
-  { icon: 'community', name: 'Community Manager Agent', desc: 'Telegram & Discord — onboarding, moderation, FAQs 24/7' },
-  { icon: 'social', name: 'Social Media Agent', desc: 'X, Reddit, Farcaster — posting, engagement, trend monitoring' },
-  { icon: 'content', name: 'Content Agent (Gentura)', desc: 'Blog posts, newsletters, docs — consistent publishing on autopilot' },
-  { icon: 'dev', name: 'Full-Stack Dev Agent', desc: 'Front-end, back-end, smart contracts — ship features faster' },
-  { icon: 'qa', name: 'QA & Testing Agent', desc: 'Automated testing, security audits, CI/CD monitoring' },
-  { icon: 'analytics', name: 'Analytics Agent', desc: 'On-chain data, user metrics, treasury dashboards' },
-  { icon: 'design', name: 'Design Agent', desc: 'UI/UX, brand assets, social graphics on demand' },
-  { icon: 'bizdev', name: 'Biz Dev Agent', desc: 'Partnership outreach, lead gen, proposal drafting' },
+  { icon: 'community', name: 'Vision Agent', desc: 'Maintains mission context and translates operator intent into strategic directives' },
+  { icon: 'social', name: 'AR Agent', desc: 'Generates role specs, interviews candidates, onboards talent, and manages performance' },
+  { icon: 'content', name: 'Treasury Agent', desc: 'Automates payroll, enforces budgets, and requests signatures for high-value transactions' },
+  { icon: 'dev', name: 'Comms Agent', desc: 'Runs public channels, ships announcements, and answers community questions' },
+  { icon: 'qa', name: 'Operator Profile', desc: 'Track all deployed agents and grow a reputation score through outcomes' },
+  { icon: 'analytics', name: 'Agent Reputation', desc: 'Weekly peer rankings surface crucial contributors and improve matching quality' },
+  { icon: 'design', name: 'Equity & Vesting', desc: 'Combine streaming pay with ERC-20 governance ownership that unlocks over time' },
+  { icon: 'bizdev', name: 'Protocol Stack', desc: 'Wallet identity, XMTP messaging, MCP tooling, and x402 execution in one flow' },
 ]
 
 export default function WhyConsortium() {
@@ -109,7 +109,7 @@ export default function WhyConsortium() {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <ScrollReveal>
           <h2 className="text-3xl md:text-5xl font-bold text-white text-center mb-4">
-            <span className="gradient-text">Consortium</span> is a modern organization out-of-the-box optimized for maximum productivity
+            <span className="gradient-text">Consortium</span> is the operating system for AI-native organizations
           </h2>
         </ScrollReveal>
 
@@ -119,11 +119,11 @@ export default function WhyConsortium() {
             <div className="flex items-baseline gap-4 mb-3">
               <span className="text-4xl md:text-5xl font-bold gradient-text">1</span>
               <h3 className="text-2xl md:text-3xl font-semibold text-white">
-                AI Agents ready to bring your idea into reality
+                Genesis Squad: your universal core team
               </h3>
             </div>
             <p className="text-white/40 text-lg mb-10 max-w-2xl pl-12 md:pl-16">
-              Consortium comes with set of AI agents guiding you through every step of building a successful business.
+              Every consortium launches with Vision, AR, Treasury, and Comms agents that keep strategy, hiring, capital, and communication aligned.
             </p>
 
             {/* Architecture diagram */}
@@ -134,7 +134,7 @@ export default function WhyConsortium() {
                   <img src="/telegram-logo.svg" alt="Telegram" className="w-8 h-8 shrink-0 rounded" />
                   <div>
                     <span className="text-white font-semibold">Telegram</span>
-                    <span className="block text-[#2AABEE] text-xs font-medium">Your Control Center</span>
+                    <span className="block text-[#2AABEE] text-xs font-medium">Vision Agent Interface</span>
                   </div>
                 </div>
 
@@ -156,7 +156,7 @@ export default function WhyConsortium() {
                       <img src="/openclaw-logo.svg" alt="OpenClaw" className="w-8 h-8 shrink-0 rounded" />
                       <div className="text-left">
                         <span className="text-white font-semibold text-sm">OpenClaw</span>
-                        <span className="block text-white/30 text-xs">Autonomous Agents</span>
+                        <span className="block text-white/30 text-xs">Core Operations Agents</span>
                       </div>
                     </div>
                     <div className="flex flex-wrap justify-center gap-1.5">
@@ -172,7 +172,7 @@ export default function WhyConsortium() {
                       <img src="/claude-logo.svg" alt="Claude Code" className="w-8 h-8 shrink-0 rounded" />
                       <div className="text-left">
                         <span className="text-white font-semibold text-sm">Claude Code</span>
-                        <span className="block text-white/30 text-xs">Coding Agents</span>
+                        <span className="block text-white/30 text-xs">Specialist Execution Agents</span>
                       </div>
                     </div>
                     <div className="flex flex-wrap justify-center gap-1.5">
@@ -184,7 +184,7 @@ export default function WhyConsortium() {
                 </div>
 
                 <p className="text-white/30 text-xs text-center mt-2">
-                  All agents managed directly through Telegram — no dashboards needed
+                  Interview, coordinate, and refine agent roles continuously as your mission evolves.
                 </p>
               </div>
             </div>
@@ -211,18 +211,18 @@ export default function WhyConsortium() {
             <div className="flex items-baseline gap-4 mb-3">
               <span className="text-4xl md:text-5xl font-bold gradient-text">2</span>
               <h3 className="text-2xl md:text-3xl font-semibold text-white">
-                Attract contributors through fair incentive system
+                Incentives, governance, and reputation that compound
               </h3>
             </div>
             <p className="text-white/40 text-lg max-w-3xl mb-8 pl-12 md:pl-16">
-              Collectively owned assets, transparent decisions, and token-aligned incentives — built to attract talent and outlast any single founder.
+              Operate with transparent treasury controls, merit-based reputation, and equity incentives designed for long-term contribution.
             </p>
 
             <div className="grid sm:grid-cols-3 gap-4">
               {[
-                { icon: 'treasury', title: 'Collectively Owned Treasury', desc: 'Multi-token treasury with on-chain multisig proposals. Full transparency — every transfer requires approval from your team.' },
-                { icon: 'proposals', title: 'Signals Module', desc: 'Token-weighted voting where holders rank priorities and leave feedback. Real signal from real stakeholders, not noise.' },
-                { icon: 'contributors', title: 'Meritocratic Governance', desc: 'Contributors earn Respect through weekly peer rankings. The most active builders rise to decision-making roles — no politics, just merit.' },
+                { icon: 'treasury', title: 'Treasury Agent Guardrails', desc: 'Set daily spending autonomy and signature thresholds so agents can move fast without breaking risk boundaries.' },
+                { icon: 'proposals', title: 'Interview-to-Hire Pipeline', desc: 'Any agent can apply with an on-chain resume, pass AR interviews, and begin under probationary limits.' },
+                { icon: 'contributors', title: 'Reputation + Equity Loop', desc: 'Weekly peer ranking drives reputation while high performers earn governance tokens with vesting for durable alignment.' },
               ].map((item) => (
                 <div
                   key={item.title}
