@@ -1,7 +1,7 @@
 'use client'
 
 import React from 'react'
-import ScrollReveal from './ScrollReveal'
+import AnimatedText from './AnimatedText'
 
 function FeatureIcon({ type }: { type: string }) {
   const map: Record<string, React.ReactNode> = {
@@ -56,44 +56,40 @@ export default function HowItWorks() {
     <section id="how-it-works" className="relative py-20 md:py-24">
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Genesis Squad */}
-        <ScrollReveal>
-          <div className="mb-16">
-            <h3 className="text-3xl font-bold text-center mb-10">The Genesis Squad: Your Autonomous C-Suite</h3>
-            <div className="grid sm:grid-cols-3 gap-6">
-              {[
-                { icon: 'vision', title: 'Vision Agent (CEO)', desc: 'Translates your intent into strategic goals.' },
-                { icon: 'hr', title: 'HR Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
-                { icon: 'treasury', title: 'Treasury Agent (CFO)', desc: 'Handles payroll, budgets, and financial reporting.' },
-              ].map(agent => (
-                <div key={agent.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center">
-                  <div className="flex justify-center mb-4"><FeatureIcon type={agent.icon} /></div>
-                  <h4 className="font-bold text-white mb-2">{agent.title}</h4>
-                  <p className="text-sm text-white/50">{agent.desc}</p>
-                </div>
-              ))}
-            </div>
+        <div className="mb-16">
+          <AnimatedText text="The Genesis Squad: Your Autonomous C-Suite" className="text-3xl font-bold text-center mb-10" el="h3" />
+          <div className="grid sm:grid-cols-3 gap-6">
+            {[
+              { icon: 'vision', title: 'Vision Agent (CEO)', desc: 'Translates your intent into strategic goals.' },
+              { icon: 'hr', title: 'HR Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
+              { icon: 'treasury', title: 'Treasury Agent (CFO)', desc: 'Handles payroll, budgets, and financial reporting.' },
+            ].map(agent => (
+              <div key={agent.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center">
+                <div className="flex justify-center mb-4"><FeatureIcon type={agent.icon} /></div>
+                <h4 className="font-bold text-white mb-2">{agent.title}</h4>
+                <p className="text-sm text-white/50">{agent.desc}</p>
+              </div>
+            ))}
           </div>
-        </ScrollReveal>
+        </div>
 
         {/* Economic Layer */}
-        <ScrollReveal>
-          <div>
-            <h3 className="text-3xl font-bold text-center mb-10">The Economic Layer: Incentives that Compound</h3>
-            <div className="grid sm:grid-cols-3 gap-6">
-              {[
-                { icon: 'interview', title: 'Interview-to-Hire', desc: 'A merit-based process. Agents apply with on-chain resumes and pass automated interviews.' },
-                { icon: 'reputation', title: 'Reputation + Equity Loop', desc: 'High-performing agents earn reputation via peer rankings and vested ERC-20 tokens.' },
-                { icon: 'guardrails', title: 'Treasury Guardrails', desc: 'You set the financial policy. The Treasury Agent executes it, handling micro-transactions and requesting signatures for major ones.' },
-              ].map(item => (
-                <div key={item.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center">
-                  <div className="flex justify-center mb-4"><FeatureIcon type={item.icon} /></div>
-                  <h4 className="font-bold text-white mb-2">{item.title}</h4>
-                  <p className="text-sm text-white/50">{item.desc}</p>
-                </div>
-              ))}
-            </div>
+        <div>
+          <AnimatedText text="The Economic Layer: Incentives that Compound" className="text-3xl font-bold text-center mb-10" el="h3" />
+          <div className="grid sm:grid-cols-3 gap-6">
+            {[
+              { icon: 'interview', title: 'Interview-to-Hire', desc: 'A merit-based process. Agents apply with on-chain resumes and pass automated interviews.' },
+              { icon: 'reputation', title: 'Reputation + Equity Loop', desc: 'High-performing agents earn reputation via peer rankings and vested ERC-20 tokens.' },
+              { icon: 'guardrails', title: 'Treasury Guardrails', desc: 'You set the financial policy. The Treasury Agent executes it, handling micro-transactions and requesting signatures for major ones.' },
+            ].map(item => (
+              <div key={item.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center">
+                <div className="flex justify-center mb-4"><FeatureIcon type={item.icon} /></div>
+                <h4 className="font-bold text-white mb-2">{item.title}</h4>
+                <p className="text-sm text-white/50">{item.desc}</p>
+              </div>
+            ))}
           </div>
-        </ScrollReveal>
+        </div>
       </div>
     </section>
   )
