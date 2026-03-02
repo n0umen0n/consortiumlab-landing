@@ -1,13 +1,13 @@
 'use client'
 
 import { useRef, useEffect, useState, useMemo } from 'react'
+import AnimatedText from './AnimatedText'
 
 function StarField() {
   const stars = useMemo(() => {
     const s = []
     for (let i = 0; i < 150; i++) {
       let x, y
-      // Keep generating until outside the planet zone (center ~50%, ~50%, radius ~25%)
       do {
         x = Math.random() * 100
         y = Math.random() * 100
@@ -50,7 +50,6 @@ function StarField() {
 }
 
 export default function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null)
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -60,71 +59,40 @@ export default function Hero() {
 
   return (
     <section className="relative w-full min-h-screen overflow-hidden bg-black flex items-center justify-center">
-      {/* Background Video */}
       <video
-        ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
         onCanPlay={() => setLoaded(true)}
-        className="absolute object-cover"
-        style={{
-          width: '100%',
-          height: '100%',
-          top: 0,
-          left: 0,
-          objectPosition: '52% center',
-          zIndex: 0,
-          opacity: 0.7,
-          filter: 'contrast(1.3) brightness(1.15)',
-        }}
+        className="absolute object-cover w-full h-full top-0 left-0 z-0 opacity-70 contrast-[1.3] brightness-[1.15]"
+        style={{ objectPosition: '52% center' }}
       >
         <source
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260215_121759_424f8e9c-d8bd-4974-9567-52709dfb6842.mp4"
           type="video/mp4"
         />
       </video>
-
-      {/* Star field overlay */}
       <StarField />
-
-      {/* Blurred pill overlay */}
       <div
-        className="absolute left-1/2 -translate-x-1/2"
-        style={{
-          top: '215px',
-          width: '801px',
-          height: '384px',
-          borderRadius: '9999px',
-          background: '#000',
-          filter: 'blur(77.5px)',
-          zIndex: 1,
-        }}
+        className="absolute left-1/2 -translate-x-1/2 top-[215px] w-[801px] h-[384px] rounded-full bg-black blur-[77.5px] z-[1]"
       />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70 z-[1]" />
 
-      {/* Gradient overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70" style={{ zIndex: 1 }} />
-
-      {/* All content */}
-      <div className="relative" style={{ zIndex: 2 }}>
-        {/* Hero Content */}
+      <div className="relative z-[2]">
         <div
           className={`flex flex-col items-center text-center max-w-[871px] mx-auto px-6 transition-all duration-1000 ${
             loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          {/* Heading */}
-          {/* Heading */}
-          <AnimatedText
+          <AnimatedText 
             text="The Human-Agent Collaboration Platform"
             className="text-white font-bold tracking-[-2px] leading-[1.1] text-center gradient-text"
             style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(40px, 6vw, 76px)' }}
             el="h1"
           />
 
-          {/* CTA Buttons */}
-          <div className="flex flex-row gap-[22px] items-center mt-10 flex-wrap justify-center">
+          <div className="flex flex-row gap-[22px] items-center mt-12 flex-wrap justify-center">
             <a
               href="/org"
               className="px-8 py-[14px] rounded-[10px] text-white font-medium text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(123,57,252,0.3)]"
@@ -148,13 +116,6 @@ export default function Hero() {
               See Example Factory
             </a>
           </div>
-        </div>
-      </div>
-
-      {/* Scroll indicator */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce" style={{ zIndex: 2 }}>
-        <div className="w-6 h-10 rounded-full border-2 border-white/20 flex items-start justify-center p-2">
-          <div className="w-1 h-2 bg-white/40 rounded-full" />
         </div>
       </div>
     </section>
