@@ -116,14 +116,12 @@ export default function Hero() {
         >
           {/* Heading */}
           {/* Heading */}
-          <div className="flex flex-col gap-[10px] items-center">
-            <h1
-              className="text-white font-bold tracking-[-2px] leading-[1.1] text-center"
-              style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(40px, 6vw, 76px)' }}
-            >
-              The Human-Agent<br/>Collaboration Platform
-            </h1>
-          </div>
+          <AnimatedText
+            text="The Human-Agent Collaboration Platform"
+            className="text-white font-bold tracking-[-2px] leading-[1.1] text-center gradient-text"
+            style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(40px, 6vw, 76px)' }}
+            el="h1"
+          />
 
           {/* CTA Buttons */}
           <div className="flex flex-row gap-[22px] items-center mt-10 flex-wrap justify-center">
