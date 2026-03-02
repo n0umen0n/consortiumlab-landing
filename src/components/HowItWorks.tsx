@@ -11,7 +11,7 @@ function FeatureIcon({ type }: { type: string }) {
         <path d="M10 22 L16 16 L22 22 L16 28Z" stroke="currentColor" strokeWidth="1.5" fill="currentColor" fillOpacity="0.1" opacity="0.6" />
       </svg>
     ),
-    hr: (
+    coordinator: (
       <svg className="w-12 h-12 animate-icon-bounce" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
         <circle cx="16" cy="10" r="4" stroke="#6C8EEF" strokeWidth="1.5" fill="#6C8EEF" fillOpacity="0.15" />
         <circle cx="8" cy="22" r="3" stroke="#A855F7" strokeWidth="1.5" fill="#A855F7" fillOpacity="0.1" />
@@ -24,14 +24,6 @@ function FeatureIcon({ type }: { type: string }) {
         <rect x="4" y="12" width="24" height="16" rx="2" stroke="#6C8EEF" strokeWidth="1.5" fill="#6C8EEF" fillOpacity="0.08" />
         <path d="M4 12 L16 4 L28 12" stroke="#A855F7" strokeWidth="1.5" />
         <circle cx="16" cy="20" r="3" stroke="#C9A84C" strokeWidth="1.5" fill="#C9A84C" fillOpacity="0.2" className="animate-icon-glow" style={{ color: '#C9A84C' }} />
-      </svg>
-    ),
-    interview: (
-      <svg className="w-12 h-12" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M8 12 C8 10.3431 9.34315 9 11 9 L21 9 C22.6569 9 24 10.3431 24 12 L24 19 C24 20.6569 22.6569 22 21 22 L17 22 L13 26 L13 22 L11 22 C9.34315 22 8 20.6569 8 19Z" stroke="#6C8EEF" strokeWidth="1.5" fill="#6C8EEF" fillOpacity="0.1" className="animate-icon-scale" />
-        <circle cx="12" cy="15.5" r="1" fill="#A855F7" className="animate-bounce" style={{ animationDelay: '0s' }} />
-        <circle cx="16" cy="15.5" r="1" fill="#A855F7" className="animate-bounce" style={{ animationDelay: '0.2s' }} />
-        <circle cx="20" cy="15.5" r="1" fill="#A855F7" className="animate-bounce" style={{ animationDelay: '0.4s' }} />
       </svg>
     ),
     reputation: (
@@ -57,11 +49,11 @@ export default function HowItWorks() {
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Genesis Squad */}
         <div className="mb-16">
-          <AnimatedText text="The Genesis Squad: Your Autonomous C-Suite" className="text-3xl font-bold text-center mb-10" el="h3" />
+          <AnimatedText text="Consortium comes with three agents to recruit and manage your organization." className="text-3xl font-bold text-center mb-10" el="h3" />
           <div className="grid sm:grid-cols-3 gap-6">
             {[
               { icon: 'vision', title: 'Vision Agent (CEO)', desc: 'Translates your intent into strategic goals.' },
-              { icon: 'hr', title: 'HR Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
+              { icon: 'coordinator', title: 'Coordinator Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
               { icon: 'treasury', title: 'Treasury Agent (CFO)', desc: 'Handles payroll, budgets, and financial reporting.' },
             ].map(agent => (
               <div key={agent.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center">
@@ -75,12 +67,11 @@ export default function HowItWorks() {
 
         {/* Economic Layer */}
         <div>
-          <AnimatedText text="The Economic Layer: Incentives that Compound" className="text-3xl font-bold text-center mb-10" el="h3" />
-          <div className="grid sm:grid-cols-3 gap-6">
+          <AnimatedText text="A Framework for Trust & Growth" className="text-3xl font-bold text-center mb-10" el="h3" />
+          <div className="grid sm:grid-cols-2 gap-6">
             {[
-              { icon: 'interview', title: 'Interview-to-Hire', desc: 'A merit-based process. Agents apply with on-chain resumes and pass automated interviews.' },
-              { icon: 'reputation', title: 'Reputation + Equity Loop', desc: 'High-performing agents earn reputation via peer rankings and vested ERC-20 tokens.' },
-              { icon: 'guardrails', title: 'Treasury Guardrails', desc: 'You set the financial policy. The Treasury Agent executes it, handling micro-transactions and requesting signatures for major ones.' },
+              { icon: 'reputation', title: 'Reputation & Treasury Access', desc: 'High-performing agents earn reputation via peer rankings, unlocking greater access to the treasury.' },
+              { icon: 'guardrails', title: 'Treasury Guardrails', desc: 'You set the financial policy. The Treasury Agent handles micro-transactions and requests multisig approval for major ones.' },
             ].map(item => (
               <div key={item.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center">
                 <div className="flex justify-center mb-4"><FeatureIcon type={item.icon} /></div>
