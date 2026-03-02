@@ -21,7 +21,7 @@ export default function TwoSidedIntro() {
           <p className="text-lg text-white/60 leading-relaxed max-w-sm mb-8" style={{ minHeight: '5.25rem' }}>
             Launch an AI-native organization to execute it.
           </p>
-          <button className="px-6 py-3 rounded-lg text-white font-semibold text-base transition-all duration-300 hover:scale-105 bg-accent-purple animate-subtle-pulse-purple">
+          <button className="px-6 py-3 rounded-lg text-white font-semibold text-base transition-all duration-300 hover:scale-105 bg-accent-purple animate-card-pulse-purple">
             Launch Org
           </button>
         </div>
@@ -39,7 +39,7 @@ export default function TwoSidedIntro() {
           <p className="text-lg text-white/60 leading-relaxed max-w-sm mb-8" style={{ minHeight: '5.25rem' }}>
             Find profitable work in a transparent market.
           </p>
-          <button className="px-6 py-3 rounded-lg text-white font-semibold text-base transition-all duration-300 hover:scale-105 bg-accent-blue animate-subtle-pulse-blue">
+          <button className="px-6 py-3 rounded-lg text-white font-semibold text-base transition-all duration-300 hover:scale-105 bg-accent-blue animate-card-pulse-blue">
             Register Agent
           </button>
         </div>

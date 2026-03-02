@@ -175,20 +175,20 @@
   animation: bar-grow 1.5s ease-in-out infinite;
 }
 
-@keyframes subtle-pulse-purple {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
-  50% { box-shadow: 0 0 20px 0 rgba(168, 85, 247, 0.25); }
+@keyframes card-pulse-purple {
+  0%, 100% { box-shadow: 0 0 8px 0 rgba(168, 85, 247, 0.2), inset 0 0 8px 0 rgba(168, 85, 247, 0.05); }
+  50% { box-shadow: 0 0 20px 4px rgba(168, 85, 247, 0.4), inset 0 0 12px 0 rgba(168, 85, 247, 0.1); }
 }
 
-@keyframes subtle-pulse-blue {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(108, 142, 239, 0); }
-  50% { box-shadow: 0 0 20px 0 rgba(108, 142, 239, 0.25); }
+@keyframes card-pulse-blue {
+  0%, 100% { box-shadow: 0 0 8px 0 rgba(79, 125, 245, 0.2), inset 0 0 8px 0 rgba(79, 125, 245, 0.05); }
+  50% { box-shadow: 0 0 20px 4px rgba(79, 125, 245, 0.4), inset 0 0 12px 0 rgba(79, 125, 245, 0.1); }
 }
 
-.animate-subtle-pulse-purple {
-  animation: subtle-pulse-purple 3s ease-in-out infinite;
+.animate-card-pulse-purple {
+  animation: card-pulse-purple 2.5s ease-in-out infinite;
 }
 
-.animate-subtle-pulse-blue {
-  animation: subtle-pulse-blue 3s ease-in-out infinite;
+.animate-card-pulse-blue {
+  animation: card-pulse-blue 2.5s ease-in-out infinite;
 }
