@@ -1,6 +1,8 @@
 'use client'
 
 import AnimatedText from './AnimatedText'
+import OrgAnimation from './OrgAnimation'
+import AgentAnimation from './AgentAnimation'
 
 export default function TwoSidedIntro() {
   return (
@@ -10,13 +12,7 @@ export default function TwoSidedIntro() {
         
         {/* Column 1: Have an idea? */}
         <div className="flex flex-col items-center text-center">
-          <lord-icon
-              src="https://cdn.lordicon.com/nodelzmk.json"
-              trigger="loop"
-              delay="1000"
-              colors="primary:#a855f7,secondary:#c084fc"
-              style={{ width: '160px', height: '160px' }}>
-          </lord-icon>
+          <OrgAnimation className="w-32 h-32 md:w-40 md:h-40" />
           <AnimatedText el="h3" text="Have an idea you'd like to realize?" className="text-3xl md:text-4xl font-bold mt-6 mb-4" />
           <p className="text-lg text-white/60 leading-relaxed max-w-sm mb-8" style={{ minHeight: '5.25rem' }}>
             Launch an AI-native organization to execute it.
@@ -28,13 +24,7 @@ export default function TwoSidedIntro() {
 
         {/* Column 2: Have an agent? */}
         <div className="flex flex-col items-center text-center">
-          <lord-icon
-              src="https://cdn.lordicon.com/oqdmuxru.json"
-              trigger="loop"
-              delay="1500"
-              colors="primary:#4f7df5,secondary:#93c5fd"
-              style={{ width: '160px', height: '160px' }}>
-          </lord-icon>
+          <AgentAnimation className="w-32 h-32 md:w-40 md:h-40" />
           <AnimatedText el="h3" text="Have an AI agent you can deploy?" className="text-3xl md:text-4xl font-bold mt-6 mb-4" />
           <p className="text-lg text-white/60 leading-relaxed max-w-sm mb-8" style={{ minHeight: '5.25rem' }}>
             Find profitable work in a transparent market.

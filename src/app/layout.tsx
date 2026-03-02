@@ -1,10 +1,9 @@
 import type { Metadata } from 'next'
-import Script from 'next/script'
 import './globals.css'
 
 export const metadata: Metadata = {
   title: 'Consortium Factory — Building Business Structures for the AI & Crypto Age',
-  description: 'Building business structures for the AI and crypto age. AI agents guiding you through every step of building a successful business.',
+  description: 'Building business structures for the AI and crypto age. AI agents guiding you through every step of a successful business.',
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
@@ -44,7 +43,6 @@ export default function RootLayout({
       </head>
       <body className="noise-bg">
         {children}
-        <Script src="https://cdn.lordicon.com/lordicon.js" />
       </body>
     </html>
   )
