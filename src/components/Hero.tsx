@@ -85,10 +85,9 @@ export default function Hero() {
             loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <AnimatedText 
+          <AnimatedText
             text="The Human-Agent Collaboration Platform"
-            className="font-bold tracking-[-2px] leading-[1.1] text-center animated-gradient-text"
-            style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(40px, 6vw, 76px)' }}
+            className="font-bold tracking-[-2px] leading-[1.1] text-center animated-gradient-text font-[Inter,sans-serif] text-[clamp(40px,6vw,76px)]"
             el="h1"
           />
 
