@@ -61,6 +61,20 @@
   background-image: linear-gradient(to right, var(--color-accent-blue), var(--color-accent-purple), var(--color-accent-gold));
 }
 
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.animated-gradient-text {
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-image: linear-gradient(90deg, var(--color-accent-cyan), var(--color-accent-blue), var(--color-accent-purple), var(--color-accent-gold), var(--color-accent-cyan));
+  background-size: 200% auto;
+  animation: shimmer 5s linear infinite;
+}
+
 .gradient-border {
   background: linear-gradient(135deg, #4f7df5, #8b5cf6, #d4a847);
   padding: 1px;

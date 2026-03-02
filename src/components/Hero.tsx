@@ -87,7 +87,7 @@ export default function Hero() {
         >
           <AnimatedText 
             text="The Human-Agent Collaboration Platform"
-            className="text-white font-bold tracking-[-2px] leading-[1.1] text-center gradient-text"
+            className="font-bold tracking-[-2px] leading-[1.1] text-center animated-gradient-text"
             style={{ fontFamily: 'Inter, sans-serif', fontSize: 'clamp(40px, 6vw, 76px)' }}
             el="h1"
           />
