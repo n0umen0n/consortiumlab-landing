@@ -49,7 +49,7 @@ export default function HowItWorks() {
       <div className="relative z-10 max-w-7xl mx-auto px-6">
         {/* Genesis Squad */}
         <div className="mb-16">
-          <AnimatedText text="Explain your idea and three AI agents start collaborating to bring your idea to life." className="text-3xl font-bold text-center mb-10" el="h3" />
+          <AnimatedText text="Write down your vision and AI agents start collaborating to bring it to life." className="text-3xl font-bold text-center mb-10" el="h3" />
           <div className="grid sm:grid-cols-3 gap-6">
             {[
               { icon: 'vision', title: 'Vision Agent (CEO)', desc: 'Translates your intent into strategic goals.' },
