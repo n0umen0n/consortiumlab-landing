@@ -175,32 +175,20 @@
   animation: bar-grow 1.5s ease-in-out infinite;
 }
 
-@keyframes pulse-purple {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(168, 85, 247, 0.4);
-  }
-  70% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(168, 85, 247, 0);
-  }
+@keyframes subtle-pulse-purple {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(168, 85, 247, 0); }
+  50% { box-shadow: 0 0 20px 0 rgba(168, 85, 247, 0.25); }
 }
 
-@keyframes pulse-blue {
-  0%, 100% {
-    transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(108, 142, 239, 0.4);
-  }
-  70% {
-    transform: scale(1.05);
-    box-shadow: 0 0 0 10px rgba(108, 142, 239, 0);
-  }
+@keyframes subtle-pulse-blue {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(108, 142, 239, 0); }
+  50% { box-shadow: 0 0 20px 0 rgba(108, 142, 239, 0.25); }
 }
 
-.animate-pulse-purple {
-  animation: pulse-purple 2s infinite;
+.animate-subtle-pulse-purple {
+  animation: subtle-pulse-purple 3s ease-in-out infinite;
 }
 
-.animate-pulse-blue {
-  animation: pulse-blue 2s infinite;
+.animate-subtle-pulse-blue {
+  animation: subtle-pulse-blue 3s ease-in-out infinite;
 }
