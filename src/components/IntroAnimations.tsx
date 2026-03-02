@@ -4,30 +4,36 @@ import React from 'react'
 
 export function OrganizationAnimation() {
   return (
-    <div className="w-24 h-24 md:w-32 md:h-32">
+    <div className="w-32 h-32 md:w-40 md:h-40">
       <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
         <style>{`
-          .org-node { animation: org-pulse 3s ease-in-out infinite; }
-          .org-line { stroke-dasharray: 100; stroke-dashoffset: 100; animation: org-draw 4s ease-out infinite; }
-          @keyframes org-pulse { 0%, 100% { transform: scale(0.9); opacity: 0.7; } 50% { transform: scale(1.1); opacity: 1; } }
-          @keyframes org-draw { to { stroke-dashoffset: 0; } }
+          .node { animation: pulse 2.5s ease-in-out infinite alternate; }
+          .line { stroke-dasharray: 100; stroke-dashoffset: 100; animation: draw 5s ease-out infinite; }
+          @keyframes pulse { to { transform: scale(1.1); opacity: 0.8; } }
+          @keyframes draw { to { stroke-dashoffset: 0; } }
         `}</style>
-        {/* Top Node */}
-        <circle cx="50" cy="20" r="10" className="org-node" style={{ animationDelay: '0s' }} fill="#A855F7" />
-        
-        {/* Middle Nodes */}
-        <circle cx="25" cy="50" r="8" className="org-node" style={{ animationDelay: '0.5s' }} fill="#6C8EEF" />
-        <circle cx="75" cy="50" r="8" className="org-node" style={{ animationDelay: '1s' }} fill="#6C8EEF" />
-        
-        {/* Bottom Nodes */}
-        <circle cx="25" cy="80" r="6" className="org-node" style={{ animationDelay: '1.5s' }} fill="#2DD4BF" />
-        <circle cx="75" cy="80" r="6" className="org-node" style={{ animationDelay: '2s' }} fill="#2DD4BF" />
-
-        {/* Connections */}
-        <path d="M50 30 V 45 H 25" stroke="rgba(255,255,255,0.2)" strokeWidth="1" className="org-line" style={{ animationDelay: '0s' }} />
-        <path d="M50 30 V 45 H 75" stroke="rgba(255,255,255,0.2)" strokeWidth="1" className="org-line" style={{ animationDelay: '0.5s' }} />
-        <path d="M25 58 V 74" stroke="rgba(255,255,255,0.2)" strokeWidth="1" className="org-line" style={{ animationDelay: '1s' }} />
-        <path d="M75 58 V 74" stroke="rgba(255,255,255,0.2)" strokeWidth="1" className="org-line" style={{ animationDelay: '1.5s' }} />
+        <g className="node" style={{ transformOrigin: '50px 15px' }}>
+          <circle cx="50" cy="15" r="9" fill="#A855F7" />
+          <circle cx="50" cy="15" r="9" stroke="#fff" strokeWidth="2" strokeOpacity="0.5" />
+        </g>
+        <g className="node" style={{ transformOrigin: '25px 50px', animationDelay: '0.5s' }}>
+          <circle cx="25" cy="50" r="7" fill="#6C8EEF" />
+        </g>
+        <g className="node" style={{ transformOrigin: '75px 50px', animationDelay: '1s' }}>
+          <circle cx="75" cy="50" r="7" fill="#6C8EEF" />
+        </g>
+        <g className="node" style={{ transformOrigin: '50px 85px', animationDelay: '1.5s' }}>
+          <circle cx="50" cy="85" r="6" fill="#2DD4BF" />
+        </g>
+        <path d="M50 24 V 80" stroke="url(#line-grad)" strokeWidth="1.5" className="line" />
+        <path d="M32 50 H 68" stroke="url(#line-grad)" strokeWidth="1.5" className="line" style={{ animationDelay: '1s' }} />
+        <defs>
+          <linearGradient id="line-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#A855F7" stopOpacity="0" />
+            <stop offset="50%" stopColor="#6C8EEF" />
+            <stop offset="100%" stopColor="#2DD4BF" stopOpacity="0" />
+          </linearGradient>
+        </defs>
       </svg>
     </div>
   )
@@ -35,20 +41,35 @@ export function OrganizationAnimation() {
 
 export function AgentsAnimation() {
   return (
-    <div className="w-24 h-24 md:w-32 md:h-32">
-       <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-         <style>{`
-          .agent-dot { animation: agent-float 6s ease-in-out infinite; }
-          @keyframes agent-float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(var(--dx), var(--dy)); } }
-         `}</style>
-        <circle cx="50" cy="50" r="8" fill="#A855F7" className="agent-dot" style={{ '--dx': '10px', '--dy': '-15px', animationDelay: '0s' } as React.CSSProperties} />
-        <circle cx="30" cy="30" r="6" fill="#6C8EEF" className="agent-dot" style={{ '--dx': '-12px', '--dy': '18px', animationDelay: '-1s' } as React.CSSProperties} />
-        <circle cx="70" cy="30" r="6" fill="#6C8EEF" className="agent-dot" style={{ '--dx': '15px', '--dy': '10px', animationDelay: '-2s' } as React.CSSProperties} />
-        <circle cx="30" cy="70" r="6" fill="#6C8EEF" className="agent-dot" style={{ '--dx': '-18px', '--dy': '-12px', animationDelay: '-3s' } as React.CSSProperties} />
-        <circle cx="70" cy="70" r="6" fill="#6C8EEF" className="agent-dot" style={{ '--dx': '12px', '--dy': '-15px', animationDelay: '-4s' } as React.CSSProperties} />
-        <circle cx="50" cy="20" r="5" fill="#2DD4BF" className="agent-dot" style={{ '--dx': '0px', '--dy': '25px', animationDelay: '-5s' } as React.CSSProperties} />
-        <circle cx="80" cy="50" r="5" fill="#2DD4BF" className="agent-dot" style={{ '--dx': '-25px', '--dy': '0px', animationDelay: '-6s' } as React.CSSProperties} />
-      </svg>
+    <div className="w-32 h-32 md:w-40 md:h-40 relative">
+      <style>{`
+        .agent-dot { position: absolute; border-radius: 50%; animation: swarm 8s ease-in-out infinite; }
+        @keyframes swarm {
+          0%, 100% { transform: translate(var(--x1), var(--y1)) scale(0.8); }
+          50% { transform: translate(var(--x2), var(--y2)) scale(1.2); }
+        }
+      `}</style>
+      {[
+        { size: 14, color: '#A855F7', x1: '40%', y1: '40%', x2: '60%', y2: '60%' },
+        { size: 10, color: '#6C8EEF', x1: '20%', y1: '30%', x2: '80%', y2: '50%' },
+        { size: 10, color: '#6C8EEF', x1: '70%', y1: '20%', x2: '30%', y2: '80%' },
+        { size: 8, color: '#2DD4BF', x1: '10%', y1: '60%', x2: '90%', y2: '30%' },
+        { size: 8, color: '#2DD4BF', x1: '80%', y1: '70%', x2: '20%', y2: '10%' },
+      ].map((dot, i) => (
+        <div
+          key={i}
+          className="agent-dot"
+          style={{
+            width: dot.size,
+            height: dot.size,
+            background: dot.color,
+            top: '50%', left: '50%',
+            animationDelay: `${i * -1.6}s`,
+            ['--x1' as string]: dot.x1, ['--y1' as string]: dot.y1,
+            ['--x2' as string]: dot.x2, ['--y2' as string]: dot.y2,
+          }}
+        />
+      ))}
     </div>
   )
 }
