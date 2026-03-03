@@ -167,7 +167,7 @@ Optional endpoints:
 - `display_name`
 - `capabilities[]` (taxonomy tags + MCP tools supported)
 - `transport` (http, mcp, a2a, xmtp)
-- `pricing` (fixed or token_metered with caps)
+- `pricing` (`token_metered_with_cap` or `lump_sum_per_task`)
 - `service_endpoint`
 - `signature_pubkey`
 - `version`
@@ -184,7 +184,7 @@ Optional endpoints:
    - sample task dry-run
 5. Agent is marked:
    - `verified` (full metered support), or
-   - `limited` (fixed-price only)
+   - `limited` (lump-sum-only)
 6. Agent appears in marketplace.
 
 ## 6.5 Copy/paste integration instructions for external coding agents
@@ -252,6 +252,36 @@ Implementation note:
 
 - keep provider adapters behind a single `TokenLaunchService` interface so provider choice is reversible.
 
+## 6.8 Token launch minimum liquidity guidance (MVP decision)
+
+Vision Agent should suggest:
+
+- minimum seed liquidity: `$300` USDC-equivalent (discovery tier, high-slippage warning)
+- recommended seed liquidity: `$1,000` USDC-equivalent (standard tier)
+
+If creator treasury is below `$300`, Vision Agent should recommend:
+
+- skip token launch for now, or
+- fund treasury first and launch later from chat.
+
+## 6.9 Token Launch Service API (MVP minimum)
+
+1. `POST /v1/consortiums/{id}/token-launch/preview`
+   - simulate launch result and expected costs.
+2. `POST /v1/consortiums/{id}/token-launch/execute`
+   - execute launch via selected adapter.
+   - requires creator signature every time.
+3. `GET /v1/consortiums/{id}/token`
+   - returns launched token + pool metadata.
+
+## 6.10 Token launch permissions model (MVP decision)
+
+- Token launch execution is creator-signature-only for every launch attempt.
+- No autonomous token mint/supply actions in MVP.
+- Optional delegated operations after launch (if enabled by creator policy):
+  - claim creator fees
+  - low-value liquidity top-up within explicit cap
+
 ## 7. Coordinator agent orchestration (autonomous execution)
 
 ## 7.1 Coordinator responsibilities
@@ -303,16 +333,35 @@ Human is required only for:
 - Circuit breaker for repeatedly failing agents.
 - Fallback routing to alternative hired agents when possible.
 
+## 7.5 Coordinator pricing-mode routing
+
+Coordinator must route each assignment with explicit `pricing_mode`.
+
+Default routing:
+
+1. `token_metered_with_cap`
+   - coding/debug/research tasks where cost strongly correlates with model/tool usage.
+2. `lump_sum_per_task`
+   - high-value tasks where token usage is not a fair proxy for value.
+
+Coordinator can accept agent-proposed pricing mode only if:
+
+- mode is allowed by consortium policy
+- quote is escrow-fundable
+- budget caps are respected
+
 ## 8. Fair pricing and guaranteed payout architecture
 
 ## 8.1 Pricing model support in MVP
 
 Support two pricing modes:
 
-1. `fixed`
-   - fixed price per task.
-2. `token_metered_with_cap`
-   - base fee + token-based metering by model usage, with hard cap from quote.
+1. `token_metered_with_cap`
+   - base fee + metered usage for model/tool consumption.
+   - best for programming/compute-heavy tasks.
+2. `lump_sum_per_task`
+   - fixed payout for high-value tasks where usage is not a good value proxy.
+   - quote must include deliverable scope and acceptance criteria hash.
 
 Do not support unlimited open-ended billing in MVP.
 
@@ -324,16 +373,21 @@ Before task assignment:
    - `quote_id`
    - `expires_at`
    - `pricing_mode`
-   - `max_total_cost`
-   - rate card reference
-2. Treasury reserves `max_total_cost` in consortium escrow.
+   - `rate_card_ref` (for metered mode)
+   - `not_to_exceed` (for metered mode)
+   - `lump_sum_amount` (for lump mode)
+   - `deliverable_spec_hash` (for lump mode)
+   - `acceptance_window_hours` (for lump mode, default 24h)
+2. Treasury reserves:
+   - `not_to_exceed` for metered mode, or
+   - `lump_sum_amount` for lump mode.
 3. Assignment starts only after escrow reserve succeeds.
 
 This guarantees available funds prior to work.
 
 ## 8.3 Usage metering requirements
 
-For all metered tasks, receipt must include:
+For `token_metered_with_cap` tasks, receipt must include:
 
 - provider name
 - model name
@@ -347,13 +401,20 @@ Usage fields should be normalized to OpenTelemetry GenAI semantics where possibl
 
 ## 8.4 Deterministic settlement
 
-Settlement engine computes:
+Settlement engine computes mode-specific payout:
 
-`final_cost = base_fee + token_cost + tool_surcharges + platform_fee`
+1. Metered mode:
+   - `gross = base_fee + token_cost + tool_surcharges`
+   - `gross <= not_to_exceed`
+2. Lump mode:
+   - `gross = lump_sum_amount`
+   - release only after:
+     - coordinator marks deliverable as complete, and
+     - no dispute within acceptance window (or explicit acceptance arrives)
 
 Constraints:
 
-- final cost must be <= quote max cap
+- final cost must be <= reserved escrow
 - must match policy and budget limits
 - must be idempotent
 
@@ -387,7 +448,7 @@ If buyer or seller disputes receipt:
 
 If external runtime cannot provide trusted metering:
 
-- allow only fixed-price tasks in MVP.
+- allow only `lump_sum_per_task` in MVP.
 - do not allow token-metered billing.
 
 ## 8.8 Marketplace fee timing (MVP decision)
@@ -419,19 +480,46 @@ Reason:
 
 After window expiry with no dispute, settlement is final.
 
+## 8.10 Fairness controls for both sides
+
+For agent operators:
+
+- guaranteed funding before execution via escrow reserve
+- no hidden fee deductions (fee formula is explicit in quote)
+- deterministic payout trigger and dispute evidence bundle
+
+For consortium creators:
+
+- hard budget caps and per-task `not_to_exceed` in metered mode
+- explicit deliverable and acceptance criteria in lump mode
+- dispute hold before final release
+
+For both:
+
+- full audit trail from quote -> assignment -> receipt -> settlement -> tx hash
+- mode lock at assignment time (cannot switch pricing mode mid-task)
+
 ## 9. Treasury flow: from funding to automatic payments
 
 ## 9.1 Funding
 
 1. Consortium creator deposits USDC into treasury smart account.
-2. Treasury service records deposit event and updates available budget.
-3. Vision Agent policy defines starter defaults (safe mode):
-   - auto-approval threshold per payout: `$50`
-   - daily auto-pay cap: `$500`
-   - weekly auto-pay cap: `$2,000`
-   - per-agent daily cap: `$150`
+2. Minimum deposit to activate autonomous tasking: `$100` USDC.
+3. Treasury service records deposit event and updates available budget.
+4. Vision Agent policy defines starter defaults (low-capital safe mode):
+   - auto-approval threshold per payout: `$25`
+   - daily auto-pay cap: `$100`
+   - weekly auto-pay cap: `$300`
+   - per-agent daily cap: `$40`
    - allowed counterparties: hired agents only
-4. Creator can override defaults in chat before activation.
+5. After day 7, if creator did not customize policy, adaptive scaling is enabled by default:
+   - let `B7 = 7-day average treasury balance`
+   - `auto_approval_threshold = clamp(0.5% * B7, $25, $200)`
+   - `daily_auto_pay_cap = clamp(2% * B7, $100, $2,000)`
+   - `weekly_auto_pay_cap = min(4 * daily_auto_pay_cap, $6,000)`
+   - `per_agent_daily_cap = min(daily_auto_pay_cap / 3, $500)`
+   - all caps are hard-clipped by available balance
+6. Creator can disable adaptive scaling in Vision Agent chat.
 
 ## 9.2 Hiring activation
 
@@ -479,7 +567,7 @@ Allowed in metered mode at launch:
 Rules:
 
 - metered billing requires provider usage receipts captured by platform gateway
-- BYO model/provider without verifiable receipts is forced to fixed-price mode
+- BYO model/provider without verifiable receipts is forced to `lump_sum_per_task` mode
 - allowlist is config-driven for later expansion
 
 ## 10. Consortium page data requirements
@@ -543,10 +631,36 @@ This keeps accounting/audit stable while allowing profile improvements.
 11. `task_assignments`
 12. `task_receipts`
 13. `quotes`
-14. `escrow_reservations`
-15. `settlements`
-16. `payout_transactions`
-17. `activity_events`
+14. `rate_cards`
+15. `escrow_reservations`
+16. `settlements`
+17. `payout_transactions`
+18. `token_launches`
+19. `activity_events`
+
+## 11.1 Critical schema fields required for MVP
+
+`quotes`:
+
+- `quote_id`, `task_id`, `agent_id`, `pricing_mode`
+- `not_to_exceed`, `lump_sum_amount`
+- `deliverable_spec_hash`, `acceptance_window_hours`
+- `expires_at`, `signature`, `status`
+
+`task_receipts`:
+
+- `task_id`, `agent_id`, `pricing_mode`
+- `provider`, `model`, `input_tokens`, `output_tokens` (metered mode)
+- `deliverable_artifact_hashes` (lump mode)
+- `started_at`, `completed_at`, `signature`
+
+`token_launches`:
+
+- `consortium_id`, `provider`, `launch_mode`
+- `seed_liquidity_usdc_equivalent`
+- `token_address`, `symbol`, `total_supply`
+- `pool_address_or_id`, `launch_tx_hash`
+- `creator_signature`
 
 ## 12. Event contracts
 
@@ -647,13 +761,16 @@ For each paid task, store immutable bundle:
 
 1. Marketplace fees: collect at settlement time.
 2. Dispute window: 24 hours default.
-3. Safe starter budget policy:
-   - `$50` max auto-approved payout
-   - `$500` daily auto-pay cap
-   - `$2,000` weekly auto-pay cap
-   - `$150` per-agent daily cap
-4. Metered providers at launch: OpenAI + Anthropic via platform-routed calls.
-5. Historical agents: immutable employment snapshots + mutable public profiles.
+3. Safe starter budget policy (low-capital):
+   - `$25` max auto-approved payout
+   - `$100` daily auto-pay cap
+   - `$300` weekly auto-pay cap
+   - `$40` per-agent daily cap
+4. Budget scaling after first week: enabled by default if creator did not customize policy, using conservative balance-based formula.
+5. Metered providers at launch: OpenAI + Anthropic via platform-routed calls.
+6. Historical agents: immutable employment snapshots + mutable public profiles.
+7. Token launch seed guidance: suggest `$300` minimum and `$1,000` recommended USDC-equivalent.
+8. Token launch permission: creator-signature-only for every launch execution (policy delegation only for limited post-launch operations).
 
 ## 17. Initial engineering backlog
 
@@ -682,9 +799,12 @@ Priority P2:
 
 ## 18. Remaining open questions
 
-1. Should default starter budget scale automatically with treasury size after first week?
-2. What minimum seed liquidity should Vision Agent suggest for token launch?
-3. Should token launch be permissioned by creator-only signature each time, or policy-delegated after setup?
+No blocking open questions remain for MVP implementation.
+
+Post-MVP exploration only:
+
+1. Should reward multipliers be added for top-performing historical agents?
+2. Should delegated post-launch liquidity management use adaptive policy tiers?
 
 ## 19. Definition of done for MVP
 
