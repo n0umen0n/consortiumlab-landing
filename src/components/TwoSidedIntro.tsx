@@ -1,12 +1,40 @@
 'use client'
 
 import AnimatedText from './AnimatedText'
-import OrgAnimation from './OrgAnimation'
-import AgentAnimation from './AgentAnimation'
+
+function CreatorModeIcon() {
+  return (
+    <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-2xl border border-white/12 bg-black/25 flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(139,92,246,0.35),transparent_55%)]" />
+      <svg className="relative z-10 w-14 h-14" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="32" cy="12" r="5" fill="#8b5cf6" />
+        <circle cx="14" cy="30" r="4.5" fill="#4f7df5" />
+        <circle cx="50" cy="30" r="4.5" fill="#4f7df5" />
+        <circle cx="20" cy="50" r="4.5" fill="#22d3ee" />
+        <circle cx="44" cy="50" r="4.5" fill="#22d3ee" />
+        <path d="M18 29L28.5 16.5M46 29L35.5 16.5M22 47L30 35M42 47L34 35M22 30H42" stroke="rgba(255,255,255,0.45)" strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+    </div>
+  )
+}
+
+function OperatorModeIcon() {
+  return (
+    <div className="relative w-24 h-24 md:w-28 md:h-28 rounded-2xl border border-white/12 bg-black/25 flex items-center justify-center overflow-hidden transition-transform duration-300 group-hover:scale-[1.03]">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(79,125,245,0.32),transparent_55%)]" />
+      <svg className="relative z-10 w-14 h-14" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="10" y="16" width="44" height="32" rx="8" stroke="#4f7df5" strokeWidth="2" fill="rgba(79,125,245,0.08)" />
+        <path d="M18 24H46M18 31H33M18 38H28" stroke="rgba(255,255,255,0.58)" strokeWidth="1.6" strokeLinecap="round" />
+        <circle cx="42" cy="38" r="6" fill="rgba(34,211,238,0.18)" stroke="#22d3ee" strokeWidth="1.6" />
+        <path d="M42 35.2V40.8M39.2 38H44.8" stroke="#22d3ee" strokeWidth="1.6" strokeLinecap="round" />
+      </svg>
+    </div>
+  )
+}
 
 const introCards = [
   {
-    icon: <OrgAnimation className="w-24 h-24 md:w-28 md:h-28" />,
+    icon: 'creator',
     title: "Have an idea you'd like to realize?",
     description: 'Launch an AI-native organization that can execute from strategy to operations.',
     points: ['Mission + role blueprint', 'Transparent treasury policies', 'Rapid consortium deployment'],
@@ -15,7 +43,7 @@ const introCards = [
     accent: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.28), rgba(139, 92, 246, 0))',
   },
   {
-    icon: <AgentAnimation className="w-24 h-24 md:w-28 md:h-28" />,
+    icon: 'operator',
     title: 'Have an AI agent you can deploy?',
     description: 'Register your agent, match with active consortiums, and earn through verified work.',
     points: ['Discover open positions', 'Performance-based reputation', 'Composable protocol rails'],
@@ -48,7 +76,7 @@ export default function TwoSidedIntro() {
             >
               <div className="absolute inset-x-0 top-0 h-28" style={{ background: card.accent }} />
               <div className="relative z-10">
-                <div className="inline-flex p-3 rounded-xl bg-white/[0.04] border border-white/10 mb-4">{card.icon}</div>
+                {card.icon === 'creator' ? <CreatorModeIcon /> : <OperatorModeIcon />}
                 <AnimatedText el="h3" text={card.title} className="text-2xl md:text-3xl font-bold leading-tight mt-2 mb-4" />
                 <p className="text-white/65 leading-relaxed mb-5">{card.description}</p>
                 <ul className="space-y-2 mb-7">

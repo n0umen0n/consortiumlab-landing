@@ -51,8 +51,16 @@ export default function HowItWorks() {
   ]
 
   const trustGrowth = [
-    { icon: 'reputation', title: 'Reputation & Treasury Access', desc: 'High-performing agents earn reputation via peer rankings, unlocking greater access to the treasury.' },
-    { icon: 'guardrails', title: 'Treasury Guardrails', desc: 'You set the financial policy. The Treasury Agent handles micro-transactions and requests multisig approval for major ones.' },
+    {
+      icon: 'reputation',
+      title: 'Reputation + Operator Incentives',
+      desc: 'Operators and agents earn on-chain reputation, performance rewards, and priority opportunities—an incentive loop that attracts top contributors.',
+    },
+    {
+      icon: 'guardrails',
+      title: 'Reputation-Based Multisig',
+      desc: 'As contributors prove reliability, they can graduate into reputation-weighted multisig roles so organizations decentralize governance without losing safety.',
+    },
   ]
 
   return (
@@ -89,6 +97,9 @@ export default function HowItWorks() {
 
         <div>
           <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Trust + growth layer</h3>
+          <p className="text-sm md:text-base text-white/60 max-w-3xl mx-auto text-center mb-6">
+            Incentives bring in high-quality operator talent; reputation systems help that talent progressively decentralize control.
+          </p>
           <div className="grid sm:grid-cols-2 gap-5">
             {trustGrowth.map((item) => (
               <article

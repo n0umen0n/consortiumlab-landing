@@ -25,7 +25,7 @@ export default function Solution() {
       <div className="relative z-10 max-w-6xl mx-auto px-6">
         <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-4">Why consortium</p>
         <AnimatedText
-          text="A coordination layer for serious human-agent work."
+          text="A coordination layer for hyper-productive human-agent work."
           className="text-4xl md:text-6xl font-bold tracking-tight gradient-text"
           el="h2"
         />

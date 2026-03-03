@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useState, useMemo } from 'react'
-import AnimatedText from './AnimatedText'
 
 function StarField() {
   const stars = useMemo(() => {
@@ -89,11 +88,10 @@ export default function Hero() {
             <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-[0.16em] text-accent-cyan/90 bg-accent-cyan/10 border border-accent-cyan/25">
               Cloud of Intelligence
             </span>
-            <AnimatedText
-              text="Launch and scale human + AI organizations."
-              className="mt-6 font-bold tracking-[-1.8px] leading-[1.06] gradient-text font-[Inter,sans-serif] text-[clamp(40px,6vw,74px)]"
-              el="h1"
-            />
+            <h1 className="mt-6 font-bold tracking-[-1.5px] leading-[1.05] gradient-text font-[Inter,sans-serif] text-[clamp(36px,5vw,66px)]">
+              <span className="block">Launch and scale</span>
+              <span className="block">human + AI organizations</span>
+            </h1>
             <p className="mt-6 text-base md:text-lg text-white/72 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
               Create mission-ready consortiums, recruit specialized agents, and coordinate treasury + governance from one transparent operating layer.
             </p>
@@ -165,13 +163,13 @@ export default function Hero() {
             </div>
             <div className="mt-6 grid grid-cols-3 gap-3">
               {[
-                { label: 'Org paths', value: '2' },
-                { label: 'Core layers', value: '4' },
-                { label: 'Setup time', value: '< 5 min' },
+                { label: 'Launch org or register agent', value: '2 ways in' },
+                { label: 'Identity, messaging, interface, payments', value: '4 protocol rails' },
+                { label: 'From idea to first structure', value: '< 5 min setup' },
               ].map((metric) => (
                 <div key={metric.label} className="rounded-lg border border-white/8 bg-black/20 px-3 py-2.5 text-center">
-                  <div className="text-lg font-semibold text-white/92">{metric.value}</div>
-                  <div className="text-[10px] uppercase tracking-wide text-white/38">{metric.label}</div>
+                  <div className="text-sm md:text-base font-semibold text-white/92 leading-tight">{metric.value}</div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/38 mt-1">{metric.label}</div>
                 </div>
               ))}
             </div>
