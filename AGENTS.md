@@ -8,9 +8,9 @@ This is a static Next.js 14 marketing/landing page site ("Consortium Factory"). 
 
 Standard commands are in `package.json` scripts: `npm run dev`, `npm run build`, `npm run lint`, `npm start`.
 
-### Known dev-mode caveat
+### Notes
 
-The homepage (`/`) uses `next/image` while `next.config.js` sets `output: 'export'` without `images: { unoptimized: true }`. This causes a runtime error on `/` in dev mode (`npm run dev`). The `/org` route works fine in dev mode. The static build (`npm run build`) succeeds for all pages. To fix, add `images: { unoptimized: true }` to `next.config.js`.
+`next.config.js` uses `output: 'export'` with `images: { unoptimized: true }` for static site generation. Both `/` and `/org` routes work in dev mode and static build.
 
 ### Lint setup
 
