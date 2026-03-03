@@ -3,8 +3,16 @@
 import { useState, useEffect } from 'react'
 import ConsortiumLogo from './ConsortiumLogo'
 
+const navLinks = [
+  { label: 'Why Consortium', href: '/#why-consortium' },
+  { label: 'How it Works', href: '/#how-it-works' },
+  { label: 'Team', href: '/#team' },
+  { label: 'Contact', href: '/#contact' },
+]
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50)
@@ -12,80 +20,119 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  return (
-    <nav
-      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
-        scrolled
-          ? 'bg-black/60 backdrop-blur-2xl shadow-[0_4px_30px_rgba(0,0,0,0.3)]'
-          : 'bg-transparent'
-      }`}
-    >
-      <div
-        className="mx-auto flex items-center justify-between"
-        style={{
-          maxWidth: '1440px',
-          padding: '16px 40px',
-          height: '80px',
-          fontFamily: 'Manrope, sans-serif',
-        }}
-      >
-        {/* Left: Logo + Nav */}
-        <div className="flex items-center gap-12 md:gap-20">
-          <a href="/" className="flex items-center gap-3 group">
-            <ConsortiumLogo className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
-            <span className="text-lg font-semibold tracking-tight">
-              <span className="bg-gradient-to-r from-[#4f7df5] via-[#8b5cf6] to-[#d4a847] bg-clip-text text-transparent">
-                Consortium
-              </span>{' '}
-              <span className="text-white/90">Factory</span>
-            </span>
-          </a>
+  useEffect(() => {
+    const onResize = () => {
+      if (window.innerWidth >= 768) setMenuOpen(false)
+    }
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
 
-          <div className="hidden md:flex items-center gap-1">
-            {[
-              { label: 'Home', href: '/' },
-              { label: 'What is Consortium?', href: '/#why-consortium' },
-              { label: 'Team', href: '/#team' },
-              { label: 'Contact', href: '#contact' },
-            ].map((link) => (
+  return (
+    <nav className="fixed top-0 w-full z-50 px-4 md:px-6 pt-4 md:pt-5">
+      <div
+        className={`mx-auto max-w-7xl rounded-2xl transition-all duration-500 ${
+          scrolled
+            ? 'glass-panel surface-shadow'
+            : 'bg-black/20 border border-white/10 backdrop-blur-xl'
+        }`}
+      >
+        <div className="flex items-center justify-between px-4 md:px-6 h-[72px] font-[Manrope,sans-serif]">
+          <div className="flex items-center gap-4 md:gap-10">
+            <a href="/" className="flex items-center gap-3 group shrink-0">
+              <ConsortiumLogo className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
+              <span className="text-base md:text-lg font-semibold tracking-tight">
+                <span className="bg-gradient-to-r from-[#4f7df5] via-[#8b5cf6] to-[#d4a847] bg-clip-text text-transparent">
+                  Consortium
+                </span>{' '}
+                <span className="text-white/90">Factory</span>
+              </span>
+            </a>
+
+            <div className="hidden md:flex items-center gap-1">
+              {navLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="px-3 py-2 rounded-lg text-sm font-medium text-white/65 hover:text-white hover:bg-white/5 transition-all duration-200"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="hidden md:flex items-center gap-3">
+            <span className="text-xs text-accent-cyan/80 border border-accent-cyan/20 bg-accent-cyan/10 rounded-full px-2.5 py-1">
+              Live demo
+            </span>
+            <a
+              href="https://x.com/ConsortiumDAC"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-4 py-2 rounded-lg text-sm font-semibold text-[#171717] bg-white border border-white/70 transition-all duration-200 hover:bg-white/90"
+            >
+              Follow
+            </a>
+            <a
+              href="/org"
+              className="px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_6px_24px_rgba(79,125,245,0.35)]"
+            >
+              Get Started
+            </a>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMenuOpen((v) => !v)}
+            className="md:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg border border-white/15 bg-white/5 text-white/90"
+            aria-expanded={menuOpen}
+            aria-label="Toggle navigation menu"
+          >
+            {menuOpen ? (
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M6 6l12 12M18 6L6 18" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            ) : (
+              <svg className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                <path d="M4 7h16M4 12h16M4 17h16" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            )}
+          </button>
+        </div>
+
+        {menuOpen && (
+          <div className="md:hidden border-t border-white/10 px-4 pb-4 pt-3 space-y-2">
+            {navLinks.map((link) => (
               <a
                 key={link.label}
                 href={link.href}
-                className="px-3 py-1 text-sm font-medium text-white/60 hover:text-white transition-colors duration-200"
-                style={{ lineHeight: '22px' }}
+                className="block rounded-lg px-3 py-2 text-sm text-white/80 hover:text-white hover:bg-white/5 transition-colors"
+                onClick={() => setMenuOpen(false)}
               >
                 {link.label}
               </a>
             ))}
+            <div className="flex items-center gap-2 pt-2">
+              <a
+                href="https://x.com/ConsortiumDAC"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold text-[#171717] bg-white border border-white/70"
+              >
+                Follow
+              </a>
+              <a
+                href="/org"
+                className="flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-[#7b39fc] to-[#4f7df5]"
+              >
+                Get Started
+              </a>
+            </div>
           </div>
-        </div>
-
-        {/* Right: Buttons */}
-        <div className="hidden md:flex items-center gap-3">
-          <a
-            href="https://x.com/ConsortiumDAC"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-4 py-2 rounded-lg text-sm font-semibold text-[#171717] transition-all duration-200 hover:bg-white/90"
-            style={{
-              background: 'white',
-              border: '1px solid #d4d4d4',
-            }}
-          >
-            Follow Us
-          </a>
-          <a
-            href="/org"
-            className="px-4 py-2 rounded-lg text-sm font-semibold text-[#fafafa] transition-all duration-200 hover:brightness-110"
-            style={{
-              background: '#7b39fc',
-              boxShadow: '0px 4px 16px rgba(123, 57, 252, 0.2)',
-            }}
-          >
-            Get Started
-          </a>
-        </div>
+        )}
       </div>
+      <div className="h-2" />
     </nav>
   )
 }

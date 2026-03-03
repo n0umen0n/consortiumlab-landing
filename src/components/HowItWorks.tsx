@@ -44,40 +44,61 @@ function FeatureIcon({ type }: { type: string }) {
 }
 
 export default function HowItWorks() {
+  const genesisAgents = [
+    { icon: 'vision', title: 'Vision Agent (CEO)', desc: 'Translates your intent into strategic goals.' },
+    { icon: 'coordinator', title: 'Coordinator Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
+    { icon: 'treasury', title: 'Treasury Agent (CFO)', desc: 'Handles payroll, budgets, and financial reporting.' },
+  ]
+
+  const trustGrowth = [
+    { icon: 'reputation', title: 'Reputation & Treasury Access', desc: 'High-performing agents earn reputation via peer rankings, unlocking greater access to the treasury.' },
+    { icon: 'guardrails', title: 'Treasury Guardrails', desc: 'You set the financial policy. The Treasury Agent handles micro-transactions and requests multisig approval for major ones.' },
+  ]
+
   return (
-    <section id="how-it-works" className="relative py-20 md:py-24">
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        {/* Genesis Squad */}
-        <div className="mb-16">
-          <AnimatedText text="Write down your vision and AI agents start collaborating to bring it to life." className="text-3xl font-bold text-center mb-10" el="h3" />
-          <div className="grid sm:grid-cols-3 gap-6">
-            {[
-              { icon: 'vision', title: 'Vision Agent (CEO)', desc: 'Translates your intent into strategic goals.' },
-              { icon: 'coordinator', title: 'Coordinator Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
-              { icon: 'treasury', title: 'Treasury Agent (CFO)', desc: 'Handles payroll, budgets, and financial reporting.' },
-            ].map(agent => (
-              <div key={agent.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center">
+    <section id="how-it-works" className="relative py-20 md:py-28 overflow-hidden">
+      <div className="absolute inset-0 grid-bg opacity-50" />
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">How it works</p>
+          <AnimatedText
+            text="Write your vision. Specialized agents orchestrate execution."
+            className="text-3xl md:text-5xl font-bold tracking-tight leading-tight"
+            el="h2"
+          />
+          <p className="mt-5 text-white/62 text-base md:text-lg">
+            A clear operator loop from mission creation to autonomous delivery.
+          </p>
+        </div>
+
+        <div className="mb-14">
+          <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Genesis squad</h3>
+          <div className="grid sm:grid-cols-3 gap-5">
+            {genesisAgents.map((agent) => (
+              <article
+                key={agent.title}
+                className="group glass-panel surface-shadow rounded-xl p-6 text-center hover:-translate-y-1 transition-transform duration-300"
+              >
                 <div className="flex justify-center mb-4"><FeatureIcon type={agent.icon} /></div>
-                <h4 className="font-bold text-white mb-2">{agent.title}</h4>
-                <p className="text-sm text-white/50">{agent.desc}</p>
-              </div>
+                <h4 className="font-semibold text-white/92 mb-2">{agent.title}</h4>
+                <p className="text-sm text-white/56 leading-relaxed">{agent.desc}</p>
+              </article>
             ))}
           </div>
         </div>
 
-        {/* Economic Layer */}
         <div>
-          <AnimatedText text="A Framework for Trust & Growth" className="text-3xl font-bold text-center mb-10" el="h3" />
-          <div className="grid sm:grid-cols-2 gap-6">
-            {[
-              { icon: 'reputation', title: 'Reputation & Treasury Access', desc: 'High-performing agents earn reputation via peer rankings, unlocking greater access to the treasury.' },
-              { icon: 'guardrails', title: 'Treasury Guardrails', desc: 'You set the financial policy. The Treasury Agent handles micro-transactions and requests multisig approval for major ones.' },
-            ].map(item => (
-              <div key={item.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center">
+          <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Trust + growth layer</h3>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {trustGrowth.map((item) => (
+              <article
+                key={item.title}
+                className="glass-panel surface-shadow rounded-xl p-6 text-center hover:-translate-y-1 transition-transform duration-300"
+              >
                 <div className="flex justify-center mb-4"><FeatureIcon type={item.icon} /></div>
-                <h4 className="font-bold text-white mb-2">{item.title}</h4>
-                <p className="text-sm text-white/50">{item.desc}</p>
-              </div>
+                <h4 className="font-semibold text-white/92 mb-2">{item.title}</h4>
+                <p className="text-sm text-white/56 leading-relaxed">{item.desc}</p>
+              </article>
             ))}
           </div>
         </div>

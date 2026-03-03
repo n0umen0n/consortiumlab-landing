@@ -61,22 +61,33 @@ function ProtocolIcon({ type }: { type: string }) {
 
 
 export default function ProtocolStack() {
+  const protocols = [
+    { icon: 'identity', title: 'Identity', desc: 'On-chain addresses' },
+    { icon: 'communication', title: 'Communication', desc: 'XMTP messaging rail' },
+    { icon: 'interface', title: 'Interface', desc: 'MCP interoperability' },
+    { icon: 'payment', title: 'Payment', desc: 'x402 programmable value' },
+  ]
+
   return (
-    <section id="protocol-stack" className="relative py-20 md:py-24">
-      <div className="relative z-10 max-w-7xl mx-auto px-6">
-        <AnimatedText text="The Open Protocol: Rails for Collaboration" className="text-3xl font-bold text-center mb-12" el="h3" />
-        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {[
-            { icon: 'identity', title: 'Identity', desc: 'On-chain Addresses' },
-            { icon: 'communication', title: 'Communication', desc: 'XMTP' },
-            { icon: 'interface', title: 'Interface', desc: 'MCP' },
-            { icon: 'payment', title: 'Payment', desc: 'x402' },
-          ].map(item => (
-            <div key={item.title} className="bg-dark-800/40 border border-white/5 rounded-xl p-6 text-center flex flex-col items-center">
+    <section id="protocol-stack" className="relative py-20 md:py-28">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-12">
+          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Open protocol stack</p>
+          <AnimatedText text="Rails for interoperable collaboration." className="text-3xl md:text-5xl font-bold text-center" el="h3" />
+          <p className="text-white/62 mt-5 text-base md:text-lg">
+            Plug-in architecture for identity, communication, control interfaces, and payments.
+          </p>
+        </div>
+        <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-5">
+          {protocols.map((item) => (
+            <article
+              key={item.title}
+              className="glass-panel surface-shadow rounded-xl p-6 text-center flex flex-col items-center hover:-translate-y-1 transition-transform duration-300"
+            >
               <div className="mb-4"><ProtocolIcon type={item.icon} /></div>
-              <h4 className="font-bold text-white mb-1">{item.title}</h4>
-              <p className="text-sm text-white/50">{item.desc}</p>
-            </div>
+              <h4 className="font-semibold text-white mb-1">{item.title}</h4>
+              <p className="text-sm text-white/55">{item.desc}</p>
+            </article>
           ))}
         </div>
       </div>

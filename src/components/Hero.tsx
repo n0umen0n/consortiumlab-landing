@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import AnimatedText from './AnimatedText'
 
 function StarField() {
@@ -58,14 +58,14 @@ export default function Hero() {
   }, [])
 
   return (
-    <section className="relative w-full min-h-screen overflow-hidden bg-black flex items-center justify-center">
+    <section className="relative w-full min-h-screen overflow-hidden bg-black flex items-center">
       <video
         autoPlay
         loop
         muted
         playsInline
         onCanPlay={() => setLoaded(true)}
-        className="absolute object-cover w-full h-full top-0 left-0 z-0 opacity-70 contrast-[1.3] brightness-[1.15]"
+        className="absolute object-cover w-full h-full top-0 left-0 z-0 opacity-65 contrast-[1.2] brightness-[1.12]"
         style={{ objectPosition: '52% center' }}
       >
         <source
@@ -74,46 +74,107 @@ export default function Hero() {
         />
       </video>
       <StarField />
-      <div
-        className="absolute left-1/2 -translate-x-1/2 top-[215px] w-[801px] h-[384px] rounded-full bg-black blur-[77.5px] z-[1]"
-      />
-      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/70 z-[1]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/45 to-black/80 z-[1]" />
+      <div className="absolute left-1/2 -translate-x-1/2 top-[25%] w-[860px] h-[400px] rounded-full bg-[#0b0d17] blur-[88px] z-[1]" />
+      <div className="absolute -right-20 top-32 w-80 h-80 bg-accent-purple/15 rounded-full blur-[120px] z-[1]" />
+      <div className="absolute -left-20 bottom-16 w-80 h-80 bg-accent-blue/10 rounded-full blur-[120px] z-[1]" />
 
-      <div className="relative z-[2]">
+      <div className="relative z-[2] max-w-7xl mx-auto px-6 lg:px-8 pt-36 md:pt-40 pb-24 w-full">
         <div
-          className={`flex flex-col items-center text-center max-w-[871px] mx-auto px-6 transition-all duration-1000 ${
+          className={`grid lg:grid-cols-[1.12fr,0.88fr] gap-8 lg:gap-14 items-center transition-all duration-1000 ${
             loaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
           }`}
         >
-          <AnimatedText
-            text="The Human-Agent Collaboration Platform"
-            className="font-bold tracking-[-2px] leading-[1.1] text-center gradient-text font-[Inter,sans-serif] text-[clamp(40px,6vw,76px)]"
-            el="h1"
-          />
+          <div className="text-center lg:text-left">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold uppercase tracking-[0.16em] text-accent-cyan/90 bg-accent-cyan/10 border border-accent-cyan/25">
+              Cloud of Intelligence
+            </span>
+            <AnimatedText
+              text="Launch and scale human + AI organizations."
+              className="mt-6 font-bold tracking-[-1.8px] leading-[1.06] gradient-text font-[Inter,sans-serif] text-[clamp(40px,6vw,74px)]"
+              el="h1"
+            />
+            <p className="mt-6 text-base md:text-lg text-white/72 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+              Create mission-ready consortiums, recruit specialized agents, and coordinate treasury + governance from one transparent operating layer.
+            </p>
+            <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-9 justify-center lg:justify-start">
+              <a
+                href="/org"
+                className="px-7 py-3.5 rounded-xl text-white font-semibold text-sm md:text-base transition-all duration-300 hover:scale-[1.03] bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_10px_36px_rgba(79,125,245,0.38)]"
+              >
+                Explore Live Consortium
+              </a>
+              <a
+                href="/#how-it-works"
+                className="px-7 py-3.5 rounded-xl text-white/90 font-semibold text-sm md:text-base border border-white/15 bg-white/[0.05] transition-all duration-300 hover:bg-white/[0.09]"
+              >
+                See How It Works
+              </a>
+            </div>
+            <div className="mt-7 flex flex-wrap gap-2.5 justify-center lg:justify-start">
+              {['Operator-first UX', 'Transparent by design', 'Human + AI teams'].map((item) => (
+                <span
+                  key={item}
+                  className="text-xs md:text-sm px-3 py-1.5 rounded-full border border-white/12 bg-white/[0.03] text-white/70"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
 
-          <div className="flex flex-row gap-[22px] items-center mt-12 flex-wrap justify-center">
-            <a
-              href="/org"
-              className="px-8 py-[14px] rounded-[10px] text-white font-medium text-base transition-all duration-300 hover:scale-105 hover:shadow-[0_0_40px_rgba(123,57,252,0.3)]"
-              style={{
-                background: '#7b39fc',
-                fontFamily: 'Cabin, sans-serif',
-                lineHeight: '1.7',
-              }}
-            >
-              See Example Consortium
-            </a>
-            <a
-              href="#"
-              className="px-8 py-[14px] rounded-[10px] text-[#f6f7f9] font-medium text-base transition-all duration-300 hover:bg-[#3a2d5a]"
-              style={{
-                background: '#2b2344',
-                fontFamily: 'Cabin, sans-serif',
-                lineHeight: '1.7',
-              }}
-            >
-              See Example Factory
-            </a>
+          <div className="glass-panel surface-shadow rounded-2xl p-6 md:p-7 max-w-xl mx-auto lg:mx-0 lg:ml-auto">
+            <p className="text-[11px] uppercase tracking-[0.18em] text-accent-cyan/80 font-semibold">Inside one consortium</p>
+            <h2 className="text-2xl md:text-3xl font-semibold mt-3 mb-6 leading-tight">
+              From idea to coordinated execution
+            </h2>
+            <div className="space-y-4">
+              {[
+                {
+                  title: 'Define mission',
+                  desc: 'Describe your objective and constraints in plain language.',
+                  tone: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.55), rgba(139, 92, 246, 0))',
+                },
+                {
+                  title: 'Assemble agent team',
+                  desc: 'Recruit and assign specialized agents to roles automatically.',
+                  tone: 'linear-gradient(to bottom, rgba(79, 125, 245, 0.55), rgba(79, 125, 245, 0))',
+                },
+                {
+                  title: 'Run with guardrails',
+                  desc: 'Track outcomes with treasury policy and governance controls.',
+                  tone: 'linear-gradient(to bottom, rgba(212, 168, 71, 0.5), rgba(212, 168, 71, 0))',
+                },
+              ].map((step, index) => (
+                <div
+                  key={step.title}
+                  className="relative rounded-xl border border-white/10 bg-white/[0.03] p-4 pl-5 overflow-hidden"
+                >
+                  <div className="absolute inset-y-0 left-0 w-1.5" style={{ background: step.tone }} />
+                  <div className="flex items-start gap-3">
+                    <span className="shrink-0 w-6 h-6 rounded-full bg-white/10 border border-white/20 text-[11px] font-semibold text-white/75 flex items-center justify-center mt-0.5">
+                      {index + 1}
+                    </span>
+                    <div>
+                      <h3 className="font-semibold text-white/90">{step.title}</h3>
+                      <p className="text-sm text-white/58 mt-1 leading-relaxed">{step.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-6 grid grid-cols-3 gap-3">
+              {[
+                { label: 'Org paths', value: '2' },
+                { label: 'Core layers', value: '4' },
+                { label: 'Setup time', value: '< 5 min' },
+              ].map((metric) => (
+                <div key={metric.label} className="rounded-lg border border-white/8 bg-black/20 px-3 py-2.5 text-center">
+                  <div className="text-lg font-semibold text-white/92">{metric.value}</div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/38">{metric.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
