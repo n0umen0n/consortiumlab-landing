@@ -25,10 +25,11 @@ From day one, a consortium creator must be able to:
 
 1. Log in, create a consortium, and define mission with Vision Agent.
 2. Fund treasury.
-3. Hire external agents.
-4. Let coordinator dispatch tasks autonomously to hired agents.
-5. Pay hired agents automatically according to agreed rates.
-6. View consortium operations: all currently active agents and all agents that have ever worked.
+3. Decide in Vision Agent chat whether to launch a consortium token now or later.
+4. Hire external agents.
+5. Let coordinator dispatch tasks autonomously to hired agents.
+6. Pay hired agents automatically according to agreed rates.
+7. View consortium operations: all currently active agents and all agents that have ever worked.
 
 ### 2.2 Non-goals for MVP
 
@@ -74,9 +75,11 @@ From day one, a consortium creator must be able to:
    - Quote validation, invoicing, escrow release, payout execution.
 11. Treasury Service
    - Smart account control, budget policy checks, transfer execution.
-12. Event Bus
+12. Token Launch Service
+   - Executes token creation + initial pool launch (Bankr/Clanker adapters, manual fallback).
+13. Event Bus
    - Reliable async pipeline for orchestration and billing events.
-13. Data Stores
+14. Data Stores
    - Postgres (state), Redis (queues/cache), object storage (artifacts), optional vector DB (memory).
 
 ## 4.2 Core domains
@@ -101,6 +104,28 @@ From day one, a consortium creator must be able to:
 - Required: wallet address.
 - Optional: ENS name.
 - Agent manifest must include signing key used for task ack/results.
+
+## 5.3 Vision Agent setup chat contract
+
+The setup interface is a chat with Vision Agent. MVP requires a structured setup flow inside chat.
+
+Required setup questions in order:
+
+1. Mission: "What is your consortium mission?"
+2. Budget posture: "How autonomous should spending be?"
+3. Token decision:
+   - "Do you want to create a consortium token on Base now?"
+   - Vision Agent must explain:
+     - token is optional
+     - token can attract outside capital
+     - token can power consortium economy (governance, incentives, rewards)
+4. Hiring intent: "Do you want to start with Genesis Squad only or hire external agents now?"
+
+Token decision outcomes:
+
+- `launch_now`: trigger Token Launch Service flow.
+- `launch_later`: store pending tokenization plan.
+- `no_token`: continue without token module.
 
 ## 6. Agent plug-in architecture (framework agnostic)
 
@@ -184,6 +209,48 @@ The generated prompt must include:
 - local test commands
 
 This is what makes plugging in truly agnostic: consistent protocol contract, not framework lock-in.
+
+## 6.6 Token launch integration options (Base)
+
+For MVP, Vision Agent can route token launch through adapters:
+
+1. Bankr Deploy API (default)
+   - API-first flow, supports simulation and deployment.
+2. Clanker Deploy API/SDK (secondary option)
+   - useful for creator/social-native launch flow.
+3. Manual fallback
+   - deploy ERC-20 + create pool directly (Uniswap path) if launch adapters are unavailable.
+
+Minimum token launch output stored in consortium state:
+
+- `token_address`
+- `token_symbol`
+- `total_supply`
+- `pool_address_or_id`
+- `launch_tx_hash`
+- `liquidity_seed_amount`
+- `launch_provider` (`bankr`, `clanker`, `manual`)
+
+## 6.7 Token launch provider selection notes (research-backed)
+
+MVP default provider should be Bankr because:
+
+- documented Deploy API is straightforward for backend orchestration
+- supports simulation mode before broadcast
+- supports fee recipient configuration
+
+Secondary provider is Clanker because:
+
+- has deploy API + SDK path
+- strong social distribution path for creator-led launches
+
+Base ecosystem context:
+
+- Base docs list Clanker and other launch rails for fast token launch UX.
+
+Implementation note:
+
+- keep provider adapters behind a single `TokenLaunchService` interface so provider choice is reversible.
 
 ## 7. Coordinator agent orchestration (autonomous execution)
 
@@ -323,16 +390,48 @@ If external runtime cannot provide trusted metering:
 - allow only fixed-price tasks in MVP.
 - do not allow token-metered billing.
 
+## 8.8 Marketplace fee timing (MVP decision)
+
+Marketplace fee is taken at settlement time, not quote time.
+
+Reason:
+
+- avoids charging for cancelled or failed work
+- keeps agent payout math deterministic per completed task
+- simpler reconciliation for MVP
+
+Fee formula order:
+
+1. Compute gross payable from quote + usage.
+2. Deduct marketplace fee from gross.
+3. Transfer net payout to agent operator.
+4. Transfer fee amount to protocol fee recipient.
+
+## 8.9 Default dispute window (MVP decision)
+
+Default dispute window is 24 hours from receipt submission.
+
+Reason:
+
+- safer for global users and asynchronous operations
+- enough time to inspect evidence for metered tasks
+- still short enough to keep payouts timely
+
+After window expiry with no dispute, settlement is final.
+
 ## 9. Treasury flow: from funding to automatic payments
 
 ## 9.1 Funding
 
 1. Consortium creator deposits USDC into treasury smart account.
 2. Treasury service records deposit event and updates available budget.
-3. Vision Agent policy defines:
-   - auto-approval threshold
-   - daily/weekly budget caps
-   - allowed counterparties
+3. Vision Agent policy defines starter defaults (safe mode):
+   - auto-approval threshold per payout: `$50`
+   - daily auto-pay cap: `$500`
+   - weekly auto-pay cap: `$2,000`
+   - per-agent daily cap: `$150`
+   - allowed counterparties: hired agents only
+4. Creator can override defaults in chat before activation.
 
 ## 9.2 Hiring activation
 
@@ -370,6 +469,19 @@ Later:
 
 - add streaming payroll protocol (for salaried roles), keeping the same policy checks.
 
+## 9.5 Metered model/provider allowlist (MVP decision)
+
+Allowed in metered mode at launch:
+
+1. OpenAI (platform-routed API calls only)
+2. Anthropic (platform-routed API calls only)
+
+Rules:
+
+- metered billing requires provider usage receipts captured by platform gateway
+- BYO model/provider without verifiable receipts is forced to fixed-price mode
+- allowlist is config-driven for later expansion
+
 ## 10. Consortium page data requirements
 
 The consortium page must show all agents that are working or have worked.
@@ -404,6 +516,17 @@ Per agent-contributor relationship:
 2. `GET /v1/consortiums/{id}/agents?status=historical`
 3. `GET /v1/consortiums/{id}/agents/{agent_id}/timeline`
 4. `GET /v1/consortiums/{id}/activity-feed`
+
+## 10.4 Historical agent record policy (MVP decision)
+
+Historical records are immutable snapshots for each employment period.
+
+Pattern:
+
+- immutable `employment_contract_snapshot` preserves truth at time of work
+- mutable `agent_public_profile` can still be updated for display
+
+This keeps accounting/audit stable while allowing profile improvements.
 
 ## 11. Data model (MVP minimum tables)
 
@@ -502,6 +625,7 @@ For each paid task, store immutable bundle:
 - Consortium service + policies
 - Agent registry + CAAS validation
 - Treasury funding and balance view
+- Vision Agent setup flow with token decision prompt
 
 ## Phase 2 (Weeks 5-8): Autonomous work + hiring
 
@@ -509,6 +633,7 @@ For each paid task, store immutable bundle:
 - Coordinator runtime with assignment state machine
 - Agent connectivity gateway (HTTP + MCP)
 - Active/historical agent APIs
+- Token Launch Service adapters (Bankr default, Clanker optional)
 
 ## Phase 3 (Weeks 9-12): Fair settlement
 
@@ -518,7 +643,19 @@ For each paid task, store immutable bundle:
 - Dispute workflow
 - Dashboard metrics and audit views
 
-## 16. Initial engineering backlog
+## 16. Resolved MVP defaults (authoritative decisions)
+
+1. Marketplace fees: collect at settlement time.
+2. Dispute window: 24 hours default.
+3. Safe starter budget policy:
+   - `$50` max auto-approved payout
+   - `$500` daily auto-pay cap
+   - `$2,000` weekly auto-pay cap
+   - `$150` per-agent daily cap
+4. Metered providers at launch: OpenAI + Anthropic via platform-routed calls.
+5. Historical agents: immutable employment snapshots + mutable public profiles.
+
+## 17. Initial engineering backlog
 
 Priority P0:
 
@@ -528,12 +665,14 @@ Priority P0:
 4. Implement treasury escrow reservation and release API.
 5. Implement settlement calculator with idempotency.
 6. Implement consortium agents API (active and historical).
+7. Implement Vision Agent token decision + Token Launch Service adapter (Bankr first).
 
 Priority P1:
 
 1. Add XMTP interview adapter.
 2. Add A2A adapter for external orchestration.
 3. Add dispute dashboard and evidence viewer.
+4. Add Clanker adapter.
 
 Priority P2:
 
@@ -541,15 +680,13 @@ Priority P2:
 2. Add streaming payroll option.
 3. Add multi-chain adapter support.
 
-## 17. Open questions (to resolve before implementation starts)
+## 18. Remaining open questions
 
-1. Should marketplace fees be taken at quote time or settlement time?
-2. What is the default dispute window (for example 6h or 24h)?
-3. What are safe default budget policies for new consortiums?
-4. Which models/providers are allowed in metered mode at MVP launch?
-5. Should historical agents be immutable snapshots or updatable profiles?
+1. Should default starter budget scale automatically with treasury size after first week?
+2. What minimum seed liquidity should Vision Agent suggest for token launch?
+3. Should token launch be permissioned by creator-only signature each time, or policy-delegated after setup?
 
-## 18. Definition of done for MVP
+## 19. Definition of done for MVP
 
 MVP is complete when:
 
