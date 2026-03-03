@@ -224,6 +224,84 @@
   animation: card-pulse-blue 2.5s ease-in-out infinite;
 }
 
+/* Entry card illustration interactions */
+.entry-illustration svg,
+.entry-illustration svg * {
+  transition: transform 280ms ease, opacity 280ms ease, filter 280ms ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.group:hover .org-illustration {
+  transform: translateY(-10px) rotate(-2deg);
+  box-shadow: inset 0 0 0 1px rgba(139, 92, 246, 0.35), 0 10px 25px rgba(139, 92, 246, 0.2);
+}
+
+.group:hover .agent-illustration {
+  transform: translateY(-10px) scale(1.04);
+  box-shadow: inset 0 0 0 1px rgba(79, 125, 245, 0.4), 0 10px 25px rgba(79, 125, 245, 0.24);
+}
+
+.group:hover .org-illustration .org-graph {
+  transform: translate(-6px, -10px) rotate(-3deg) scale(1.08);
+}
+
+.group:hover .org-illustration .org-node-core {
+  transform: translateY(-4px) scale(1.08);
+}
+
+.group:hover .org-illustration .org-node-left {
+  transform: translate(-3px, 2px);
+}
+
+.group:hover .org-illustration .org-node-right {
+  transform: translate(3px, 2px);
+}
+
+.group:hover .org-illustration .org-leaf-1,
+.group:hover .org-illustration .org-leaf-3 {
+  transform: translateY(5px);
+}
+
+.group:hover .org-illustration .org-leaf-2,
+.group:hover .org-illustration .org-leaf-4 {
+  transform: translateY(-4px);
+}
+
+.agent-pulse {
+  opacity: 0.15;
+}
+
+.group:hover .agent-illustration .agent-pulse {
+  opacity: 1;
+  transform: scale(1.28);
+}
+
+.group:hover .agent-illustration .agent-head {
+  transform: translateY(-7px) scale(1.04);
+  filter: drop-shadow(0 0 16px rgba(79, 125, 245, 0.62));
+}
+
+.group:hover .agent-illustration .agent-eye-left,
+.group:hover .agent-illustration .agent-eye-right {
+  transform: scaleX(1.26);
+  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.9));
+}
+
+.group:hover .agent-illustration .agent-mouth {
+  transform: scaleX(0.82);
+}
+
+@keyframes agent-scan {
+  0% { transform: translateY(0); opacity: 0; }
+  20% { opacity: 0.85; }
+  100% { transform: translateY(30px); opacity: 0; }
+}
+
+.group:hover .agent-illustration .agent-scan {
+  animation: agent-scan 900ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
