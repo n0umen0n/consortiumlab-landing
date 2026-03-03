@@ -25,6 +25,10 @@ npm run build
 
 Static export will be generated in the `out/` directory.
 
+## Architecture Spec
+
+- MVP implementation architecture: `MVP_ARCHITECTURE_SPEC.md`
+
 ## Structure
 
 ```
