@@ -6,7 +6,7 @@ import ConsortiumLogo from './ConsortiumLogo'
 const navLinks = [
   { label: 'Why Consortium', href: '/#why-consortium' },
   { label: 'How it Works', href: '/#how-it-works' },
-  { label: 'Team', href: '/#team' },
+  { label: 'Architecture', href: '/#architecture' },
   { label: 'Contact', href: '/#contact' },
 ]
 
