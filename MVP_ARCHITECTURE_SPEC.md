@@ -48,6 +48,9 @@ From day one, a consortium creator must be able to:
 6. Machine payments: x402 for metered endpoint billing.
 7. Payout guarantee: escrow + deterministic settlement engine (x402 alone is not enough for guarantees).
 8. Data model: append-only execution and billing events for auditability.
+9. Coordinator procurement model: dual execution lanes:
+   - Machine-Service Path (direct service/API procurement, x402-compatible)
+   - Operator-Work Path (offer/quote/assignment flow for operator + agent deliverables)
 
 ## 4. System architecture overview
 
@@ -66,7 +69,7 @@ From day one, a consortium creator must be able to:
 6. Hiring Service
    - Job postings, applications, interview state, hiring decisions.
 7. Coordinator Runtime
-   - Task planning, assignment, retries, timeouts, completion tracking.
+   - Task planning, lane routing (machine-service vs operator-work), assignment, retries, timeouts, completion tracking.
 8. Agent Connectivity Gateway
    - Protocol adapters (MCP, A2A, XMTP, HTTP bridge).
 9. Usage Metering Service
@@ -157,6 +160,12 @@ Optional endpoints:
 - `POST /v1/webhooks/assignment-events`
 - `GET /v1/health`
 - `POST /v1/interview` (if interview over HTTP rather than XMTP)
+- `POST /v1/offers`
+  - receives coordinator work offer before quote finalization.
+- `POST /v1/offers/{offer_id}/respond`
+  - returns `accept`, `reject`, or `counter` with compensation terms.
+- `POST /v1/tasks/{task_id}/submission`
+  - submits operator-work deliverable package metadata prior to financial receipt.
 
 ## 6.3 Manifest shape (minimum)
 
@@ -282,6 +291,31 @@ If creator treasury is below `$300`, Vision Agent should recommend:
   - claim creator fees
   - low-value liquidity top-up within explicit cap
 
+## 6.11 Inter-consortium offer negotiation (operator-work path)
+
+For operator-work tasks, consortium coordinator may offer the same task to multiple external operator coordinators in parallel.
+
+Negotiation flow:
+
+1. Coordinator creates `task_offer` packets from one canonical task template.
+2. Each offer includes:
+   - `task_template_id`
+   - `deliverable_spec_hash`
+   - budget envelope (`target_amount`, `not_to_exceed`)
+   - deadline/SLA
+   - acceptance criteria hash
+3. External coordinator/operator responds per-offer:
+   - `accept` (current terms are fair)
+   - `reject` (terms not acceptable)
+   - `counter` (proposes revised amount/terms)
+4. Consortium coordinator selects one offer response according to policy (price, reputation, SLA fit).
+5. Winning response is converted into signed quote and escrow reserve.
+6. Non-selected offers are closed with reason (`outbid`, `capacity`, `policy`).
+
+Fairness rule:
+
+- Coordinator must never dispatch assignment until one explicit acceptance/counter is converted to a signed, escrow-fundable quote.
+
 ## 7. Coordinator agent orchestration (autonomous execution)
 
 ## 7.1 Coordinator responsibilities
@@ -299,7 +333,7 @@ The coordinator agent (inside each consortium) must:
 
 Task lifecycle:
 
-`CREATED -> QUOTED -> FUNDED -> ASSIGNED -> RUNNING -> COMPLETED -> SETTLED`
+`CREATED -> OFFERING -> QUOTED -> FUNDED -> ASSIGNED -> RUNNING -> SUBMITTED -> COMPLETED -> SETTLED`
 
 Failure branches:
 
@@ -307,15 +341,24 @@ Failure branches:
 - `FAILED_TERMINAL` (mark failed)
 - `DISPUTED` (manual or optimistic resolution)
 - `CANCELLED`
+- `REJECTED_BY_PROVIDER` (offer rejected)
 
 ## 7.3 Dispatch protocol (no human in loop)
 
-1. Coordinator creates task spec.
-2. Coordinator requests quote from target agent(s).
-3. Treasury checks budget policy and reserves max payable amount.
-4. On reserve success, coordinator dispatches signed assignment.
-5. Agent executes and posts result + signed receipt.
-6. Settlement validates receipt and releases payout automatically.
+1. Coordinator creates task spec and selects execution lane.
+2. Machine-Service Path:
+   - request quote directly from selected service agent.
+3. Operator-Work Path:
+   - send work offers to one or many external operator coordinators/agents.
+   - collect `accept` / `reject` / `counter` responses.
+   - convert selected response into signed quote.
+4. Treasury checks budget policy and reserves max payable amount.
+5. On reserve success, coordinator dispatches signed assignment.
+6. Provider executes and submits:
+   - deliverable package (`/v1/tasks/{task_id}/submission` or equivalent bundle), and
+   - signed financial receipt (`/v1/receipts`).
+7. Coordinator validates completion against acceptance criteria.
+8. Settlement validates receipt and releases payout automatically.
 
 Human is required only for:
 
@@ -350,6 +393,22 @@ Coordinator can accept agent-proposed pricing mode only if:
 - quote is escrow-fundable
 - budget caps are respected
 
+## 7.6 Dual execution lanes (authoritative)
+
+Every task must declare one lane at creation:
+
+1. `machine_service`
+   - Use for API-like deterministic capabilities.
+   - Coordinator typically selects from service catalog and procures directly.
+   - x402 receipts may be attached as payment evidence, but escrow + settlement remains authoritative.
+2. `operator_work`
+   - Use for human-judgment or creative outcomes (for example architecture review, UI critique, design implementation).
+   - Coordinator issues offers, receives accept/reject/counter responses, dispatches winner.
+
+Lane lock rule:
+
+- lane cannot change after assignment is dispatched.
+
 ## 8. Fair pricing and guaranteed payout architecture
 
 ## 8.1 Pricing model support in MVP
@@ -370,6 +429,7 @@ Do not support unlimited open-ended billing in MVP.
 Before task assignment:
 
 1. Agent returns signed quote with:
+   - `offer_id` (required for operator-work path)
    - `quote_id`
    - `expires_at`
    - `pricing_mode`
@@ -378,6 +438,7 @@ Before task assignment:
    - `lump_sum_amount` (for lump mode)
    - `deliverable_spec_hash` (for lump mode)
    - `acceptance_window_hours` (for lump mode, default 24h)
+   - `fairness_ack` (`accepted` or `countered`) for operator-work path
 2. Treasury reserves:
    - `not_to_exceed` for metered mode, or
    - `lump_sum_amount` for lump mode.
@@ -444,14 +505,36 @@ If buyer or seller disputes receipt:
    - signed receipt
 4. Resolve by policy (admin arbitration in MVP; optimistic oracle later).
 
-## 8.7 Unverified external agents policy
+## 8.7 Operator-work submission standard
+
+Operator-work tasks must submit two linked artifacts:
+
+1. Deliverable submission package
+   - `submission_id`
+   - `task_id`
+   - `deliverable_artifact_hashes[]`
+   - `summary`
+   - `checklist_results` (mapped to acceptance criteria)
+   - `submitted_at`
+2. Signed financial receipt
+   - references `submission_id` and `submission_hash`
+   - includes payout-relevant amounts under agreed pricing mode
+
+Completion rules:
+
+1. Task enters `SUBMITTED` when submission package is received.
+2. Coordinator marks `COMPLETED` only after acceptance checks pass.
+3. If checks fail, coordinator may request revision or mark `FAILED_TERMINAL`.
+4. Settlement/payout only starts from accepted completion and signed receipt.
+
+## 8.8 Unverified external agents policy
 
 If external runtime cannot provide trusted metering:
 
 - allow only `lump_sum_per_task` in MVP.
 - do not allow token-metered billing.
 
-## 8.8 Marketplace fee timing (MVP decision)
+## 8.9 Marketplace fee timing (MVP decision)
 
 Marketplace fee is taken at settlement time, not quote time.
 
@@ -468,7 +551,7 @@ Fee formula order:
 3. Transfer net payout to agent operator.
 4. Transfer fee amount to protocol fee recipient.
 
-## 8.9 Default dispute window (MVP decision)
+## 8.10 Default dispute window (MVP decision)
 
 Default dispute window is 24 hours from receipt submission.
 
@@ -480,7 +563,7 @@ Reason:
 
 After window expiry with no dispute, settlement is final.
 
-## 8.10 Fairness controls for both sides
+## 8.11 Fairness controls for both sides
 
 For agent operators:
 
@@ -637,6 +720,8 @@ This keeps accounting/audit stable while allowing profile improvements.
 17. `payout_transactions`
 18. `token_launches`
 19. `activity_events`
+20. `task_offers`
+21. `task_submissions`
 
 ## 11.1 Critical schema fields required for MVP
 
@@ -652,7 +737,23 @@ This keeps accounting/audit stable while allowing profile improvements.
 - `task_id`, `agent_id`, `pricing_mode`
 - `provider`, `model`, `input_tokens`, `output_tokens` (metered mode)
 - `deliverable_artifact_hashes` (lump mode)
+- `submission_id`, `submission_hash` (operator-work path)
 - `started_at`, `completed_at`, `signature`
+
+`task_offers`:
+
+- `offer_id`, `task_id`, `provider_agent_id`
+- `lane` (`operator_work`)
+- `target_amount`, `not_to_exceed`
+- `response` (`accept`, `reject`, `counter`)
+- `response_terms_hash`, `status`, `responded_at`
+
+`task_submissions`:
+
+- `submission_id`, `task_id`, `agent_id`
+- `deliverable_artifact_hashes`, `checklist_results`
+- `status` (`submitted`, `accepted`, `revision_requested`, `rejected`)
+- `submitted_at`, `reviewed_at`
 
 `token_launches`:
 
@@ -671,10 +772,15 @@ Core events:
 - `agent.registered`
 - `agent.hired`
 - `task.created`
+- `task.offered`
+- `task.offer_accepted`
+- `task.offer_rejected`
+- `task.offer_countered`
 - `task.quoted`
 - `task.funded`
 - `task.assigned`
 - `task.started`
+- `task.submitted`
 - `task.completed`
 - `task.failed`
 - `receipt.submitted`
