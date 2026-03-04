@@ -51,6 +51,7 @@ From day one, a consortium creator must be able to:
 9. Coordinator procurement model: dual execution lanes:
    - Machine-Service Path (direct service/API procurement, x402-compatible)
    - Operator-Work Path (offer/quote/assignment flow for operator + agent deliverables)
+10. GitHub-native delivery: repo-scoped operator-work tasks should land in consortium GitHub with issue/PR-first workflow.
 
 ## 4. System architecture overview
 
@@ -84,6 +85,8 @@ From day one, a consortium creator must be able to:
    - Reliable async pipeline for orchestration and billing events.
 14. Data Stores
    - Postgres (state), Redis (queues/cache), object storage (artifacts), optional vector DB (memory).
+15. GitHub Integration Service
+   - GitHub App auth, issue/PR orchestration, webhook ingestion, checks/merge status normalization.
 
 ## 4.2 Core domains
 
@@ -316,6 +319,29 @@ Fairness rule:
 
 - Coordinator must never dispatch assignment until one explicit acceptance/counter is converted to a signed, escrow-fundable quote.
 
+## 6.12 GitHub-native delivery integration (minimal friction)
+
+For repo-scoped tasks (UI spec, architecture docs, implementation), GitHub is the default delivery surface.
+
+Minimal-friction principles:
+
+1. Use GitHub App installation auth (no sharing personal PATs between parties).
+2. Keep operators in standard git + PR workflow; no mandatory custom CLI.
+3. Auto-create issue and draft PR from task template whenever `delivery_target = github_repo`.
+4. Treat PR metadata as first-class submission evidence.
+5. Preserve artifact fallback path for non-repo tasks.
+
+Default flow:
+
+1. Consortium connects one or more repos via GitHub App installation.
+2. Coordinator opens/links a GitHub issue for the task.
+3. Offer negotiation runs (`accept` / `reject` / `counter`) as usual.
+4. After winning quote + escrow reserve, coordinator opens draft PR (or creates expected head branch) and assigns provider.
+5. Operator/agent pushes commits and updates PR conversation.
+6. Provider submits `/v1/tasks/{task_id}/submission` referencing PR URL/number and head SHA.
+7. Coordinator validates acceptance criteria + required GitHub checks/reviews.
+8. Task is marked `COMPLETED` and settlement proceeds.
+
 ## 7. Coordinator agent orchestration (autonomous execution)
 
 ## 7.1 Coordinator responsibilities
@@ -355,7 +381,7 @@ Failure branches:
 4. Treasury checks budget policy and reserves max payable amount.
 5. On reserve success, coordinator dispatches signed assignment.
 6. Provider executes and submits:
-   - deliverable package (`/v1/tasks/{task_id}/submission` or equivalent bundle), and
+   - deliverable package (`/v1/tasks/{task_id}/submission` or equivalent bundle; for GitHub delivery include PR reference + head SHA), and
    - signed financial receipt (`/v1/receipts`).
 7. Coordinator validates completion against acceptance criteria.
 8. Settlement validates receipt and releases payout automatically.
@@ -408,6 +434,25 @@ Every task must declare one lane at creation:
 Lane lock rule:
 
 - lane cannot change after assignment is dispatched.
+
+## 7.7 GitHub delivery mode for operator-work
+
+If `delivery_target = github_repo`, assignment must include:
+
+- `repository_full_name`
+- `base_branch`
+- `issue_number` (if issue-first flow enabled)
+- `required_checks[]`
+- `expected_artifact_paths[]` (optional)
+
+Acceptance gate for `COMPLETED`:
+
+1. referenced PR exists and maps to assigned task
+2. submitted `head_sha` matches latest verified provider commit
+3. required checks pass (or policy-approved bypass)
+4. required reviewer/maintainer approval policy is satisfied
+
+If any gate fails, coordinator requests revision and task remains `RUNNING` or `SUBMITTED`.
 
 ## 8. Fair pricing and guaranteed payout architecture
 
@@ -512,6 +557,8 @@ Operator-work tasks must submit two linked artifacts:
 1. Deliverable submission package
    - `submission_id`
    - `task_id`
+   - `delivery_type` (`github_pr` or `artifact_bundle`)
+   - `delivery_uri` (for example PR URL)
    - `deliverable_artifact_hashes[]`
    - `summary`
    - `checklist_results` (mapped to acceptance criteria)
@@ -722,6 +769,8 @@ This keeps accounting/audit stable while allowing profile improvements.
 19. `activity_events`
 20. `task_offers`
 21. `task_submissions`
+22. `github_installations`
+23. `github_task_links`
 
 ## 11.1 Critical schema fields required for MVP
 
@@ -751,9 +800,24 @@ This keeps accounting/audit stable while allowing profile improvements.
 `task_submissions`:
 
 - `submission_id`, `task_id`, `agent_id`
+- `delivery_type`, `delivery_uri`
+- `repository_full_name`, `pr_number`, `head_sha`
 - `deliverable_artifact_hashes`, `checklist_results`
 - `status` (`submitted`, `accepted`, `revision_requested`, `rejected`)
 - `submitted_at`, `reviewed_at`
+
+`github_installations`:
+
+- `consortium_id`, `github_installation_id`
+- `owner_login`, `connected_repositories`
+- `connected_by_user_id`, `connected_at`, `status`
+
+`github_task_links`:
+
+- `task_id`, `repository_full_name`
+- `issue_number`, `pr_number`
+- `base_branch`, `head_branch`, `head_sha`
+- `checks_status`, `review_status`, `merged_at`
 
 `token_launches`:
 
@@ -783,6 +847,12 @@ Core events:
 - `task.submitted`
 - `task.completed`
 - `task.failed`
+- `github.repo_connected`
+- `github.issue_created`
+- `github.pr_opened`
+- `github.pr_updated`
+- `github.checks_updated`
+- `github.pr_merged`
 - `receipt.submitted`
 - `settlement.calculated`
 - `payout.executed`
@@ -814,6 +884,10 @@ Every event must include:
    - never pass raw provider API keys to external agents.
 6. Isolation:
    - per-consortium policy namespace and queue partitioning.
+7. GitHub auth:
+   - use short-lived GitHub App installation tokens server-side; do not require operator PAT escrow by default.
+8. GitHub completion integrity:
+   - bind task acceptance to PR head SHA + required checks/reviews to prevent stale or spoofed submissions.
 
 ## 14. Observability and auditability
 
@@ -853,6 +927,7 @@ For each paid task, store immutable bundle:
 - Coordinator runtime with assignment state machine
 - Agent connectivity gateway (HTTP + MCP)
 - Active/historical agent APIs
+- GitHub App integration for issue/PR-based operator-work delivery
 - Token Launch Service adapters (Bankr default, Clanker optional)
 
 ## Phase 3 (Weeks 9-12): Fair settlement
@@ -877,6 +952,7 @@ For each paid task, store immutable bundle:
 6. Historical agents: immutable employment snapshots + mutable public profiles.
 7. Token launch seed guidance: suggest `$300` minimum and `$1,000` recommended USDC-equivalent.
 8. Token launch permission: creator-signature-only for every launch execution (policy delegation only for limited post-launch operations).
+9. GitHub delivery default: repo-scoped operator-work tasks should use issue/PR-first submission when repo is connected.
 
 ## 17. Initial engineering backlog
 
@@ -889,6 +965,7 @@ Priority P0:
 5. Implement settlement calculator with idempotency.
 6. Implement consortium agents API (active and historical).
 7. Implement Vision Agent token decision + Token Launch Service adapter (Bankr first).
+8. Implement GitHub App integration + task-to-issue/PR linkage and webhook consumer.
 
 Priority P1:
 
@@ -921,4 +998,5 @@ MVP is complete when:
 3. At least one paid task settles automatically from escrow to operator wallet.
 4. Consortium page correctly shows active and historical agents with earnings and task stats.
 5. Audit trail exists for every paid task from quote to payout.
+6. At least one operator-work task is delivered as a merged PR in a connected consortium GitHub repository.
 
