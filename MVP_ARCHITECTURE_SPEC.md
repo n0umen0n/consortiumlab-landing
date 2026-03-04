@@ -42,12 +42,16 @@ From day one, a consortium creator must be able to:
 
 1. Chain: Base (EVM-first), Solana optional later via adapter.
 2. Login: Privy for onboarding UX, wallet signatures remain source of authority for critical actions.
-3. Agent capability interface: MCP for tools.
+3. Agent integration contract: CAAS HTTP baseline, MCP optional for tool interoperability.
 4. Agent-to-agent interoperability: internal task bus + optional A2A adapter.
-5. Wallet-native interview/identity chat: XMTP.
-6. Machine payments: x402 for metered endpoint billing.
+5. XMTP for wallet-native interview/identity messaging in hiring flows.
+6. x402 as machine-service payment rail (lane-specific), with escrow+settlement as payout authority.
 7. Payout guarantee: escrow + deterministic settlement engine (x402 alone is not enough for guarantees).
 8. Data model: append-only execution and billing events for auditability.
+9. Coordinator procurement model: dual execution lanes:
+   - Machine-Service Path (direct service/API procurement, x402-compatible)
+   - Operator-Work Path (offer/quote/assignment flow for operator + agent deliverables)
+10. GitHub-native delivery: repo-scoped operator-work tasks should land in consortium GitHub with issue/PR-first workflow.
 
 ## 4. System architecture overview
 
@@ -66,7 +70,7 @@ From day one, a consortium creator must be able to:
 6. Hiring Service
    - Job postings, applications, interview state, hiring decisions.
 7. Coordinator Runtime
-   - Task planning, assignment, retries, timeouts, completion tracking.
+   - Task planning, lane routing (machine-service vs operator-work), assignment, retries, timeouts, completion tracking.
 8. Agent Connectivity Gateway
    - Protocol adapters (MCP, A2A, XMTP, HTTP bridge).
 9. Usage Metering Service
@@ -81,6 +85,8 @@ From day one, a consortium creator must be able to:
    - Reliable async pipeline for orchestration and billing events.
 14. Data Stores
    - Postgres (state), Redis (queues/cache), object storage (artifacts), optional vector DB (memory).
+15. GitHub Integration Service
+   - GitHub App auth, issue/PR orchestration, webhook ingestion, checks/merge status normalization.
 
 ## 4.2 Core domains
 
@@ -157,6 +163,12 @@ Optional endpoints:
 - `POST /v1/webhooks/assignment-events`
 - `GET /v1/health`
 - `POST /v1/interview` (if interview over HTTP rather than XMTP)
+- `POST /v1/offers`
+  - receives coordinator work offer before quote finalization.
+- `POST /v1/offers/{offer_id}/respond`
+  - returns `accept`, `reject`, or `counter` with compensation terms.
+- `POST /v1/tasks/{task_id}/submission`
+  - submits operator-work deliverable package metadata prior to financial receipt.
 
 ## 6.3 Manifest shape (minimum)
 
@@ -282,6 +294,74 @@ If creator treasury is below `$300`, Vision Agent should recommend:
   - claim creator fees
   - low-value liquidity top-up within explicit cap
 
+## 6.11 Inter-consortium offer negotiation (operator-work path)
+
+For operator-work tasks, consortium coordinator may offer the same task to multiple external operator coordinators in parallel.
+
+Negotiation flow:
+
+1. Coordinator creates `task_offer` packets from one canonical task template.
+2. Each offer includes:
+   - `task_template_id`
+   - `deliverable_spec_hash`
+   - budget envelope (`target_amount`, `not_to_exceed`)
+   - deadline/SLA
+   - acceptance criteria hash
+3. External coordinator/operator responds per-offer:
+   - `accept` (current terms are fair)
+   - `reject` (terms not acceptable)
+   - `counter` (proposes revised amount/terms)
+4. Consortium coordinator selects one offer response according to policy (price, reputation, SLA fit).
+5. Winning response is converted into signed quote and escrow reserve.
+6. Non-selected offers are closed with reason (`outbid`, `capacity`, `policy`).
+
+Fairness rule:
+
+- Coordinator must never dispatch assignment until one explicit acceptance/counter is converted to a signed, escrow-fundable quote.
+
+## 6.12 GitHub-native delivery integration (minimal friction)
+
+For repo-scoped tasks (UI spec, architecture docs, implementation), GitHub is the default delivery surface.
+
+Minimal-friction principles:
+
+1. Use GitHub App installation auth (no sharing personal PATs between parties).
+2. Keep operators in standard git + PR workflow; no mandatory custom CLI.
+3. Auto-create issue and draft PR from task template whenever `delivery_target = github_repo`.
+4. Treat PR metadata as first-class submission evidence.
+5. Preserve artifact fallback path for non-repo tasks.
+6. Support one-message submit intent from operator chat ("done, submit now") for active tasks.
+
+Default flow:
+
+1. Consortium connects one or more repos via GitHub App installation.
+2. Coordinator opens/links a GitHub issue for the task.
+3. Offer negotiation runs (`accept` / `reject` / `counter`) as usual.
+4. After winning quote + escrow reserve, coordinator opens draft PR (or creates expected head branch) and assigns provider.
+5. Operator/agent pushes commits and updates PR conversation.
+6. Provider submits either:
+   - explicit API call to `/v1/tasks/{task_id}/submission`, or
+   - chat submit intent (for example "done, submit now"), which platform resolves to active task + PR/head SHA and records as submission.
+7. Coordinator validates acceptance criteria + required GitHub checks/reviews.
+8. Task is marked `COMPLETED` and settlement proceeds.
+
+## 6.13 Operator chat-submit UX (minimum friction standard)
+
+Operator may finalize work from any supported coding-agent chat (OpenClaw, Cursor, Codex, Claude Code) by sending a submit intent phrase.
+
+Canonical phrase:
+
+- "done, submit now"
+
+Required platform behavior:
+
+1. Resolve the operator's active assigned task(s).
+2. If one active task exists, auto-bind submission to that task.
+3. If multiple active tasks exist, ask a single disambiguation question and proceed.
+4. For GitHub delivery, auto-read latest assigned PR + head SHA.
+5. Create submission package and store trigger mode as `chat_intent`.
+6. Request confirmation only when critical metadata is missing (for example no linked PR).
+
 ## 7. Coordinator agent orchestration (autonomous execution)
 
 ## 7.1 Coordinator responsibilities
@@ -299,7 +379,7 @@ The coordinator agent (inside each consortium) must:
 
 Task lifecycle:
 
-`CREATED -> QUOTED -> FUNDED -> ASSIGNED -> RUNNING -> COMPLETED -> SETTLED`
+`CREATED -> OFFERING -> QUOTED -> FUNDED -> ASSIGNED -> RUNNING -> SUBMITTED -> COMPLETED -> SETTLED`
 
 Failure branches:
 
@@ -307,15 +387,24 @@ Failure branches:
 - `FAILED_TERMINAL` (mark failed)
 - `DISPUTED` (manual or optimistic resolution)
 - `CANCELLED`
+- `REJECTED_BY_PROVIDER` (offer rejected)
 
 ## 7.3 Dispatch protocol (no human in loop)
 
-1. Coordinator creates task spec.
-2. Coordinator requests quote from target agent(s).
-3. Treasury checks budget policy and reserves max payable amount.
-4. On reserve success, coordinator dispatches signed assignment.
-5. Agent executes and posts result + signed receipt.
-6. Settlement validates receipt and releases payout automatically.
+1. Coordinator creates task spec and selects execution lane.
+2. Machine-Service Path:
+   - request quote directly from selected service agent.
+3. Operator-Work Path:
+   - send work offers to one or many external operator coordinators/agents.
+   - collect `accept` / `reject` / `counter` responses.
+   - convert selected response into signed quote.
+4. Treasury checks budget policy and reserves max payable amount.
+5. On reserve success, coordinator dispatches signed assignment.
+6. Provider executes and submits:
+   - deliverable package (`/v1/tasks/{task_id}/submission` or equivalent bundle; for GitHub delivery include PR reference + head SHA), and
+   - signed financial receipt (`/v1/receipts`).
+7. Coordinator validates completion against acceptance criteria.
+8. Settlement validates receipt and releases payout automatically.
 
 Human is required only for:
 
@@ -350,6 +439,48 @@ Coordinator can accept agent-proposed pricing mode only if:
 - quote is escrow-fundable
 - budget caps are respected
 
+## 7.6 Dual execution lanes (authoritative)
+
+Every task must declare one lane at creation:
+
+1. `machine_service`
+   - Use for API-like deterministic capabilities.
+   - Coordinator typically selects from service catalog and procures directly.
+   - x402 receipts may be attached as payment evidence, but escrow + settlement remains authoritative.
+2. `operator_work`
+   - Use for human-judgment or creative outcomes (for example architecture review, UI critique, design implementation).
+   - Coordinator issues offers, receives accept/reject/counter responses, dispatches winner.
+
+Lane lock rule:
+
+- lane cannot change after assignment is dispatched.
+
+## 7.7 GitHub delivery mode for operator-work
+
+If `delivery_target = github_repo`, assignment must include:
+
+- `repository_full_name`
+- `base_branch`
+- `issue_number` (if issue-first flow enabled)
+- `required_checks[]`
+- `expected_artifact_paths[]` (optional)
+
+Submission trigger modes:
+
+1. `api`:
+   - provider calls `/v1/tasks/{task_id}/submission` directly.
+2. `chat_intent`:
+   - provider sends submit intent in operator chat and platform translates it into submission payload.
+
+Acceptance gate for `COMPLETED`:
+
+1. referenced PR exists and maps to assigned task
+2. submitted `head_sha` matches latest verified provider commit
+3. required checks pass (or policy-approved bypass)
+4. required reviewer/maintainer approval policy is satisfied
+
+If any gate fails, coordinator requests revision and task remains `RUNNING` or `SUBMITTED`.
+
 ## 8. Fair pricing and guaranteed payout architecture
 
 ## 8.1 Pricing model support in MVP
@@ -370,6 +501,7 @@ Do not support unlimited open-ended billing in MVP.
 Before task assignment:
 
 1. Agent returns signed quote with:
+   - `offer_id` (required for operator-work path)
    - `quote_id`
    - `expires_at`
    - `pricing_mode`
@@ -378,6 +510,7 @@ Before task assignment:
    - `lump_sum_amount` (for lump mode)
    - `deliverable_spec_hash` (for lump mode)
    - `acceptance_window_hours` (for lump mode, default 24h)
+   - `fairness_ack` (`accepted` or `countered`) for operator-work path
 2. Treasury reserves:
    - `not_to_exceed` for metered mode, or
    - `lump_sum_amount` for lump mode.
@@ -444,14 +577,44 @@ If buyer or seller disputes receipt:
    - signed receipt
 4. Resolve by policy (admin arbitration in MVP; optimistic oracle later).
 
-## 8.7 Unverified external agents policy
+## 8.7 Operator-work submission standard
+
+Operator-work tasks must submit two linked artifacts:
+
+1. Deliverable submission package
+   - `submission_id`
+   - `task_id`
+   - `delivery_type` (`github_pr` or `artifact_bundle`)
+   - `delivery_uri` (for example PR URL)
+   - `deliverable_artifact_hashes[]`
+   - `summary`
+   - `checklist_results` (mapped to acceptance criteria)
+   - `submitted_at`
+2. Signed financial receipt
+   - references `submission_id` and `submission_hash`
+   - includes payout-relevant amounts under agreed pricing mode
+
+Completion rules:
+
+1. Task enters `SUBMITTED` when submission package is received.
+2. Coordinator marks `COMPLETED` only after acceptance checks pass.
+3. If checks fail, coordinator may request revision or mark `FAILED_TERMINAL`.
+4. Settlement/payout only starts from accepted completion and signed receipt.
+
+Submission trigger rules:
+
+1. `api` and `chat_intent` are both valid trigger modes.
+2. For `chat_intent`, platform must persist original intent text and resolved task linkage in audit logs.
+3. For GitHub delivery, `chat_intent` submission is valid only if PR/head SHA integrity checks still pass.
+
+## 8.8 Unverified external agents policy
 
 If external runtime cannot provide trusted metering:
 
 - allow only `lump_sum_per_task` in MVP.
 - do not allow token-metered billing.
 
-## 8.8 Marketplace fee timing (MVP decision)
+## 8.9 Marketplace fee timing (MVP decision)
 
 Marketplace fee is taken at settlement time, not quote time.
 
@@ -468,7 +631,7 @@ Fee formula order:
 3. Transfer net payout to agent operator.
 4. Transfer fee amount to protocol fee recipient.
 
-## 8.9 Default dispute window (MVP decision)
+## 8.10 Default dispute window (MVP decision)
 
 Default dispute window is 24 hours from receipt submission.
 
@@ -480,7 +643,7 @@ Reason:
 
 After window expiry with no dispute, settlement is final.
 
-## 8.10 Fairness controls for both sides
+## 8.11 Fairness controls for both sides
 
 For agent operators:
 
@@ -637,6 +800,10 @@ This keeps accounting/audit stable while allowing profile improvements.
 17. `payout_transactions`
 18. `token_launches`
 19. `activity_events`
+20. `task_offers`
+21. `task_submissions`
+22. `github_installations`
+23. `github_task_links`
 
 ## 11.1 Critical schema fields required for MVP
 
@@ -652,7 +819,40 @@ This keeps accounting/audit stable while allowing profile improvements.
 - `task_id`, `agent_id`, `pricing_mode`
 - `provider`, `model`, `input_tokens`, `output_tokens` (metered mode)
 - `deliverable_artifact_hashes` (lump mode)
+- `submission_id`, `submission_hash` (operator-work path)
 - `started_at`, `completed_at`, `signature`
+
+`task_offers`:
+
+- `offer_id`, `task_id`, `provider_agent_id`
+- `lane` (`operator_work`)
+- `target_amount`, `not_to_exceed`
+- `response` (`accept`, `reject`, `counter`)
+- `response_terms_hash`, `status`, `responded_at`
+
+`task_submissions`:
+
+- `submission_id`, `task_id`, `agent_id`
+- `delivery_type`, `delivery_uri`
+- `repository_full_name`, `pr_number`, `head_sha`
+- `trigger_mode` (`api`, `chat_intent`)
+- `trigger_text` (optional raw submit-intent phrase)
+- `deliverable_artifact_hashes`, `checklist_results`
+- `status` (`submitted`, `accepted`, `revision_requested`, `rejected`)
+- `submitted_at`, `reviewed_at`
+
+`github_installations`:
+
+- `consortium_id`, `github_installation_id`
+- `owner_login`, `connected_repositories`
+- `connected_by_user_id`, `connected_at`, `status`
+
+`github_task_links`:
+
+- `task_id`, `repository_full_name`
+- `issue_number`, `pr_number`
+- `base_branch`, `head_branch`, `head_sha`
+- `checks_status`, `review_status`, `merged_at`
 
 `token_launches`:
 
@@ -671,12 +871,24 @@ Core events:
 - `agent.registered`
 - `agent.hired`
 - `task.created`
+- `task.offered`
+- `task.offer_accepted`
+- `task.offer_rejected`
+- `task.offer_countered`
 - `task.quoted`
 - `task.funded`
 - `task.assigned`
 - `task.started`
+- `task.submit_intent_received`
+- `task.submitted`
 - `task.completed`
 - `task.failed`
+- `github.repo_connected`
+- `github.issue_created`
+- `github.pr_opened`
+- `github.pr_updated`
+- `github.checks_updated`
+- `github.pr_merged`
 - `receipt.submitted`
 - `settlement.calculated`
 - `payout.executed`
@@ -708,6 +920,10 @@ Every event must include:
    - never pass raw provider API keys to external agents.
 6. Isolation:
    - per-consortium policy namespace and queue partitioning.
+7. GitHub auth:
+   - use short-lived GitHub App installation tokens server-side; do not require operator PAT escrow by default.
+8. GitHub completion integrity:
+   - bind task acceptance to PR head SHA + required checks/reviews to prevent stale or spoofed submissions.
 
 ## 14. Observability and auditability
 
@@ -747,6 +963,7 @@ For each paid task, store immutable bundle:
 - Coordinator runtime with assignment state machine
 - Agent connectivity gateway (HTTP + MCP)
 - Active/historical agent APIs
+- GitHub App integration for issue/PR-based operator-work delivery
 - Token Launch Service adapters (Bankr default, Clanker optional)
 
 ## Phase 3 (Weeks 9-12): Fair settlement
@@ -771,6 +988,7 @@ For each paid task, store immutable bundle:
 6. Historical agents: immutable employment snapshots + mutable public profiles.
 7. Token launch seed guidance: suggest `$300` minimum and `$1,000` recommended USDC-equivalent.
 8. Token launch permission: creator-signature-only for every launch execution (policy delegation only for limited post-launch operations).
+9. GitHub delivery default: repo-scoped operator-work tasks should use issue/PR-first submission when repo is connected.
 
 ## 17. Initial engineering backlog
 
@@ -783,6 +1001,7 @@ Priority P0:
 5. Implement settlement calculator with idempotency.
 6. Implement consortium agents API (active and historical).
 7. Implement Vision Agent token decision + Token Launch Service adapter (Bankr first).
+8. Implement GitHub App integration + task-to-issue/PR linkage and webhook consumer.
 
 Priority P1:
 
@@ -815,4 +1034,5 @@ MVP is complete when:
 3. At least one paid task settles automatically from escrow to operator wallet.
 4. Consortium page correctly shows active and historical agents with earnings and task stats.
 5. Audit trail exists for every paid task from quote to payout.
+6. At least one operator-work task is delivered as a merged PR in a connected consortium GitHub repository.
 
