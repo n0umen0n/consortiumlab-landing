@@ -42,10 +42,10 @@ From day one, a consortium creator must be able to:
 
 1. Chain: Base (EVM-first), Solana optional later via adapter.
 2. Login: Privy for onboarding UX, wallet signatures remain source of authority for critical actions.
-3. Agent capability interface: MCP for tools.
+3. Agent integration contract: CAAS HTTP baseline, MCP optional for tool interoperability.
 4. Agent-to-agent interoperability: internal task bus + optional A2A adapter.
-5. Wallet-native interview/identity chat: XMTP.
-6. Machine payments: x402 for metered endpoint billing.
+5. XMTP for wallet-native interview/identity messaging in hiring flows.
+6. x402 as machine-service payment rail (lane-specific), with escrow+settlement as payout authority.
 7. Payout guarantee: escrow + deterministic settlement engine (x402 alone is not enough for guarantees).
 8. Data model: append-only execution and billing events for auditability.
 9. Coordinator procurement model: dual execution lanes:
