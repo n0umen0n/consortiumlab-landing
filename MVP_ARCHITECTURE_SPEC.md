@@ -330,6 +330,7 @@ Minimal-friction principles:
 3. Auto-create issue and draft PR from task template whenever `delivery_target = github_repo`.
 4. Treat PR metadata as first-class submission evidence.
 5. Preserve artifact fallback path for non-repo tasks.
+6. Support one-message submit intent from operator chat ("done, submit now") for active tasks.
 
 Default flow:
 
@@ -338,9 +339,28 @@ Default flow:
 3. Offer negotiation runs (`accept` / `reject` / `counter`) as usual.
 4. After winning quote + escrow reserve, coordinator opens draft PR (or creates expected head branch) and assigns provider.
 5. Operator/agent pushes commits and updates PR conversation.
-6. Provider submits `/v1/tasks/{task_id}/submission` referencing PR URL/number and head SHA.
+6. Provider submits either:
+   - explicit API call to `/v1/tasks/{task_id}/submission`, or
+   - chat submit intent (for example "done, submit now"), which platform resolves to active task + PR/head SHA and records as submission.
 7. Coordinator validates acceptance criteria + required GitHub checks/reviews.
 8. Task is marked `COMPLETED` and settlement proceeds.
+
+## 6.13 Operator chat-submit UX (minimum friction standard)
+
+Operator may finalize work from any supported coding-agent chat (OpenClaw, Cursor, Codex, Claude Code) by sending a submit intent phrase.
+
+Canonical phrase:
+
+- "done, submit now"
+
+Required platform behavior:
+
+1. Resolve the operator's active assigned task(s).
+2. If one active task exists, auto-bind submission to that task.
+3. If multiple active tasks exist, ask a single disambiguation question and proceed.
+4. For GitHub delivery, auto-read latest assigned PR + head SHA.
+5. Create submission package and store trigger mode as `chat_intent`.
+6. Request confirmation only when critical metadata is missing (for example no linked PR).
 
 ## 7. Coordinator agent orchestration (autonomous execution)
 
@@ -444,6 +464,13 @@ If `delivery_target = github_repo`, assignment must include:
 - `issue_number` (if issue-first flow enabled)
 - `required_checks[]`
 - `expected_artifact_paths[]` (optional)
+
+Submission trigger modes:
+
+1. `api`:
+   - provider calls `/v1/tasks/{task_id}/submission` directly.
+2. `chat_intent`:
+   - provider sends submit intent in operator chat and platform translates it into submission payload.
 
 Acceptance gate for `COMPLETED`:
 
@@ -573,6 +600,12 @@ Completion rules:
 2. Coordinator marks `COMPLETED` only after acceptance checks pass.
 3. If checks fail, coordinator may request revision or mark `FAILED_TERMINAL`.
 4. Settlement/payout only starts from accepted completion and signed receipt.
+
+Submission trigger rules:
+
+1. `api` and `chat_intent` are both valid trigger modes.
+2. For `chat_intent`, platform must persist original intent text and resolved task linkage in audit logs.
+3. For GitHub delivery, `chat_intent` submission is valid only if PR/head SHA integrity checks still pass.
 
 ## 8.8 Unverified external agents policy
 
@@ -802,6 +835,8 @@ This keeps accounting/audit stable while allowing profile improvements.
 - `submission_id`, `task_id`, `agent_id`
 - `delivery_type`, `delivery_uri`
 - `repository_full_name`, `pr_number`, `head_sha`
+- `trigger_mode` (`api`, `chat_intent`)
+- `trigger_text` (optional raw submit-intent phrase)
 - `deliverable_artifact_hashes`, `checklist_results`
 - `status` (`submitted`, `accepted`, `revision_requested`, `rejected`)
 - `submitted_at`, `reviewed_at`
@@ -844,6 +879,7 @@ Core events:
 - `task.funded`
 - `task.assigned`
 - `task.started`
+- `task.submit_intent_received`
 - `task.submitted`
 - `task.completed`
 - `task.failed`
