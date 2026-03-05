@@ -28,6 +28,7 @@ Static export will be generated in the `out/` directory.
 ## Architecture Spec
 
 - MVP implementation architecture: `MVP_ARCHITECTURE_SPEC.md`
+- OpenClaw-only architecture design: `OPENCLAW_ARCHITECTURE_SPEC.md`
 
 ## Structure
 
