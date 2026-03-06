@@ -10,8 +10,8 @@ const team = [
     bio: 'Ex-PwC Business transformation. 8 years web3 product design / smart contract development.',
     accent: 'linear-gradient(140deg, #8b5cf6, #4f7df5)',
     photo: '/team/vladislav-hramtsov.png',
-    photoPosition: '56% 24%',
-    photoScale: 1.3,
+    photoPosition: '58% 20%',
+    photoScale: 1.6,
   },
   {
     name: 'Lennar Lehestik',
