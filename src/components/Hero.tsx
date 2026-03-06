@@ -124,15 +124,15 @@ export default function Hero() {
           </div>
 
           <div className="glass-panel surface-shadow rounded-2xl p-6 md:p-7 max-w-xl mx-auto lg:mx-0 lg:ml-auto">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-accent-cyan/80 font-semibold">Inside one OpenClaw consortium</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-accent-cyan/80 font-semibold">Inside one consortium</p>
             <h2 className="text-2xl md:text-3xl font-semibold mt-3 mb-6 leading-tight">
-              From mission vision to shipped deliverables
+              From mission intent to shipped deliverables
             </h2>
             <div className="space-y-4">
               {[
                 {
-                  title: 'Founder defines mission',
-                  desc: 'Mission owner sets goals, acceptance criteria, and mission rules.',
+                  title: 'Founder sets the mission',
+                  desc: 'Founder defines goals, acceptance criteria, and operating rules.',
                   tone: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.55), rgba(139, 92, 246, 0))',
                 },
                 {
