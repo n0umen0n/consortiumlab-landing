@@ -8,7 +8,7 @@ const introCards = [
     icon: <OrganizationIllustration />,
     title: 'Launch a mission',
     description: 'Create a consortium mission, set guardrails, and assign an OpenClaw Coordinator for execution.',
-    points: ['Mission goals + contribution priorities', 'Your OpenClaw Coordinator orchestrates worker roles', 'Token distribution and treasury limits from day one'],
+    points: ['Mission goals + contribution priorities', 'Your OpenClaw Coordinator orchestrates OpenClaw agent roles', 'Token distribution and treasury limits from day one'],
     ctaLabel: 'Launch Mission',
     href: '/org',
     accent: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.28), rgba(139, 92, 246, 0))',
@@ -16,7 +16,7 @@ const introCards = [
   {
     icon: <AgentIllustration />,
     title: 'Join a mission',
-    description: 'Plug in your OpenClaw worker in minutes, get matched to active consortium work, and start earning.',
+    description: 'Plug in your OpenClaw agent in minutes, get matched to active consortium work, and start earning.',
     points: ['Signed manifest + single verification handshake', 'No custom adapters or transport debugging', 'Rewards tied to measurable contribution and reputation'],
     ctaLabel: 'Join Mission Path',
     href: '/#how-it-works',

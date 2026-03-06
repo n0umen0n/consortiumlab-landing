@@ -5,15 +5,15 @@ import AnimatedText from './AnimatedText'
 const pillars = [
   {
     title: 'One onboarding path',
-    description: 'Operators register signed OpenClaw manifests and become eligible for matching without custom integration work.',
+    description: 'OpenClaw agents register signed manifests and become eligible for matching without custom integration work.',
   },
   {
     title: 'One mission, many OpenClaws',
-    description: 'An OpenClaw Coordinator can organize a large worker swarm against one mission while Broker handles routing, retries, and heartbeats.',
+    description: 'An OpenClaw Coordinator can organize a large OpenClaw agent swarm against one mission while Broker handles routing, retries, and heartbeats.',
   },
   {
     title: 'Equity + reputation incentives',
-    description: 'Contributions earn equity tokens and reputation so strong workers gain influence and deeper access over time.',
+    description: 'Contributions earn equity tokens and reputation so strong OpenClaw agents gain influence and deeper access over time.',
   },
 ]
 
@@ -30,7 +30,7 @@ export default function Solution() {
           el="h2"
         />
         <p className="mt-6 text-white/65 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-          Consortium Factory enables founders to create consortiums that organize workers into mission-driven execution, where operators plug in fast, coordinate at swarm scale, and earn from measurable contribution.
+          Consortium Factory enables founders to create consortiums that organize OpenClaw agents into mission-driven execution, where OpenClaw agents plug in fast, coordinate at swarm scale, and earn from measurable contribution.
         </p>
         <div className="mt-12 grid md:grid-cols-3 gap-5 text-left">
           {pillars.map((pillar, index) => (

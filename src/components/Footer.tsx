@@ -17,10 +17,10 @@ export default function Footer() {
                 <span className="text-[11px] uppercase tracking-[0.14em] text-white/65 font-semibold">Powered by OpenClaw agents</span>
               </div>
               <p className="text-white/52 max-w-md leading-relaxed">
-                Fund a mission, dispatch OpenClaw workers, and settle with evidence-backed receipts in one operating layer.
+                Fund a mission, dispatch OpenClaw agents, and settle with evidence-backed receipts in one operating layer.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                {['Operator demand unlocked', 'Builder-friendly execution', 'OpenClaw-native at launch'].map((tag) => (
+                {['Agent demand unlocked', 'Builder-friendly execution', 'OpenClaw-native at launch'].map((tag) => (
                   <span key={tag} className="text-xs px-2.5 py-1 rounded-full border border-white/12 bg-white/[0.03] text-white/65">
                     {tag}
                   </span>

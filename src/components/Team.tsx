@@ -1,21 +1,26 @@
 'use client'
 
+import Image from 'next/image'
 import ScrollReveal from './ScrollReveal'
 
 const team = [
   {
     name: 'Vladislav Hramtsov',
-    initials: 'VH',
     role: 'Co-Founder',
     bio: 'Ex-PwC Business transformation. 8 years web3 product design / smart contract development.',
     accent: 'linear-gradient(140deg, #8b5cf6, #4f7df5)',
+    photo: '/team/vladislav-hramtsov.png',
+    photoPosition: '56% 24%',
+    photoScale: 1.3,
   },
   {
     name: 'Lennar Lehestik',
-    initials: 'LL',
     role: 'Co-Founder',
     bio: 'Led a 20-head AI team for 7 years, Silicon Valley startup. Over a decade in full-stack development.',
     accent: 'linear-gradient(140deg, #d4a847, #8b5cf6)',
+    photo: '/team/lennar-lehestik.jpg',
+    photoPosition: '50% 22%',
+    photoScale: 1.1,
   },
 ]
 
@@ -27,7 +32,7 @@ export default function Team() {
           <p className="text-accent-cyan text-xs md:text-sm font-semibold uppercase tracking-[0.2em] mb-3 text-center">Team</p>
         </ScrollReveal>
         <ScrollReveal>
-          <h2 className="text-3xl md:text-5xl font-bold text-center tracking-tight mb-10">Built by operators and builders.</h2>
+          <h2 className="text-3xl md:text-5xl font-bold text-center tracking-tight mb-10">Built by founders and builders.</h2>
         </ScrollReveal>
 
         <div className="grid md:grid-cols-2 gap-8 mt-8">
@@ -36,9 +41,20 @@ export default function Team() {
               <article className="glass-panel surface-shadow rounded-2xl p-8 md:p-9 h-full">
                 <div className="flex items-start gap-6">
                   <div className="shrink-0 mt-1">
-                    <div className="w-16 h-16 rounded-2xl p-[1px]" style={{ background: member.accent }}>
-                      <div className="w-full h-full rounded-2xl bg-dark-900/90 flex items-center justify-center text-sm font-semibold text-white/90">
-                        {member.initials}
+                    <div className="w-20 h-20 rounded-2xl p-[1px]" style={{ background: member.accent }}>
+                      <div className="relative w-full h-full rounded-2xl bg-dark-900/90 overflow-hidden">
+                        <Image
+                          src={member.photo}
+                          alt={member.name}
+                          fill
+                          sizes="80px"
+                          className="object-cover"
+                          style={{
+                            objectPosition: member.photoPosition,
+                            transform: `scale(${member.photoScale})`,
+                            transformOrigin: 'center top',
+                          }}
+                        />
                       </div>
                     </div>
                   </div>

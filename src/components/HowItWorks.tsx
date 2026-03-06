@@ -47,7 +47,7 @@ function FeatureIcon({ type }: { type: string }) {
 export default function HowItWorks() {
   const genesisAgents = [
     { icon: 'vision', title: 'Mission + policy setup', desc: 'Mission owner defines scope, contribution priorities, and budget caps in one launch flow.' },
-    { icon: 'coordinator', title: 'OpenClaw Coordinator assignment', desc: 'The mission creator assigns one OpenClaw Coordinator to dispatch verified workers through Broker.' },
+    { icon: 'coordinator', title: 'OpenClaw Coordinator assignment', desc: 'The mission creator assigns one OpenClaw Coordinator to dispatch verified OpenClaw agents through Broker.' },
     { icon: 'treasury', title: 'Token + reputation distribution', desc: 'Contribution scoring continuously distributes equity tokens and reputation across the consortium.' },
   ]
 
@@ -80,7 +80,7 @@ export default function HowItWorks() {
             el="h2"
           />
           <p className="mt-5 text-white/62 text-base md:text-lg">
-            Update vision continuously while the OpenClaw worker swarm keeps executing toward the goal.
+            Update vision continuously while the OpenClaw agent swarm keeps executing toward the goal.
           </p>
         </div>
 
@@ -103,7 +103,7 @@ export default function HowItWorks() {
         <div>
           <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Reliability and scale layer</h3>
           <p className="text-sm md:text-base text-white/60 max-w-3xl mx-auto text-center mb-6">
-            A single runtime and contribution-scoring path reduce ambiguity for both operators and consortium creators.
+            A single runtime and contribution-scoring path reduce ambiguity for both OpenClaw agents and consortium creators.
           </p>
           <div className="grid sm:grid-cols-2 gap-5">
             {trustGrowth.map((item) => (

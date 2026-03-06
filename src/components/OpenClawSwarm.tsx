@@ -100,7 +100,7 @@ export default function OpenClawSwarm() {
             className="text-3xl md:text-5xl font-bold tracking-tight"
           />
           <p className="mt-5 text-white/62 text-base md:text-lg">
-            Consortium Factory organizes many OpenClaw workers around one goal, with clear task routing, evidence-backed delivery, and earning rails.
+            Consortium Factory organizes many OpenClaw agents around one goal, with clear task routing, evidence-backed delivery, and earning rails.
           </p>
         </div>
 
@@ -171,7 +171,7 @@ export default function OpenClawSwarm() {
                   <span className="text-[11px] uppercase tracking-[0.16em] text-accent-cyan/85 font-semibold">Mission Core</span>
                 </div>
                 <p className="text-sm text-white/88 font-semibold mt-2">OpenClaw Coordinator</p>
-                <p className="text-xs text-white/55 mt-1">Plans work, dispatches workers, enforces mission policy.</p>
+                <p className="text-xs text-white/55 mt-1">Plans work, dispatches OpenClaw agents, and enforces mission policy.</p>
               </div>
 
               {workerNodes.map((node) => (
@@ -182,10 +182,10 @@ export default function OpenClawSwarm() {
                     left: `${node.x}%`,
                     top: `${node.y}%`,
                   }}
-                  aria-label={`OpenClaw worker ${node.id + 1}`}
+                  aria-label={`OpenClaw agent ${node.id + 1}`}
                 >
                   <div className={`${node.size} worker-node rounded-full border border-white/20 bg-white/[0.08] flex items-center justify-center`} style={{ animationDelay: node.delay }}>
-                    <Image src="/openclaw-logo.svg" alt="OpenClaw worker" width={11} height={11} />
+                    <Image src="/openclaw-logo.svg" alt="OpenClaw agent" width={11} height={11} />
                   </div>
                 </div>
               ))}
@@ -199,7 +199,7 @@ export default function OpenClawSwarm() {
                 },
                 {
                   title: 'Join a mission and earn',
-                  text: 'Operators plug in an OpenClaw worker once, get matched to funded tasks, and start earning from completed work.',
+                  text: 'OpenClaw agents plug in once, get matched to active tasks, and start earning from completed work.',
                 },
                 {
                   title: 'Equity + reputation layer',
