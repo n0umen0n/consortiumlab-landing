@@ -1,313 +1,565 @@
-# Consortium Factory OpenClaw-Only Architecture
+# Consortium Factory OpenClaw Consortium Architecture (MVP v2)
 
-Status: Draft v1  
-Audience: Engineering, product, and platform teams  
-Last updated: 2026-03-05
+Status: Draft v2 (implementation-ready)  
+Audience: Engineering agent(s) building backend + protocol + coordinator runtime  
+Last updated: 2026-03-06
 
-## 1. Purpose
+## 1. Objective
 
-This document defines a new architecture for Consortium Factory that is fully OpenClaw-native.
+Build the first production consortium as an OpenClaw-native system where:
 
-Goal: remove integration friction by standardizing all agent onboarding, task execution, delivery, and settlement on a single runtime and protocol surface: OpenClaw.
+1. Exactly one consortium runs in MVP.
+2. The consortium mission is: **build Consortium Factory**.
+3. Your OpenClaw instance is the first and active coordinator.
+4. Any operator with an OpenClaw runtime can plug in quickly as a worker.
+5. Task coordination is autonomous for normal flows (human-in-loop only for exceptions).
+6. Reputation/governance uses the contracts in `base-respect-game/blockchain/contracts`.
 
-This is a companion design to `MVP_ARCHITECTURE_SPEC.md`, not a rewrite of product goals.
+This document is the authoritative architecture for implementation.
 
-## 2. Why an OpenClaw-only architecture
+## 2. Product copy alignment (latest landing-page claims)
 
-The previous MVP design optimizes for framework-agnostic interoperability (HTTP adapters, optional MCP/A2A bridges, mixed submission paths).
+The architecture must support the current product promises:
 
-That flexibility is useful long-term, but it creates immediate friction:
+- "Launch a mission" and "Join a mission" entry paths.
+- Mission creator OpenClaw acts as coordinator/CEO.
+- Plug-in OpenClaw workers can join and earn.
+- Evidence-backed delivery using receipts.
+- Equity + reputation growth layer.
 
-- More contracts to implement (`quote`, `task`, `receipt`, `submission`)
-- More protocol edge cases (HTTP vs MCP vs chat-intent adapters)
-- More operational variance per operator stack
-- Slower onboarding and lower first-task completion rates
+## 3. MVP scope and non-goals
 
-OpenClaw-only removes that variance at launch.
+## 3.1 In scope
 
-## 3. Design principles
+- One consortium instance.
+- One active coordinator OpenClaw.
+- N plug-in OpenClaw workers.
+- Task planning, assignment, execution tracking, receipt submission, settlement.
+- GitHub-first delivery for engineering tasks.
+- Reputation and governance integration with Base Respect Game contracts.
 
-1. One runtime model
-   - All production agents run as OpenClaw workers.
-2. One task contract
-   - A single OpenClaw task envelope for planning, execution, and receipts.
-3. One onboarding path
-   - No custom adapter coding for external operators.
-4. One submission path
-   - Every completion emits OpenClaw-native deliverable metadata.
-5. Policy by default
-   - Treasury limits and payout rules are pre-attached to every task.
-6. GitHub-first delivery
-   - Repo tasks are issue/PR-native from day one.
+## 3.2 Out of scope for MVP
 
-## 4. What changes versus current MVP architecture
+- Multi-consortium tenancy.
+- Non-OpenClaw adapters.
+- Multi-chain support.
+- Fully trustless on-chain task routing.
+- Advanced staking/slashing.
 
-## 4.1 Removed for MVP
+## 4. System architecture
 
-- Custom CAAS HTTP adapter requirements
-- Optional A2A adapter layer
-- Optional MCP fallback contracts
-- Multi-transport task dispatch logic
-- Dual submission trigger ambiguity (`api` vs `chat_intent`)
+## 4.1 Components
 
-## 4.2 Added / standardized
+1. **Landing + Ops UI (Next.js)**
+   - Mission overview, worker onboarding, task visibility, reputation views.
+2. **API Gateway**
+   - Auth, rate limiting, idempotency key validation.
+3. **Consortium Service**
+   - Consortium config, mission policy, worker roster, task metadata.
+4. **OpenClaw Registry**
+   - Worker manifest verification and capability indexing.
+5. **OpenClaw Broker (Collaboration Plane)**
+   - Assignment queue, dispatch, heartbeats, retries, cancellation.
+6. **Coordinator Runtime**
+   - Runs your OpenClaw coordinator logic and planning loops.
+7. **Receipt + Settlement Service**
+   - Receipt validation, payout computation, payout execution.
+8. **GitHub Delivery Bridge**
+   - Task-to-issue/PR mapping, checks, merge evidence.
+9. **Reputation Bridge**
+   - Maps platform events to Respect Game contract calls and indexes on-chain events.
+10. **Event Store**
+    - Append-only source of truth for audit/replay.
 
-- OpenClaw Worker Manifest (single manifest format)
-- OpenClaw Broker (assignment + retries + heartbeats)
-- OpenClaw Receipt Schema (execution + cost + evidence)
-- OpenClaw GitHub Delivery Bridge (PR state as first-class evidence)
+## 4.2 Deployment topology (MVP)
 
-## 5. OpenClaw-native system architecture
+- Single region deployment.
+- One logical consortium namespace (`consortium_id = consortium_factory_mvp`).
+- One coordinator identity (`coordinator_worker_id` fixed to your OpenClaw).
+- Shared broker queue, partitioned by `task_type`.
 
-## 5.1 Components
+## 5. Identity and trust model
 
-1. Frontend (Next.js)
-   - Same creator UX (mission, hiring, treasury, dashboard).
-2. Auth + Identity Service
-   - Privy sessions + wallet authority for critical actions.
-3. Consortium Service
-   - Mission state, policies, memberships.
-4. OpenClaw Registry
-   - Registers OpenClaw workers and verifies signed manifests.
-5. OpenClaw Broker
-   - Task routing, queueing, retries, cancellation, heartbeats.
-6. Coordinator Runtime
-   - Plans work and asks Broker for assignment execution.
-7. Treasury + Settlement Service
-   - Escrow reserve, deterministic payout, dispute windows.
-8. GitHub Delivery Bridge
-   - Links task -> issue -> PR -> head SHA -> checks.
-9. Event Store
-   - Append-only audit log for task and payment lifecycle.
+## 5.1 Core identities
 
-## 5.2 Canonical runtime flow
+- **Creator wallet**: consortium owner authority.
+- **Coordinator wallet**: your OpenClaw coordinator identity.
+- **Worker wallet**: each plugged-in operator OpenClaw.
 
-1. Creator funds treasury and configures risk policy.
-2. Coordinator decomposes mission into tasks.
-3. Broker selects eligible OpenClaw worker(s) from Registry.
-4. Treasury reserves not-to-exceed budget before assignment.
-5. Worker executes via OpenClaw runtime contract.
-6. Worker submits OpenClaw receipt with deliverable evidence.
-7. GitHub bridge validates PR/head SHA/checks (repo tasks).
-8. Settlement computes payout and releases funds automatically.
+All critical writes require wallet-bound signatures:
 
-## 6. OpenClaw worker model
+- worker registration manifest signature
+- assignment acceptance signature
+- receipt signature
+- payout approval signature (for exceptional/manual paths)
 
-## 6.1 Worker manifest (minimum)
+## 5.2 Trust levels
 
-Every worker publishes a signed OpenClaw manifest:
+- `verified`: passed handshake + signed manifest + dry run.
+- `limited`: manifest valid but limited capability or partial checks.
+- `blocked`: policy or abuse violation.
+
+Only `verified` workers can receive autonomous assignments in MVP.
+
+## 6. OpenClaw plug-in protocol (any OpenClaw can join)
+
+## 6.1 Worker manifest (required)
+
+Each worker must publish a signed manifest:
 
 - `worker_id`
 - `wallet_address`
+- `openclaw_version`
 - `display_name`
-- `capabilities[]`
+- `capabilities[]` (taxonomy tags, ex: `frontend.react`, `docs.architecture`)
 - `execution_modes[]` (`deterministic`, `creative`, `review`)
 - `pricing_mode` (`metered_cap` or `fixed_task`)
 - `concurrency_limit`
-- `github_delivery_supported` (boolean)
+- `max_task_budget_usdc`
+- `github_delivery_supported` (bool)
+- `receipt_schema_version`
 - `signature_pubkey`
-- `version`
+- `manifest_signature`
+- `created_at`, `expires_at`
 
-## 6.2 Registration and verification
+## 6.2 Registration flow
 
-1. Operator logs in with wallet.
-2. Operator submits OpenClaw manifest.
-3. Registry verifies signature + schema.
-4. Registry runs OpenClaw handshake + dry-run task.
-5. Worker is marked `verified`.
-6. Worker is immediately available for matching.
+1. Operator connects wallet.
+2. Operator submits manifest.
+3. Registry verifies schema + signature + expiry.
+4. Registry runs OpenClaw handshake:
+   - ping
+   - sample task assignment
+   - sample receipt verification
+5. Registry marks worker `verified`.
+6. Worker appears in match pool immediately.
 
-No custom HTTP adapter implementation is required.
+Target onboarding time: under 10 minutes.
 
-## 6.3 Task envelope
+## 6.3 Handshake contract
 
-All tasks use one OpenClaw envelope:
+Required worker operations:
 
-- `task_id`
-- `consortium_id`
-- `worker_id`
-- `scope`
-- `acceptance_criteria`
-- `delivery_target` (`github_repo` or `artifact_bundle`)
-- `budget_cap`
-- `deadline`
-- `policy_snapshot_hash`
+- `acceptAssignment(assignment_packet)`
+- `sendHeartbeat(task_id, progress_pct, summary)`
+- `submitReceipt(receipt_packet)`
+- `cancelTask(task_id, reason)`
 
-This replaces fragmented endpoint contracts and keeps retries idempotent.
+Transport: HTTPS JSON for MVP (WebSocket streaming optional for live updates).
 
-## 7. Frictionless user experience design
+## 6.4 Idempotency and replay
 
-## 7.1 For consortium creators
+- Every assignment has `assignment_id` and `idempotency_key`.
+- Repeated dispatch with same `assignment_id` must be no-op.
+- Receipt updates are append-only and versioned (`receipt_revision`).
 
-- Create mission in Vision Agent chat
-- Click "Hire OpenClaw Worker"
-- Approve policy template (safe default)
-- Fund treasury once
-- Start autonomous execution
+## 7. Collaboration layer (how coordinator and workers pass work)
 
-Why this feels easier:
+## 7.1 Collaboration primitives
 
-- No protocol decisions required from creator
-- No per-agent compatibility uncertainty
-- No transport-level configuration screens
+- **TaskSpec**: intent + acceptance criteria + budget + deadlines.
+- **Assignment**: TaskSpec bound to specific worker and policy snapshot.
+- **Heartbeat**: liveness + progress + blockers.
+- **Receipt**: execution evidence + resource usage + deliverable links.
+- **DecisionEvent**: accepted/rejected/revision-requested/settled.
 
-## 7.2 For operators
+## 7.2 Task lifecycle state machine
 
-- Connect wallet
-- Register OpenClaw worker manifest
-- Pass one verification handshake
-- Receive tasks and submit receipts in one standard flow
+`PLANNED -> BUDGET_RESERVED -> ASSIGNED -> ACCEPTED -> RUNNING -> SUBMITTED -> VALIDATED -> SETTLED`
 
-Why this feels easier:
+Failure branches:
 
-- No CAAS endpoint buildout
-- No adapter-specific debugging
-- No submission-mode ambiguity
+- `RETRYABLE_FAILED`
+- `TERMINAL_FAILED`
+- `CANCELLED`
+- `DISPUTED`
 
-## 7.3 For maintainers
+## 7.3 Assignment routing policy
 
-- One runtime to observe
-- One failure taxonomy
-- One replay/idempotency model
-- One set of runbooks and SLOs
+Coordinator computes candidate score:
 
-Why this feels easier:
+`score = capability_fit * 0.35 + reliability * 0.25 + cost_fit * 0.20 + latency_fit * 0.10 + reputation_weight * 0.10`
 
-- Lower incident complexity
-- Faster root-cause analysis
-- Smaller test matrix for releases
+Rules:
 
-## 8. Why this architecture is better
+- hard filter by capability tags and budget cap.
+- prefer workers with fewer active assignments if score delta < 5%.
+- fallback to next ranked worker on timeout.
 
-## 8.1 Faster time-to-first-value
+## 7.4 Timeout and retry policy
 
-- Operators can onboard with a manifest + handshake, not a mini API product.
-- Creators can hire and dispatch with fewer decision points.
-- Platform can ship earlier due to smaller integration surface.
+- assignment ack timeout: 60s
+- heartbeat interval: 45s
+- stale heartbeat threshold: 3 missed intervals
+- max automatic retries per task: 2
+- retry strategy: exponential backoff (30s, 90s)
 
-## 8.2 Higher reliability at MVP stage
+## 7.5 Conflict and escalation
 
-- Single broker lifecycle simplifies retries, backoff, and cancellations.
-- Uniform receipts reduce payout errors from format drift.
-- One delivery path reduces completion-state ambiguity.
+Human escalation only when:
 
-## 8.3 Better economics
+- receipt validation fails after one revision request
+- payout above policy threshold
+- dispute opened by creator or worker
+- security policy trigger (signature mismatch, suspicious replay)
 
-- Lower integration cost for operators.
-- Lower support cost for platform team.
-- Better conversion from "registered worker" to "paid completed task."
+## 7.6 Collaboration transport and topics
 
-## 8.4 Better security posture
+Use a brokered collaboration model (not direct worker-to-worker RPC) so coordinator policy remains authoritative.
 
-- Fewer externally exposed protocol surfaces.
-- One signed manifest format and one signed receipt format.
-- Stronger policy enforcement because every assignment passes one broker.
+Topic set (Redis Streams, NATS, or equivalent):
 
-## 9. Frictionless defaults (authoritative)
+- `tasks.planned`
+- `tasks.budget_reserved`
+- `tasks.assigned`
+- `tasks.accepted`
+- `tasks.heartbeat`
+- `tasks.submitted`
+- `tasks.validated`
+- `tasks.settled`
+- `tasks.failed`
+- `tasks.disputed`
 
-1. Worker compatibility: OpenClaw manifest + handshake only.
-2. Assignment gating: escrow reserve required before dispatch.
-3. Submission contract: OpenClaw receipt only.
-4. Repo delivery: GitHub issue/PR metadata required for completion.
-5. Pricing modes: `metered_cap` and `fixed_task` only.
-6. Dispute window: 24h default.
-7. Human signoff: only for policy breach, threshold exceedance, or dispute.
+Envelope (all collaboration messages):
 
-## 10. Event model (OpenClaw-native)
-
-Required events:
-
-- `worker.registered`
-- `worker.verified`
-- `task.planned`
-- `task.budget_reserved`
-- `task.assigned`
-- `task.heartbeat`
-- `task.submitted`
-- `task.accepted`
-- `task.settlement_calculated`
-- `task.payout_executed`
-- `task.disputed`
-
-Each event includes:
-
-- `event_id`
+- `message_id` (uuid)
 - `trace_id`
 - `consortium_id`
-- `task_id` (if applicable)
-- `actor_type` (`human`, `worker`, `system`)
-- `actor_id`
-- `timestamp`
-- `payload`
+- `task_id`
+- `assignment_id` (nullable for pre-assignment events)
+- `message_type`
+- `created_at`
+- `producer` (`coordinator`, `worker`, `system`)
+- `schema_version`
+- `payload` (typed object)
 
-## 11. Data model (MVP minimum for OpenClaw design)
+## 7.7 Canonical sequence (task to payout)
+
+1. Coordinator emits `tasks.planned` with TaskSpec.
+2. Settlement service reserves budget and emits `tasks.budget_reserved`.
+3. Broker dispatches assignment, emits `tasks.assigned`.
+4. Worker acknowledges assignment (`tasks.accepted`).
+5. Worker sends periodic heartbeats (`tasks.heartbeat`).
+6. Worker submits receipt (`tasks.submitted`).
+7. Validator emits `tasks.validated` or revision request.
+8. Settlement executes payout and emits `tasks.settled`.
+9. Reputation bridge consumes `tasks.validated`/`tasks.settled` for cycle inputs.
+
+## 7.8 Work packet versioning strategy
+
+- `task_schema_version` and `receipt_schema_version` are mandatory.
+- Breaking changes use new versioned endpoints (`/v2/...`) and dual-write period.
+- Coordinator and worker must advertise supported versions in manifest.
+- Registry rejects workers that do not support current minimum versions.
+
+## 8. Coordinator runtime design
+
+## 8.1 Coordinator loops
+
+1. **Planning loop (30-120s)**
+   - break mission goals into TaskSpecs.
+2. **Dispatch loop (10-30s)**
+   - match tasks to verified workers and assign.
+3. **Supervision loop (15-45s)**
+   - evaluate heartbeats, detect stalls, trigger retries.
+4. **Settlement loop (30-60s)**
+   - validate receipts, release payouts, emit accounting events.
+5. **Reputation loop (hourly + cycle-end)**
+   - aggregate contributions and push to Respect Game bridge.
+
+## 8.2 Coordinator command contract
+
+Coordinator emits only deterministic commands to broker:
+
+- `CREATE_TASK`
+- `ASSIGN_TASK`
+- `REQUEST_REVISION`
+- `CANCEL_TASK`
+- `APPROVE_SETTLEMENT`
+- `ESCALATE_DISPUTE`
+
+All coordinator actions are written to event store with trace IDs.
+
+## 9. Delivery and settlement layer
+
+## 9.1 Receipt schema (required fields)
+
+- `receipt_id`
+- `task_id`
+- `worker_id`
+- `assignment_id`
+- `execution_started_at`, `execution_completed_at`
+- `deliverables[]` (URI + digest + mime type)
+- `github` block (`repo`, `issue_number`, `pr_number`, `head_sha`) for repo tasks
+- `usage` block (`model`, `input_tokens`, `output_tokens`, `tool_calls`) for metered mode
+- `requested_payout_usdc`
+- `worker_signature`
+
+## 9.2 Settlement policy
+
+- reserve budget before assignment.
+- payout only from validated receipt.
+- idempotent settlement key: `task_id + receipt_id`.
+- default dispute window: 24h.
+
+## 10. Reputation and governance layer (Base Respect Game integration)
+
+Use these contracts from `base-respect-game/blockchain/contracts`:
+
+- `RespectGameCore.sol`
+- `RespectGameGovernance.sol`
+- `RespectToken.sol`
+- `Executor.sol`
+- interfaces under `contracts/interfaces/*`
+
+## 10.1 Contract responsibilities mapping
+
+1. **RespectGameCore**
+   - membership (`becomeMember`)
+   - contribution submission (`submitContribution`)
+   - peer ranking (`submitRanking`)
+   - stage transitions (`switchStage`)
+   - game results and top members (`getGameResult`, `getTopMembers`)
+2. **RespectGameGovernance**
+   - treasury/member governance proposals (`createProposal`, `voteOnProposal`, `executeProposal`)
+3. **RespectToken**
+   - mints RESPECT to members according to game outcomes
+4. **Executor**
+   - executes approved transaction bundles from governance
+
+## 10.2 Platform-to-contract identity mapping
+
+- worker wallet == Respect member wallet.
+- coordinator wallet can also be a member.
+- consortium creator wallet should join as member for governance visibility.
+
+## 10.3 Reputation cycle mapping
+
+Respect Game has two stages:
+
+1. `ContributionSubmission`
+2. `ContributionRanking`
+
+MVP mapping:
+
+- cycle cadence: weekly.
+- during week: bridge aggregates accepted task receipts per worker.
+- cycle close:
+  - push grouped contribution summaries via `submitContribution` (or require direct worker submission through guided flow).
+  - orchestrate ranking groups and ranking submission.
+  - call `switchStage` transitions according to stage timestamps.
+- on game completion: ingest `RespectDistributed` and `TopMembersUpdated`.
+
+## 10.4 Governance usage in consortium
+
+Use Respect governance for high-impact actions:
+
+- remove abusive member (`removeMember` path via governance proposal).
+- execute treasury transactions requiring social consensus.
+- approve new members if policy requires governance path.
+
+Important implementation note:
+
+- Current governance implementation appears to execute with `votesFor >= 1`.
+- Until contracts are upgraded, enforce stricter off-chain policy in backend before forwarding governance transactions.
+
+## 10.5 Reputation Bridge service behavior
+
+Write path:
+
+1. consume platform events (`task.validated`, `task.settled`, `worker.violation`).
+2. derive contribution payloads and ranking candidate sets.
+3. submit contract transactions through signer service.
+4. persist tx hash + confirmation status.
+
+Read path:
+
+1. index on-chain events:
+   - `ContributionSubmitted`
+   - `RankingSubmitted`
+   - `RespectDistributed`
+   - `TopMembersUpdated`
+   - `ProposalCreated`, `ProposalExecuted`
+2. sync materialized reputation views in Postgres.
+
+## 11. API surface (MVP minimum)
+
+## 11.1 Worker onboarding
+
+- `POST /v1/workers/register`
+- `POST /v1/workers/verify`
+- `GET /v1/workers/{worker_id}`
+
+## 11.2 Collaboration and execution
+
+- `POST /v1/tasks`
+- `POST /v1/tasks/{task_id}/assign`
+- `POST /v1/tasks/{task_id}/heartbeat`
+- `POST /v1/tasks/{task_id}/receipts`
+- `POST /v1/tasks/{task_id}/cancel`
+- `GET /v1/tasks/{task_id}`
+
+## 11.3 Settlement
+
+- `POST /v1/settlements/{task_id}/validate`
+- `POST /v1/settlements/{task_id}/execute`
+- `POST /v1/settlements/{task_id}/dispute`
+
+## 11.4 Reputation bridge
+
+- `POST /v1/reputation/members/sync`
+- `POST /v1/reputation/cycle/close`
+- `POST /v1/reputation/rankings/submit`
+- `GET /v1/reputation/members/{wallet}`
+- `GET /v1/reputation/leaderboard`
+
+## 11.5 Canonical payloads (minimum contract)
+
+### Task create payload
+
+- `task_id`
+- `title`
+- `description`
+- `task_type`
+- `capability_tags[]`
+- `acceptance_criteria[]`
+- `budget_mode` (`metered_cap` | `fixed_task`)
+- `budget_amount_usdc`
+- `deadline_at`
+- `delivery_target` (`github_pr` | `artifact_bundle`)
+- `policy_snapshot_hash`
+
+### Assignment payload
+
+- `assignment_id`
+- `task_id`
+- `worker_id`
+- `idempotency_key`
+- `assigned_at`
+- `ack_deadline_at`
+- `priority`
+- `retry_count`
+- `execution_constraints` (timebox, tool constraints, branch naming)
+
+### Heartbeat payload
+
+- `task_id`
+- `assignment_id`
+- `worker_id`
+- `progress_pct`
+- `status_message`
+- `eta_seconds`
+- `blockers[]`
+- `sent_at`
+
+### Receipt payload
+
+- `receipt_id`
+- `task_id`
+- `assignment_id`
+- `worker_id`
+- `result_summary`
+- `deliverables[]`
+- `usage`
+- `requested_payout_usdc`
+- `submitted_at`
+- `signature`
+
+## 12. Data model (MVP tables)
 
 - `consortiums`
 - `consortium_policies`
-- `openclaw_workers`
-- `openclaw_worker_manifests`
+- `workers`
+- `worker_manifests`
 - `tasks`
 - `task_assignments`
+- `task_heartbeats`
 - `task_receipts`
-- `escrow_reservations`
 - `settlements`
 - `payout_transactions`
-- `github_task_links`
-- `activity_events`
+- `github_links`
+- `reputation_members`
+- `reputation_cycles`
+- `reputation_contributions`
+- `reputation_rankings`
+- `reputation_rewards`
+- `governance_proposals`
+- `activity_events` (append-only)
 
-## 12. Operational simplicity gains
+## 13. Security controls
 
-## 12.1 Engineering simplicity
+1. Signature verification on manifest, assignment ack, and receipt.
+2. Strict idempotency keys on assignment/settlement endpoints.
+3. Policy snapshot hash pinned on each assignment.
+4. Replay protection (nonce + ttl) for contract-bridge operations.
+5. Rate limits and abuse heuristics for worker endpoints.
+6. Secrets isolation (no raw private keys in worker-facing payloads).
 
-- Smaller API surface area to document and test
-- Fewer adapters to maintain
-- Easier local development and staging parity
+## 14. Observability and SLOs
 
-## 12.2 Support simplicity
+Required telemetry:
 
-- Clear onboarding checklist
-- Deterministic troubleshooting path
-- Better self-serve diagnostics for operators
+- assignment ack latency
+- task completion rate
+- retry rate
+- settlement failure rate
+- payout latency
+- worker onboarding funnel conversion
+- reputation sync lag (platform event -> on-chain finalized)
 
-## 12.3 Product simplicity
+MVP SLO targets:
 
-- Fewer user-facing choices that can block activation
-- Clearer UX copy and fewer "advanced setup" states
-- Better completion confidence in first session
+- 99% assignment dispatch success (excluding worker offline)
+- 95% task heartbeat freshness within 2 intervals
+- 99% settlement idempotency correctness
+- < 5 min median reputation event indexing lag
 
-## 13. Risks and mitigations
+## 15. Build plan (engineering phases)
 
-1. Risk: ecosystem lock-in to OpenClaw at MVP.
-   - Mitigation: keep internal task and receipt schemas versioned for future adapters.
-2. Risk: some external operators are not OpenClaw-ready.
-   - Mitigation: provide "OpenClaw quickstart worker template" and guided import wizard.
-3. Risk: migration complexity from prior multi-adapter experiments.
-   - Mitigation: support transitional ingestion, but only OpenClaw paths for new assignments.
+## Phase 1: Collaboration foundation (weeks 1-2)
 
-## 14. Suggested phased rollout
+- implement worker manifest schema and registry verification.
+- implement broker queues + assignment API + heartbeats.
+- ship coordinator skeleton with planning/dispatch/supervision loops.
 
-Phase 1: OpenClaw-first onboarding
+## Phase 2: Delivery and money rails (weeks 3-4)
 
-- Launch Registry + Broker + Receipt schema.
-- Allow only OpenClaw workers for new consortiums.
+- implement receipt schema and validator.
+- implement settlement service with budget reservation + payout execution.
+- integrate GitHub delivery bridge.
 
-Phase 2: OpenClaw-only execution default
+## Phase 3: Respect game integration (weeks 5-6)
 
-- Migrate active consortiums to OpenClaw assignment path.
-- Freeze creation of new non-OpenClaw integrations.
+- deploy/integrate Respect contracts on Base environment.
+- build reputation bridge write/read paths.
+- build cycle close + ranking orchestration jobs.
 
-Phase 3: Hardening and scale
+## Phase 4: Hardening (weeks 7-8)
 
-- Add richer worker reputation and SLA routing.
-- Expand observability dashboards per worker capability class.
+- add dispute workflows and governance proposal tooling.
+- add dashboards, alerts, replay tools, incident runbooks.
+- complete end-to-end load and failure-mode tests.
 
-## 15. Definition of success for this architecture
+## 16. P0 engineering backlog (agent-executable)
 
-This architecture is successful when:
+1. Define JSON schemas for manifest, assignment, heartbeat, receipt.
+2. Build OpenClaw Registry service with signature + dry-run verification.
+3. Build Broker with queue partitions and retry/cancel semantics.
+4. Build coordinator state machine and routing policy.
+5. Build receipt validator + settlement executor with idempotency.
+6. Build GitHub task link + PR validation module.
+7. Build reputation bridge adapters for RespectGameCore/Governance/Token.
+8. Build event indexer for on-chain Respect events.
+9. Build mission dashboard endpoints for tasks, payouts, and reputation.
 
-1. New worker onboarding takes minutes, not days.
-2. First paid task completion rate materially increases.
-3. Assignment-to-settlement path has fewer failure modes.
-4. Creators can operate autonomous workflows without protocol-level decisions.
-5. Platform support burden drops due to standardization on one runtime.
+## 17. Definition of done (MVP)
+
+MVP is complete when all are true:
+
+1. One consortium can run continuously with your OpenClaw as coordinator.
+2. A new OpenClaw worker can register, verify, receive task, and submit receipt without custom adapter code.
+3. Coordinator autonomously routes and settles at least one real engineering task end-to-end.
+4. Reputation cycle executes and RESPECT distribution is visible in product UI.
+5. Governance proposal flow can execute at least one controlled treasury/member action.
+6. Full audit trail exists from task creation to payout and reputation update.
 
