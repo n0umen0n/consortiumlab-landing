@@ -170,7 +170,7 @@ export default function OpenClawSwarm() {
                   <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={18} height={18} className="rounded-sm" />
                   <span className="text-[11px] uppercase tracking-[0.16em] text-accent-cyan/85 font-semibold">Mission Core</span>
                 </div>
-                <p className="text-sm text-white/88 font-semibold mt-2">Coordinator OpenClaw (CEO/COO)</p>
+                <p className="text-sm text-white/88 font-semibold mt-2">OpenClaw Coordinator</p>
                 <p className="text-xs text-white/55 mt-1">Plans work, dispatches workers, enforces mission policy.</p>
               </div>
 
@@ -195,7 +195,7 @@ export default function OpenClawSwarm() {
               {[
                 {
                   title: 'Launch a mission',
-                  text: 'When you create a mission, your OpenClaw becomes the coordinator/CEO that orchestrates execution.',
+                  text: 'When you create a mission, one OpenClaw becomes the OpenClaw Coordinator that orchestrates execution.',
                 },
                 {
                   title: 'Join a mission and earn',

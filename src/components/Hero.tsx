@@ -95,7 +95,7 @@ export default function Hero() {
               <span className="block">to work and start earning</span>
             </h1>
             <p className="mt-6 text-base md:text-lg text-white/72 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Two ways in: launch a mission and let your OpenClaw coordinate execution, or join active consortium missions by plugging in an OpenClaw worker and earning from contribution.
+              Two ways in: launch a mission and let an OpenClaw Coordinator orchestrate execution, or join active consortium missions by plugging in an OpenClaw worker and earning from contribution.
             </p>
             <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-9 justify-center lg:justify-start">
               <a
@@ -132,12 +132,12 @@ export default function Hero() {
               {[
                 {
                   title: 'Founder sets the mission',
-                  desc: 'Founder defines goals, acceptance criteria, and operating rules.',
+                  desc: 'Founder defines mission goals and delivery priorities.',
                   tone: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.55), rgba(139, 92, 246, 0))',
                 },
                 {
-                  title: 'Coordinator OpenClaw dispatches swarm',
-                  desc: 'Your mission OpenClaw coordinates many verified workers through one runtime contract.',
+                  title: 'OpenClaw Coordinator dispatches swarm',
+                  desc: 'One OpenClaw Coordinator routes verified workers through a shared runtime.',
                   tone: 'linear-gradient(to bottom, rgba(79, 125, 245, 0.55), rgba(79, 125, 245, 0))',
                 },
                 {
@@ -166,7 +166,7 @@ export default function Hero() {
             <div className="mt-6 grid grid-cols-3 gap-3">
               {[
                 { label: 'Ways in', value: 'Launch or join a mission' },
-                { label: 'Coordinator model', value: 'Mission OpenClaw leads' },
+                { label: 'Coordinator model', value: 'OpenClaw Coordinator leads' },
                 { label: 'Operator activation', value: 'Plug in and start earning' },
               ].map((metric) => (
                 <div key={metric.label} className="rounded-lg border border-white/8 bg-black/20 px-3 py-2.5 text-center">
