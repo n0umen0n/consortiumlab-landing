@@ -1,6 +1,6 @@
 # UI Specification: Consortium Factory MVP (Single Consortium)
 
-Status: Draft v3 (implementation-ready)
+Status: Draft v4 (implementation-ready)
 Audience: frontend implementation, product, design
 Last updated: 2026-03-06
 
@@ -12,10 +12,14 @@ This spec defines the complete MVP UI for Consortium Factory with a strict singl
 
 MVP operating model:
 - Exactly one consortium exists in the product.
-- Consortium mission: **build Consortium Factory**.
+- Consortium mission: build Consortium Factory.
 - Your OpenClaw instance is the initial and primary coordinator.
 - Any operator with OpenClaw can plug in quickly to contribute work.
 - Reputation runs in the background using `base-respect-game` contracts, with clear UI visibility for work, reputation, and equity.
+
+MVP constraint:
+- New consortium launch is disabled in MVP.
+- Any "Launch Mission" CTA opens a `Coming Soon` modal and reroutes the user toward joining the first consortium.
 
 ---
 
@@ -23,324 +27,423 @@ MVP operating model:
 
 ## 1.1 In scope (must ship in MVP)
 
-1. Landing page (`/`) with the current "Launch mission / Join mission" messaging.
+1. Landing page (`/`) with current OpenClaw-first messaging.
 2. Single consortium HQ (`/org`) as the main operating surface.
-3. Coordinator, worker onboarding, task/work visibility, and settlement evidence.
+3. Worker onboarding ("join mission"), task/work visibility, and settlement evidence.
 4. Reputation and equity visibility:
    - work contributions
    - ranking cycles
    - RESPECT outcomes
    - top member visibility
-5. Basic governance visibility (proposal list and status) for operational transparency.
+5. Governance transparency (proposal list and status).
 
 ## 1.2 Out of scope (defer past MVP)
 
 1. Multi-consortium creation and discovery.
 2. Multi-tenant creator profiles and cross-consortium dashboards.
 3. Advanced settings/integration marketplace.
-4. Full governance authoring flows for every contract action (MVP is mostly visibility-first).
+4. Full governance authoring for every contract action.
 
 ---
 
-## 2) Copy alignment with current landing page
+## 2) Copy and CTA alignment with current landing page
 
-The UI should stay consistent with production landing copy.
-
-Core narrative anchors to preserve:
+Narrative anchors to preserve:
 1. "OpenClaw-native consortiums"
 2. "Put OpenClaw agents to work and start earning"
 3. "Two ways in: launch a mission or join a mission"
 4. "One mission can coordinate a swarm of OpenClaw agents"
 5. "Equity + reputation rails"
 
-Primary CTA language:
-- `Launch a Mission`
-- `Join a Mission`
-- `Open Live Consortium`
+MVP CTA language:
+- Primary visible CTA text can remain `Launch a Mission`, but behavior is modal-only (no launch flow yet).
+- Secondary CTA: `Join a Mission`.
+- Tertiary CTA: `Open Live Consortium`.
 
-MVP mission copy baseline:
-- Mission title: **Consortium Factory**
-- Mission statement: **Build Consortium Factory by coordinating OpenClaw agents through one mission runtime.**
-
----
-
-## 3) Users and permissions (MVP)
-
-## 3.1 Roles
-
-1. **Mission Owner** (you)
-   - Can edit mission-level configuration and policies.
-   - Can set/replace coordinator OpenClaw.
-2. **Coordinator Operator** (initially your OpenClaw)
-   - Dispatches workers, routes tasks, enforces constraints.
-3. **Worker Operator** (anyone with OpenClaw)
-   - Plugs in, accepts assigned work, submits receipts.
-4. **Public Visitor**
-   - Can view public mission state and reputation outcomes.
-
-## 3.2 Access model
-
-- `/` is public.
-- `/org` is public-readable.
-- Mutating controls require connected wallet and role checks.
-- If unauthorized: show disabled controls + reason tooltip ("Mission owner only", "Coordinator only", etc.).
+Modal copy (exact):
+- Title: `Launching a new consortium is coming soon`
+- Body: `Currently you can join the first consortium and start contributing with OpenClaw today.`
+- Primary button: `Join First Consortium`
+- Secondary button: `Close`
 
 ---
 
-## 4) Information architecture and routing (single consortium)
+## 3) UX direction (2026 style baseline)
+
+Design direction targets modern 2026 product UX:
+1. **High-clarity glassmorphism**: restrained blur, crisp borders, strong hierarchy, zero decorative haze.
+2. **Operational density with readability**: bento information blocks, compact tables, progressive disclosure.
+3. **AI-native trust patterns**: clear system states, timestamps, provenance, and explainable score surfaces.
+4. **Conversion-first interaction**: every major section has a clear next action.
+5. **Premium motion language**: subtle depth and continuity motion, never distracting.
+6. **Accessibility by default**: WCAG 2.2 AA, keyboard-first, reduced-motion safe.
+
+---
+
+## 4) Design system specification
+
+Use tokens only; no ad-hoc hardcoded values in components.
+
+## 4.1 Color system
+
+### Dark theme (default, "Orbit")
+
+- `--bg-canvas: #070B14`
+- `--bg-subtle: #0D1324`
+- `--bg-elevated: rgba(17, 24, 42, 0.72)`
+- `--bg-solid: #121A30`
+- `--text-primary: #EEF3FF`
+- `--text-secondary: #B7C1DC`
+- `--text-tertiary: #8A95B6`
+- `--border-soft: rgba(135, 155, 211, 0.24)`
+- `--border-strong: rgba(162, 180, 230, 0.42)`
+
+### Light theme (optional, "Cloud")
+
+- `--bg-canvas: #F6F9FF`
+- `--bg-subtle: #EEF3FF`
+- `--bg-elevated: rgba(255, 255, 255, 0.72)`
+- `--bg-solid: #FFFFFF`
+- `--text-primary: #0A1022`
+- `--text-secondary: #3D4763`
+- `--text-tertiary: #68708B`
+- `--border-soft: rgba(120, 138, 184, 0.24)`
+- `--border-strong: rgba(88, 108, 160, 0.42)`
+
+### Brand and semantic tokens
+
+- `--brand-500: #5F72FF`
+- `--brand-400: #8192FF`
+- `--accent-cyan: #47D9FF`
+- `--accent-violet: #A58BFF`
+- `--accent-gold: #D4A847`
+- `--success: #19C98A`
+- `--warning: #FFB547`
+- `--danger: #FF5D7A`
+- `--info: #45A8FF`
+
+### Gradients and glass
+
+- `--gradient-primary: linear-gradient(135deg, #7B39FC 0%, #4F7DF5 100%)`
+- `--gradient-hero: linear-gradient(135deg, #5F72FF 0%, #47D9FF 48%, #A58BFF 100%)`
+- `--glass-bg: rgba(255, 255, 255, 0.05)` on dark
+- `--glass-border: rgba(255, 255, 255, 0.14)` on dark
+- `--glass-blur: 16px`
+
+## 4.2 Typography
+
+- Display/headline: `Inter Variable, Inter, system-ui, sans-serif`
+- UI body: `Inter Variable, Inter, system-ui, sans-serif`
+- Data/log mono: `JetBrains Mono, ui-monospace, monospace`
+
+Type scale:
+- Display XL: 64/68, 700
+- Display L: 48/54, 700
+- H1: 36/42, 680
+- H2: 28/34, 650
+- H3: 22/28, 620
+- Body L: 18/28, 450
+- Body: 16/24, 450
+- Body S: 14/20, 500
+- Caption: 12/16, 500
+
+## 4.3 Spacing and layout
+
+- Spacing scale: 4, 8, 12, 16, 20, 24, 32, 40, 56, 72
+- Grid: 12 columns desktop, 8 tablet, 4 mobile
+- Max content width: 1280px (marketing), 1440px (dashboard)
+- Standard paddings:
+  - desktop: 32px
+  - tablet: 24px
+  - mobile: 16px
+
+## 4.4 Radii, borders, shadows
+
+- `--radius-sm: 10px`
+- `--radius-md: 14px`
+- `--radius-lg: 20px`
+- `--radius-xl: 28px`
+- `--radius-pill: 999px`
+
+Shadows:
+- `--shadow-sm: 0 2px 8px rgba(14, 22, 45, 0.10)`
+- `--shadow-md: 0 10px 28px rgba(14, 22, 45, 0.16)`
+- `--shadow-lg: 0 20px 56px rgba(14, 22, 45, 0.22)`
+
+## 4.5 Motion
+
+- Durations: 120ms, 220ms, 360ms
+- Easing: `cubic-bezier(0.2, 0.8, 0.2, 1)`
+- Hover: +1px lift and shadow refinement
+- Drawer/modal entry: opacity + 12px translate
+- Respect `prefers-reduced-motion: reduce`
+
+---
+
+## 5) Component specifications
+
+## 5.1 Buttons
+
+Variants:
+1. `primary` (gradient filled, white text)
+2. `secondary` (glass fill + border)
+3. `ghost` (text + hover tint)
+4. `danger` (solid danger)
+
+Sizes:
+- L (48px height), M (40px), S (32px)
+
+States required:
+- default, hover, active, focus-visible, disabled, loading
+
+Rules:
+- Primary CTA per surface must be unique.
+- Loading state uses inline spinner + locked width to avoid layout shift.
+
+## 5.2 Modal (Coming Soon modal is required)
+
+Anatomy:
+- header (title + close icon)
+- body (short explanatory text)
+- footer actions (primary + secondary)
+
+Behavior:
+- Triggered by all MVP `Launch Mission` CTAs.
+- Focus trap enabled.
+- `Esc` closes.
+- Click outside closes (except when `loading`).
+- First focus lands on primary button.
+
+## 5.3 Cards and data panels
+
+- Glass card default for dashboard modules.
+- Header with title + optional metadata chip.
+- Body can include table/list/chart.
+- Optional footer for CTA or timestamp.
+
+## 5.4 Tables
+
+- Dense row: 44px, comfortable row: 52px
+- Sticky header for long lists.
+- Row hover + keyboard focus states.
+- Pagination optional in MVP; virtualized lists not required.
+
+## 5.5 Status chips
+
+Required statuses:
+- `online`, `offline`, `pending`, `approved`, `removed`
+- `submission_open`, `ranking_open`, `processing`, `settled`, `needs_attention`
+
+Each chip requires icon + text + color.
+
+---
+
+## 6) Information architecture and routing (single consortium)
 
 Top-level routes:
-1. `/` - marketing + mission entry points.
-2. `/org` - single consortium HQ (primary app surface).
+1. `/` - marketing and entry actions
+2. `/org` - single consortium HQ
 
-In-page navigation on `/org` (tabs or segmented controls):
+In-page `/org` tabs:
 1. `Overview`
 2. `Work`
 3. `Reputation & Equity`
 4. `Governance`
-5. `Treasury` (read-first in MVP)
+5. `Treasury`
 
-Drawer/modal surfaces:
+Shared drawers/modals:
 - `Join Mission` drawer
 - `Worker Details` drawer
 - `Contribution Details` drawer
 - `Proposal Details` drawer
+- `Launch Coming Soon` modal
 
 ---
 
-## 5) `/org` app shell
+## 7) `/org` app shell
 
-## 5.1 Persistent header
+## 7.1 Header
 
-Required elements:
-1. Consortium name: `Consortium Factory`
+Required:
+1. Consortium label: `Consortium Factory`
 2. Mission one-liner
-3. Coordinator status pill:
-   - `Coordinator: Your OpenClaw` (if active)
+3. Coordinator pill:
+   - `Coordinator: Your OpenClaw`
    - fallback `Coordinator offline`
-4. Quick actions:
+4. Actions:
    - `Join Mission`
-   - `Connect Wallet` (when disconnected)
-   - `OpenClaw Docs` (external)
+   - `Connect Wallet`
+   - `OpenClaw Docs`
 
-## 5.2 Global status rail (top of content)
+## 7.2 Global status rail
 
-Compact status chips:
-- Stage (`Contribution Submission` or `Contribution Ranking`)
-- Next stage timestamp countdown
-- Active workers
-- Tasks in progress
-- Last settlement timestamp
+Always visible near top:
+- stage (`Contribution Submission` / `Contribution Ranking`)
+- countdown to next stage
+- active workers
+- tasks in progress
+- last settlement timestamp
 
 ---
 
-## 6) Page-level specifications
+## 8) Page-level specifications
 
-## 6.1 Overview tab
+## 8.1 Overview tab
 
-Purpose: explain mission state at a glance.
+Purpose: mission state at a glance.
 
 Sections:
-1. **Mission Card**
-   - Mission statement
-   - Current objective sprint
-   - Priority outcomes this cycle
-2. **Coordinator Card**
-   - Coordinator identity (OpenClaw instance label)
-   - Uptime/heartbeat
-   - Dispatch count (24h/7d)
-3. **Worker Snapshot**
-   - Total plugged-in workers
-   - Active vs idle
-   - New this cycle
-   - CTA: `Join Mission`
-4. **Execution Feed**
-   - Recent task completions with timestamps
-   - Receipt links
-   - Outcome labels (`accepted`, `needs review`, `rejected`)
-5. **Reputation Pulse**
-   - Current stage
-   - Ranking participation %
-   - Last cycle RESPECT distribution summary
-   - Top 6 preview
+1. Mission card
+2. Coordinator card
+3. Worker snapshot
+4. Execution feed
+5. Reputation pulse
 
-## 6.2 Work tab
+Minimum fields:
+- mission statement
+- objective sprint
+- worker counts
+- recent accepted receipts
+- last cycle RESPECT summary
 
-Purpose: show work routing and contribution evidence.
+## 8.2 Work tab
 
-Required modules:
-1. **Task Board**
-   - Columns: `Backlog`, `Assigned`, `In Progress`, `Review`, `Done`, `Blocked`
-   - Task card fields:
-     - title
-     - assigned worker
-     - priority
-     - budget cap
-     - due window
-2. **Receipt Ledger**
-   - Table columns:
-     - receipt id
-     - task id
-     - worker
-     - submitted at
-     - evidence status
-     - payout status
-3. **Worker Activity Stream**
-   - Agent action logs
-   - Filter by worker, status, timeframe
-4. **Join Mission CTA panel**
-   - clear onboarding summary
-   - `Join Mission` button
+Purpose: routing and evidence visibility.
 
-## 6.3 Reputation & Equity tab
+Modules:
+1. Task board (`Backlog`, `Assigned`, `In Progress`, `Review`, `Done`, `Blocked`)
+2. Receipt ledger table
+3. Worker activity stream
+4. Join mission panel
 
-Purpose: make background reputation legible and actionable.
+Receipt ledger columns:
+- receipt id, task id, worker, submitted at, evidence status, payout status
 
-### A) Cycle state module (Respect Game)
+## 8.3 Reputation & Equity tab
 
-Display:
-- Current stage (`ContributionSubmission` or `ContributionRanking`)
-- Countdown to next stage
-- Current game number
-- Whether stage switch processing is active
+Purpose: make background reputation system legible.
 
-### B) Member leaderboard
+Modules:
+1. Cycle state module
+2. Member leaderboard
+3. Group and ranking transparency
+4. Contribution-to-reputation timeline
+5. Equity breakdown module
 
-Columns:
-- rank
-- wallet / label
-- total RESPECT earned
-- rolling average RESPECT
-- equity score
-- top-6 badge
+Leaderboard columns:
+- rank, wallet/label, total RESPECT, rolling average RESPECT, equity score, top-6 badge
 
-### C) Group and ranking transparency
+## 8.4 Governance tab
 
-For current game:
-- group assignment cards
-- per-group ranking submission progress
-- each member ranking submitted: yes/no
+Purpose: proposal lifecycle transparency.
 
-### D) Contribution-to-reputation traceability
+Proposal list columns:
+- id, type, proposer, status, votes for/against, execution state, created at
 
-Per member timeline:
-1. contribution submitted
-2. group ranking submitted
-3. final rank
-4. RESPECT distributed
-5. resulting equity delta
+Statuses:
+- `Active`, `Passed`, `Rejected`, `Executed`, `Expired`
 
-### E) Equity view (MVP policy surface)
+## 8.5 Treasury tab
 
-Show:
-- current equity score per member
-- cycle delta
-- source breakdown:
-  - completed receipts weight
-  - RESPECT-based multiplier
-
-Note: equity implementation may remain off-chain in MVP, but UI must show deterministic formula and audit trail.
-
-## 6.4 Governance tab
-
-Purpose: visibility into proposal lifecycle that impacts mission trust/access.
-
-Required:
-1. Proposal list with:
-   - id
-   - type
-   - proposer
-   - status
-   - votes for/against
-   - execution state
-2. Proposal details drawer:
-   - transaction count
-   - target member (if member proposal)
-   - timestamps
-3. Status labels:
-   - `Active`, `Passed`, `Rejected`, `Executed`, `Expired`
-
-## 6.5 Treasury tab (MVP read-first)
-
-Required:
-1. Total treasury value
-2. Asset allocation
-3. Recent payouts tied to receipts
-4. Access policy summary:
-   - how reputation bands affect treasury permissions
+Read-first MVP surface:
+- total treasury value
+- allocation view
+- recent payouts linked to receipts
+- policy summary for reputation-gated permissions
 
 ---
 
-## 7) "Anyone with OpenClaw can plug in" onboarding UX
-
-## 7.1 Join Mission flow
+## 9) Join Mission flow (critical MVP journey)
 
 Entry points:
-- Hero CTA
-- `/org` header CTA
-- `/org` Work tab panel CTA
+- Landing hero secondary CTA
+- `/org` header action
+- `/org` Work tab CTA panel
 
-Flow steps:
-1. Click `Join Mission`.
-2. Connect wallet.
-3. Provide OpenClaw worker endpoint + signed manifest.
-4. Run verification handshake.
-5. Submit membership request.
-6. Show status:
-   - `Pending approval`
-   - `Approved and ready`
+Flow:
+1. Click `Join Mission`
+2. Connect wallet
+3. Submit OpenClaw worker endpoint + signed manifest
+4. Run verification handshake
+5. Submit membership request
+6. Receive `Pending approval` or `Approved and ready`
 
-## 7.2 UX requirements
-
+UX rules:
 1. Max 3 screens in drawer flow.
-2. Immediate validation errors with plain-language fixes.
-3. Copy must explicitly say "No custom adapters required" when validation passes.
-4. On success, surface next action: `View available tasks`.
+2. Validation errors must be plain language and actionable.
+3. Success state must include text: "No custom adapters required."
+4. Success state CTA: `View available tasks`.
 
 ---
 
-## 8) Respect Game integration mapping (background system with visible UI)
+## 10) Launch Mission button behavior in MVP
 
-Use data from `https://github.com/n0umen0n/base-respect-game/tree/main/blockchain/contracts`.
+This rule is mandatory and global.
 
-UI mapping requirements:
+All `Launch Mission` CTAs:
+- navbar
+- hero
+- section cards
+- footer
 
-1. **Membership**
-   - Source: `becomeMember`, `approveMemberByGovernance`, member events.
-   - UI: member status chips (`pending`, `approved`, `removed`).
+must open the `Launch Coming Soon` modal (not navigate to a launch route).
 
-2. **Contribution cycle stages**
-   - Source: `getCurrentStage`, `getNextStageTimestamp`, `StageChanged`.
-   - UI: cycle banner + countdown.
+Modal behavior:
+1. Title: `Launching a new consortium is coming soon`
+2. Body: `Currently you can join the first consortium and start contributing with OpenClaw today.`
+3. Primary CTA: `Join First Consortium` -> navigates to `/org` and opens `Join Mission` drawer.
+4. Secondary CTA: `Close`
 
-3. **Contribution submission**
-   - Source: `submitContribution`, `ContributionSubmitted`.
-   - UI: per-member contribution timeline entries.
+Analytics events:
+- `launch_mission_clicked`
+- `launch_coming_soon_shown`
+- `launch_modal_join_first_consortium_clicked`
+- `launch_modal_closed`
 
-4. **Grouping and ranking**
-   - Source: `GroupAssigned`, `submitRanking`, `RankingSubmitted`.
-   - UI: group cards + ranking completion meters.
+---
 
-5. **Result distribution**
-   - Source: `getGameResult`, `RespectDistributed`, `GameCompleted`.
-   - UI: leaderboard, rank deltas, cycle recap.
+## 11) Respect Game integration mapping (background with visible UI)
 
-6. **Top member logic**
-   - Source: `getTopMembers`, `TopMembersUpdated`, `isTopMember`.
-   - UI: top-6 badges and governance eligibility markers.
+Source contracts:
+`https://github.com/n0umen0n/base-respect-game/tree/main/blockchain/contracts`
 
-7. **Governance proposals**
-   - Source: governance proposal getters/events.
-   - UI: Governance tab list + status transitions.
+UI mapping:
+
+1. Membership
+   - Source: `becomeMember`, `approveMemberByGovernance`
+   - UI: membership status chips and history entries
+
+2. Stage flow
+   - Source: `getCurrentStage`, `getNextStageTimestamp`, `StageChanged`
+   - UI: cycle banner and countdown
+
+3. Contributions
+   - Source: `submitContribution`, `ContributionSubmitted`
+   - UI: contribution timeline per member
+
+4. Grouping and ranking
+   - Source: `GroupAssigned`, `submitRanking`, `RankingSubmitted`
+   - UI: group cards and ranking completion meters
+
+5. Distribution
+   - Source: `getGameResult`, `RespectDistributed`, `GameCompleted`
+   - UI: leaderboard deltas and cycle recap
+
+6. Top members
+   - Source: `getTopMembers`, `TopMembersUpdated`, `isTopMember`
+   - UI: top-6 badges and governance eligibility markers
+
+7. Governance proposals
+   - Source: governance proposal getters/events
+   - UI: proposal list + state transitions
 
 Implementation note:
-- Contract interactions are background/system-driven where possible; UI is transparency-first and should avoid forcing users into low-level contract operations in MVP.
+- Contract operations are background/system-driven where possible.
+- UI is transparency-first and should avoid exposing low-level contract complexity in MVP.
 
 ---
 
-## 9) Data contracts for frontend (view models)
-
-Define stable view models for UI rendering:
+## 12) Frontend view models
 
 1. `MissionState`
    - missionName, missionStatement, coordinator, stage, nextStageTs
@@ -361,60 +464,7 @@ Define stable view models for UI rendering:
 
 ---
 
-## 10) Component-level requirements
-
-## 10.1 New/required components
-
-1. `CoordinatorStatusCard`
-2. `JoinMissionDrawer`
-3. `StageCountdownBanner`
-4. `GroupAssignmentPanel`
-5. `RankingProgressTable`
-6. `ReputationLeaderboard`
-7. `EquityBreakdownCard`
-8. `ReceiptLedgerTable`
-9. `ProposalStatusTable`
-
-## 10.2 Status chips (required set)
-
-- `online`
-- `offline`
-- `pending`
-- `approved`
-- `removed`
-- `submission_open`
-- `ranking_open`
-- `processing`
-- `settled`
-- `needs_attention`
-
-Each chip must use text + icon, not color only.
-
----
-
-## 11) Copy deck for key MVP UI strings
-
-Header:
-- "Consortium Factory"
-- "Mission: Build Consortium Factory with OpenClaw coordination."
-
-Join drawer:
-- "Plug in your OpenClaw worker"
-- "Signed manifest verified"
-- "No custom adapters required"
-- "You are ready to accept mission work"
-
-Reputation:
-- "Reputation runs continuously in the background"
-- "RESPECT reflects peer-ranked contribution quality"
-- "Equity combines delivered work and reputation"
-
-Governance:
-- "Top members can participate in high-trust decisions"
-
----
-
-## 12) Responsive behavior
+## 13) Responsive behavior
 
 Breakpoints:
 - mobile: <= 767px
@@ -422,46 +472,52 @@ Breakpoints:
 - desktop: >= 1200px
 
 Rules:
-1. On mobile, `/org` tabs become horizontal segmented control.
-2. Tables collapse into cards with key fields.
-3. `Join Mission` remains sticky as bottom CTA on mobile.
-4. Stage countdown remains visible at top while scrolling.
+1. `/org` tabs become horizontal segmented control on mobile.
+2. Dense tables collapse into cards with key-value rows.
+3. `Join Mission` remains sticky on mobile.
+4. Stage countdown remains visible while scrolling.
+5. Modal widths:
+   - desktop max 520px
+   - tablet max 88vw
+   - mobile full-width sheet with safe-area padding
 
 ---
 
-## 13) Accessibility and trust requirements
+## 14) Accessibility and trust requirements
 
 1. WCAG 2.2 AA minimum.
-2. Full keyboard support for all drawers/tabs/tables.
-3. Clear loading/empty/error states for each module.
-4. Show data freshness timestamps for all on-chain derived views.
-5. Every reputation/equity value must provide drill-down traceability.
+2. Full keyboard support for drawers, tabs, tables, and modal.
+3. Focus-visible ring contrast at least 3:1.
+4. Data freshness timestamp on every on-chain-derived module.
+5. Every reputation/equity value must be drill-down traceable.
+6. Never use color alone to represent status.
 
 ---
 
-## 14) MVP implementation sequence
+## 15) Implementation sequence
 
-1. Land `/org` shell + header + stage banner.
-2. Implement `Join Mission` drawer and worker onboarding states.
-3. Implement Work tab (task board + receipts + activity stream).
-4. Implement Reputation & Equity tab (leaderboard, groups, ranking progress).
-5. Implement Governance + Treasury read surfaces.
-6. Final pass: responsive, accessibility, and copy alignment.
+1. Implement global `Launch Coming Soon` modal and wire all `Launch Mission` CTAs.
+2. Land `/org` shell, header, and stage status rail.
+3. Implement `Join Mission` drawer and onboarding states.
+4. Implement Work tab (task board, receipts, activity stream).
+5. Implement Reputation & Equity tab (leaderboard, groups, ranking progress).
+6. Implement Governance and Treasury read surfaces.
+7. Final pass for responsive, accessibility, and motion polish.
 
 ---
 
-## 15) Acceptance criteria
+## 16) Acceptance criteria
 
 MVP is complete when:
 
 1. User can run one consortium mission focused on building Consortium Factory.
 2. Your OpenClaw is clearly represented as first coordinator.
-3. A new operator with OpenClaw can complete join flow in minutes.
-4. Work execution and receipts are visible per worker.
-5. Reputation cycles (submission/ranking/distribution) are visibly understandable.
-6. Each contributor shows both reputation and equity surfaces with audit trail.
-7. Governance and treasury trust signals are visible enough for operational decisions.
+3. Any operator with OpenClaw can complete join flow in minutes.
+4. Every `Launch Mission` button shows `Coming Soon` modal and routes to joining first consortium.
+5. Work execution, receipts, reputation, and equity are clearly visible with traceability.
+6. Respect cycle state and top-member logic are visible without reading contract internals.
+7. UI quality matches premium 2026 production expectations (clarity, polish, accessibility).
 
 ---
 
-This document supersedes prior multi-consortium UI specification for MVP execution.
+This document supersedes prior UI specs for MVP execution.
