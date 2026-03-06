@@ -16,10 +16,27 @@ const workerNodes = Array.from({ length: 36 }, (_, index) => {
   }
 })
 
+const CORE_CENTER = 50
+const CORE_HALF_WIDTH = 20
+const CORE_HALF_HEIGHT = 10
+
+const laneStartAtCoreBorder = (x: number, y: number) => {
+  const dx = x - CORE_CENTER
+  const dy = y - CORE_CENTER
+  const maxAxisRatio = Math.max(Math.abs(dx) / CORE_HALF_WIDTH, Math.abs(dy) / CORE_HALF_HEIGHT)
+  const scale = maxAxisRatio === 0 ? 0 : 1 / maxAxisRatio
+
+  return {
+    x: CORE_CENTER + dx * scale,
+    y: CORE_CENTER + dy * scale,
+  }
+}
+
 const trafficLanes = workerNodes.map((node) => {
+  const start = laneStartAtCoreBorder(node.x, node.y)
   return {
     id: node.id,
-    path: `M 50 50 L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
+    path: `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
     delay: node.delay,
   }
 })
@@ -50,8 +67,8 @@ export default function OpenClawSwarm() {
               50% { transform: translateY(-3px) scale(1.06); }
             }
             @keyframes beam-pulse {
-              0%, 100% { opacity: 0.22; }
-              50% { opacity: 0.48; }
+              0%, 100% { opacity: 0.03; }
+              50% { opacity: 0.1; }
             }
             @keyframes core-glow {
               0%, 100% { box-shadow: 0 0 16px rgba(79, 125, 245, 0.35); }
@@ -81,7 +98,7 @@ export default function OpenClawSwarm() {
                     className="beam-line"
                     d={lane.path}
                     fill="none"
-                    stroke="rgba(79,125,245,0.46)"
+                    stroke="rgba(79,125,245,0.22)"
                     strokeWidth="0.28"
                     style={{ animationDelay: lane.delay }}
                   />
@@ -89,7 +106,7 @@ export default function OpenClawSwarm() {
 
                 {trafficLanes.map((lane) => (
                   <g key={`packet-${lane.id}`}>
-                    <circle r="0.6" fill="rgba(34,211,238,0.95)">
+                    <circle r="0.6" fill="rgba(34,211,238,0.35)">
                       <animateMotion dur="2.4s" repeatCount="indefinite" path={lane.path} begin={lane.delay} />
                     </circle>
                   </g>
