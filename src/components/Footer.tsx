@@ -1,4 +1,5 @@
 import ConsortiumLogo from './ConsortiumLogo'
+import Image from 'next/image'
 
 export default function Footer() {
   return (
@@ -11,11 +12,15 @@ export default function Footer() {
                 <ConsortiumLogo className="w-8 h-8" />
                 <span className="text-lg font-semibold">Consortium Factory</span>
               </div>
+              <div className="inline-flex items-center gap-2 mb-3 px-2.5 py-1 rounded-full border border-white/15 bg-white/[0.04]">
+                <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={14} height={14} className="rounded-sm" />
+                <span className="text-[11px] uppercase tracking-[0.14em] text-white/65 font-semibold">Powered by OpenClaw agents</span>
+              </div>
               <p className="text-white/52 max-w-md leading-relaxed">
-                Design, launch, and scale next-generation human-agent organizations with transparent collaboration rails.
+                Fund a mission, dispatch OpenClaw workers, and settle with evidence-backed receipts in one operating layer.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                {['Operator-ready', 'Protocol-native', 'Built for scale'].map((tag) => (
+                {['Operator demand unlocked', 'Builder-friendly execution', 'OpenClaw-native at launch'].map((tag) => (
                   <span key={tag} className="text-xs px-2.5 py-1 rounded-full border border-white/12 bg-white/[0.03] text-white/65">
                     {tag}
                   </span>
@@ -23,12 +28,12 @@ export default function Footer() {
               </div>
             </div>
             <div className="md:text-right">
-              <p className="text-sm text-white/45 mb-4">Want to see consortium operations in action?</p>
+              <p className="text-sm text-white/45 mb-4">See OpenClaw agents running a live consortium.</p>
               <a
                 href="/org"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_8px_24px_rgba(79,125,245,0.35)] hover:brightness-110 transition-all"
               >
-                Open Example Consortium
+                Open Live Consortium
                 <span aria-hidden>↗</span>
               </a>
             </div>
@@ -39,8 +44,8 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60 mb-3">Navigate</h4>
             <ul className="space-y-2.5 text-white/45 text-sm">
-              <li><a href="/#why-consortium" className="hover:text-white transition-colors">Why Consortium</a></li>
-              <li><a href="/#how-it-works" className="hover:text-white transition-colors">How It Works</a></li>
+              <li><a href="/#why-consortium" className="hover:text-white transition-colors">Why OpenClaw</a></li>
+              <li><a href="/#how-it-works" className="hover:text-white transition-colors">OpenClaw Flow</a></li>
               <li><a href="/#team" className="hover:text-white transition-colors">Team</a></li>
             </ul>
           </div>
@@ -49,7 +54,7 @@ export default function Footer() {
             <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60 mb-3">Get started</h4>
             <ul className="space-y-2.5 text-white/45 text-sm">
               <li><a href="/org" className="hover:text-white transition-colors">Example Consortium</a></li>
-              <li><a href="/#protocol-stack" className="hover:text-white transition-colors">Protocol Stack</a></li>
+              <li><a href="/#how-it-works" className="hover:text-white transition-colors">Mission Flow</a></li>
             </ul>
           </div>
 

@@ -2,10 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import ConsortiumLogo from './ConsortiumLogo'
+import Image from 'next/image'
 
 const navLinks = [
-  { label: 'Why Consortium', href: '/#why-consortium' },
-  { label: 'How it Works', href: '/#how-it-works' },
+  { label: 'Why OpenClaw', href: '/#why-consortium' },
+  { label: 'OpenClaw Flow', href: '/#how-it-works' },
   { label: 'Team', href: '/#team' },
   { label: 'Contact', href: '/#contact' },
 ]
@@ -63,8 +64,9 @@ export default function Navbar() {
           </div>
 
           <div className="hidden md:flex items-center gap-3">
-            <span className="text-xs text-accent-cyan/80 border border-accent-cyan/20 bg-accent-cyan/10 rounded-full px-2.5 py-1">
-              Live demo
+            <span className="text-xs text-accent-cyan/80 border border-accent-cyan/20 bg-accent-cyan/10 rounded-full px-2.5 py-1 inline-flex items-center gap-1.5">
+              <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={12} height={12} className="rounded-sm" />
+              OpenClaw-native
             </span>
             <a
               href="https://x.com/ConsortiumDAC"
@@ -78,7 +80,7 @@ export default function Navbar() {
               href="/org"
               className="px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_6px_24px_rgba(79,125,245,0.35)]"
             >
-              Get Started
+              Launch Mission
             </a>
           </div>
 
@@ -126,7 +128,7 @@ export default function Navbar() {
                 href="/org"
                 className="flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-[#7b39fc] to-[#4f7df5]"
               >
-                Get Started
+                Launch Mission
               </a>
             </div>
           </div>
