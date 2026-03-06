@@ -16,10 +16,28 @@ const workerNodes = Array.from({ length: 36 }, (_, index) => {
   }
 })
 
+const CORE_CENTER = 50
+const CORE_HALF_WIDTH = 11.5
+const CORE_HALF_HEIGHT = 8.2
+const CORE_CORNER_RADIUS = 2.4
+
+function startAtCoreBorder(targetX: number, targetY: number) {
+  const dx = targetX - CORE_CENTER
+  const dy = targetY - CORE_CENTER
+  const absDx = Math.abs(dx) || 0.0001
+  const absDy = Math.abs(dy) || 0.0001
+  const t = Math.min(CORE_HALF_WIDTH / absDx, CORE_HALF_HEIGHT / absDy)
+  return {
+    x: CORE_CENTER + dx * t,
+    y: CORE_CENTER + dy * t,
+  }
+}
+
 const trafficLanes = workerNodes.map((node) => {
+  const start = startAtCoreBorder(node.x, node.y)
   return {
     id: node.id,
-    path: `M 50 50 L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
+    path: `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
     delay: node.delay,
   }
 })
@@ -50,8 +68,8 @@ export default function OpenClawSwarm() {
               50% { transform: translateY(-3px) scale(1.06); }
             }
             @keyframes beam-pulse {
-              0%, 100% { opacity: 0.22; }
-              50% { opacity: 0.48; }
+              0%, 100% { opacity: 0.08; }
+              50% { opacity: 0.2; }
             }
             @keyframes core-glow {
               0%, 100% { box-shadow: 0 0 16px rgba(79, 125, 245, 0.35); }
@@ -75,28 +93,44 @@ export default function OpenClawSwarm() {
               <div className="absolute left-1/2 top-1/2 w-[200px] h-[200px] rounded-full border border-accent-purple/25 -translate-x-1/2 -translate-y-1/2" />
 
               <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
-                {trafficLanes.map((lane) => (
-                  <path
-                    key={`line-${lane.id}`}
-                    className="beam-line"
-                    d={lane.path}
-                    fill="none"
-                    stroke="rgba(79,125,245,0.46)"
-                    strokeWidth="0.28"
-                    style={{ animationDelay: lane.delay }}
-                  />
-                ))}
+                <defs>
+                  <mask id="core-cutout-mask">
+                    <rect x="0" y="0" width="100" height="100" fill="white" />
+                    <rect
+                      x={CORE_CENTER - CORE_HALF_WIDTH}
+                      y={CORE_CENTER - CORE_HALF_HEIGHT}
+                      width={CORE_HALF_WIDTH * 2}
+                      height={CORE_HALF_HEIGHT * 2}
+                      rx={CORE_CORNER_RADIUS}
+                      fill="black"
+                    />
+                  </mask>
+                </defs>
 
-                {trafficLanes.map((lane) => (
-                  <g key={`packet-${lane.id}`}>
-                    <circle r="0.6" fill="rgba(34,211,238,0.95)">
-                      <animateMotion dur="2.4s" repeatCount="indefinite" path={lane.path} begin={lane.delay} />
-                    </circle>
-                  </g>
-                ))}
+                <g mask="url(#core-cutout-mask)">
+                  {trafficLanes.map((lane) => (
+                    <path
+                      key={`line-${lane.id}`}
+                      className="beam-line"
+                      d={lane.path}
+                      fill="none"
+                      stroke="rgba(79,125,245,0.3)"
+                      strokeWidth="0.22"
+                      style={{ animationDelay: lane.delay }}
+                    />
+                  ))}
+
+                  {trafficLanes.map((lane) => (
+                    <g key={`packet-${lane.id}`}>
+                      <circle r="0.48" fill="rgba(34,211,238,0.42)">
+                        <animateMotion dur="2.4s" repeatCount="indefinite" path={lane.path} begin={lane.delay} />
+                      </circle>
+                    </g>
+                  ))}
+                </g>
               </svg>
 
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 core-node rounded-2xl border border-white/20 bg-white/[0.08] px-4 py-3 text-center w-[220px]">
+              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 core-node rounded-2xl border border-white/20 bg-dark-900/85 backdrop-blur-sm px-4 py-3 text-center w-[220px]">
                 <div className="flex items-center justify-center gap-2">
                   <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={18} height={18} className="rounded-sm" />
                   <span className="text-[11px] uppercase tracking-[0.16em] text-accent-cyan/85 font-semibold">Mission Core</span>
