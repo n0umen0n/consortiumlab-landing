@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import AnimatedText from './AnimatedText'
 
@@ -17,13 +18,13 @@ const workerNodes = Array.from({ length: 36 }, (_, index) => {
 })
 
 const CORE_CENTER = 50
-const CORE_HALF_WIDTH = 20
-const CORE_HALF_HEIGHT = 10
+const DEFAULT_CORE_HALF_WIDTH = 16
+const DEFAULT_CORE_HALF_HEIGHT = 8.5
 
-const laneStartAtCoreBorder = (x: number, y: number) => {
+const laneStartAtCoreBorder = (x: number, y: number, halfWidth: number, halfHeight: number) => {
   const dx = x - CORE_CENTER
   const dy = y - CORE_CENTER
-  const maxAxisRatio = Math.max(Math.abs(dx) / CORE_HALF_WIDTH, Math.abs(dy) / CORE_HALF_HEIGHT)
+  const maxAxisRatio = Math.max(Math.abs(dx) / halfWidth, Math.abs(dy) / halfHeight)
   const scale = maxAxisRatio === 0 ? 0 : 1 / maxAxisRatio
 
   return {
@@ -32,16 +33,59 @@ const laneStartAtCoreBorder = (x: number, y: number) => {
   }
 }
 
-const trafficLanes = workerNodes.map((node) => {
-  const start = laneStartAtCoreBorder(node.x, node.y)
-  return {
-    id: node.id,
-    path: `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
-    delay: node.delay,
-  }
-})
-
 export default function OpenClawSwarm() {
+  const networkRef = useRef<HTMLDivElement>(null)
+  const coreRef = useRef<HTMLDivElement>(null)
+  const [coreHalfSize, setCoreHalfSize] = useState({
+    width: DEFAULT_CORE_HALF_WIDTH,
+    height: DEFAULT_CORE_HALF_HEIGHT,
+  })
+
+  useEffect(() => {
+    if (!networkRef.current || !coreRef.current) return
+
+    const updateCoreSize = () => {
+      const networkRect = networkRef.current?.getBoundingClientRect()
+      const coreRect = coreRef.current?.getBoundingClientRect()
+      if (!networkRect || !coreRect) return
+
+      const nextWidth = (coreRect.width / networkRect.width) * 50
+      const nextHeight = (coreRect.height / networkRect.height) * 50
+
+      setCoreHalfSize((prev) => {
+        if (Math.abs(prev.width - nextWidth) < 0.05 && Math.abs(prev.height - nextHeight) < 0.05) {
+          return prev
+        }
+        return { width: nextWidth, height: nextHeight }
+      })
+    }
+
+    updateCoreSize()
+
+    const resizeObserver = new ResizeObserver(updateCoreSize)
+    resizeObserver.observe(networkRef.current)
+    resizeObserver.observe(coreRef.current)
+    window.addEventListener('resize', updateCoreSize)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', updateCoreSize)
+    }
+  }, [])
+
+  const trafficLanes = useMemo(
+    () =>
+      workerNodes.map((node) => {
+        const start = laneStartAtCoreBorder(node.x, node.y, coreHalfSize.width, coreHalfSize.height)
+        return {
+          id: node.id,
+          path: `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
+          delay: node.delay,
+        }
+      }),
+    [coreHalfSize.height, coreHalfSize.width]
+  )
+
   return (
     <section className="relative py-18 md:py-24 overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-50" />
@@ -86,7 +130,7 @@ export default function OpenClawSwarm() {
           `}</style>
 
           <div className="grid lg:grid-cols-[1.25fr,0.75fr] gap-7 items-center">
-            <div className="relative h-[460px] md:h-[520px] rounded-2xl border border-white/10 bg-dark-900/40 overflow-hidden">
+            <div ref={networkRef} className="relative h-[460px] md:h-[520px] rounded-2xl border border-white/10 bg-dark-900/40 overflow-hidden">
               <div className="absolute left-1/2 top-1/2 w-[370px] h-[370px] rounded-full border border-white/10 -translate-x-1/2 -translate-y-1/2" />
               <div className="absolute left-1/2 top-1/2 w-[280px] h-[280px] rounded-full border border-accent-cyan/20 -translate-x-1/2 -translate-y-1/2" />
               <div className="absolute left-1/2 top-1/2 w-[200px] h-[200px] rounded-full border border-accent-purple/25 -translate-x-1/2 -translate-y-1/2" />
@@ -106,14 +150,22 @@ export default function OpenClawSwarm() {
 
                 {trafficLanes.map((lane) => (
                   <g key={`packet-${lane.id}`}>
-                    <circle r="0.6" fill="rgba(34,211,238,0.35)">
+                    <circle r="0.6" fill="rgba(34,211,238,0.35)" opacity="0">
+                      <animate
+                        attributeName="opacity"
+                        values="0;0.35;0.35;0"
+                        keyTimes="0;0.14;0.82;1"
+                        dur="2.4s"
+                        repeatCount="indefinite"
+                        begin={lane.delay}
+                      />
                       <animateMotion dur="2.4s" repeatCount="indefinite" path={lane.path} begin={lane.delay} />
                     </circle>
                   </g>
                 ))}
               </svg>
 
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 core-node rounded-2xl border border-white/20 bg-white/[0.08] px-4 py-3 text-center w-[220px]">
+              <div ref={coreRef} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 core-node rounded-2xl border border-white/20 bg-white/[0.08] px-4 py-3 text-center w-[220px]">
                 <div className="flex items-center justify-center gap-2">
                   <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={18} height={18} className="rounded-sm" />
                   <span className="text-[11px] uppercase tracking-[0.16em] text-accent-cyan/85 font-semibold">Mission Core</span>

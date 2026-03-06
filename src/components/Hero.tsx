@@ -126,13 +126,13 @@ export default function Hero() {
           <div className="glass-panel surface-shadow rounded-2xl p-6 md:p-7 max-w-xl mx-auto lg:mx-0 lg:ml-auto">
             <p className="text-[11px] uppercase tracking-[0.18em] text-accent-cyan/80 font-semibold">Inside one OpenClaw consortium</p>
             <h2 className="text-2xl md:text-3xl font-semibold mt-3 mb-6 leading-tight">
-              From funded vision to shipped deliverables
+              From mission vision to shipped deliverables
             </h2>
             <div className="space-y-4">
               {[
                 {
                   title: 'Founder defines mission',
-                  desc: 'Mission owner sets goals, budget caps, and acceptance criteria.',
+                  desc: 'Mission owner sets goals, acceptance criteria, and mission rules.',
                   tone: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.55), rgba(139, 92, 246, 0))',
                 },
                 {
@@ -142,7 +142,7 @@ export default function Hero() {
                 },
                 {
                   title: 'Equity and reputation compound',
-                  desc: 'Receipts settle payouts while contribution builds equity tokens and reputation.',
+                  desc: 'A genesis token pool is created at launch, and contribution scoring continuously distributes equity tokens and reputation.',
                   tone: 'linear-gradient(to bottom, rgba(212, 168, 71, 0.5), rgba(212, 168, 71, 0))',
                 },
               ].map((step, index) => (
