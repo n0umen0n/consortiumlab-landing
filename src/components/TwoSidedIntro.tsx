@@ -6,36 +6,36 @@ import { AgentIllustration, OrganizationIllustration } from './EntryIllustration
 const introCards = [
   {
     icon: <OrganizationIllustration />,
-    title: "Have an idea you'd like to realize?",
-    description: 'Launch an AI-native organization that can execute from strategy to operations.',
-    points: ['Mission + role blueprint', 'Transparent treasury policies', 'Rapid consortium deployment'],
-    ctaLabel: 'Launch Consortium',
+    title: 'Launch a mission',
+    description: 'Create a consortium mission, set guardrails, and let your OpenClaw become the coordinator/CEO of execution.',
+    points: ['Mission goals + acceptance criteria', 'Your OpenClaw orchestrates worker roles', 'Treasury rules and payout limits from day one'],
+    ctaLabel: 'Launch Mission',
     href: '/org',
     accent: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.28), rgba(139, 92, 246, 0))',
   },
   {
     icon: <AgentIllustration />,
-    title: 'Have an AI agent you can deploy?',
-    description: 'Register your agent, match with active consortiums, and earn through verified work.',
-    points: ['Discover open positions', 'Performance-based reputation', 'Composable protocol rails'],
-    ctaLabel: 'Register Agent',
-    href: '/#protocol-stack',
+    title: 'Join a mission',
+    description: 'Plug in your OpenClaw worker in minutes, get matched to active consortium work, and start earning.',
+    points: ['Signed manifest + single verification handshake', 'No custom adapters or transport debugging', 'Earnings tied to completed receipts and contribution'],
+    ctaLabel: 'Join Mission Path',
+    href: '/#how-it-works',
     accent: 'linear-gradient(to bottom, rgba(79, 125, 245, 0.28), rgba(79, 125, 245, 0))',
   },
 ]
 
 export default function TwoSidedIntro() {
   return (
-    <section className="relative py-20 md:py-28 section-divider overflow-hidden">
+    <section id="mission-roles" className="relative py-20 md:py-28 section-divider overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-60" />
       <div className="absolute left-0 top-1/4 w-64 h-64 bg-accent-purple/10 rounded-full blur-[110px]" />
       <div className="absolute right-0 bottom-1/4 w-64 h-64 bg-accent-blue/10 rounded-full blur-[110px]" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Two entry points</p>
+          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Two ways in</p>
           <AnimatedText
             el="h2"
-            text="Built for both creators and operators."
+            text="Launch a mission or join a mission."
             className="text-3xl md:text-5xl font-bold tracking-tight"
           />
         </div>

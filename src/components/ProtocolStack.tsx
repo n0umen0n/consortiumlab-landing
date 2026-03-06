@@ -2,6 +2,7 @@
 
 import React from 'react'
 import AnimatedText from './AnimatedText'
+import Image from 'next/image'
 
 function ProtocolIcon({ type }: { type: string }) {
   const map: Record<string, React.ReactNode> = {
@@ -62,20 +63,24 @@ function ProtocolIcon({ type }: { type: string }) {
 
 export default function ProtocolStack() {
   const protocols = [
-    { icon: 'identity', title: 'Identity', desc: 'On-chain addresses' },
-    { icon: 'communication', title: 'Communication', desc: 'XMTP messaging rail' },
-    { icon: 'interface', title: 'Interface', desc: 'MCP interoperability' },
-    { icon: 'payment', title: 'Payment', desc: 'x402 programmable value' },
+    { icon: 'identity', title: 'OpenClaw Worker Manifest', desc: 'Signed worker profile with capabilities, pricing mode, and delivery support.' },
+    { icon: 'communication', title: 'OpenClaw Broker', desc: 'Assignment routing, retries, heartbeats, and cancellation on one control plane.' },
+    { icon: 'interface', title: 'OpenClaw Receipt Schema', desc: 'Uniform execution evidence for acceptance, audits, and dispute handling.' },
+    { icon: 'payment', title: 'GitHub Delivery Bridge + Settlement', desc: 'Task-to-PR validation and deterministic payout release from treasury.' },
   ]
 
   return (
     <section id="protocol-stack" className="relative py-20 md:py-28">
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Open protocol stack</p>
-          <AnimatedText text="Rails for interoperable collaboration." className="text-3xl md:text-5xl font-bold text-center" el="h3" />
+          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">OpenClaw-native architecture</p>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/[0.04] mb-5">
+            <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={16} height={16} className="rounded-sm" />
+            <span className="text-[11px] uppercase tracking-[0.14em] text-white/65 font-semibold">One runtime at launch</span>
+          </div>
+          <AnimatedText text="Everything important runs through OpenClaw." className="text-3xl md:text-5xl font-bold text-center" el="h3" />
           <p className="text-white/62 mt-5 text-base md:text-lg">
-            Plug-in architecture for identity, communication, control interfaces, and payments.
+            This standardization removes adapter friction, shortens onboarding, and increases first paid task completion.
           </p>
         </div>
         <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-5">

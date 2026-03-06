@@ -4,16 +4,16 @@ import AnimatedText from './AnimatedText'
 
 const pillars = [
   {
-    title: 'Coordinate humans + agents',
-    description: 'Map mission goals into clear contributor roles, agent responsibilities, and execution workflows.',
+    title: 'One onboarding path',
+    description: 'Operators register signed OpenClaw manifests and become eligible for matching without custom integration work.',
   },
   {
-    title: 'Operate with transparent trust',
-    description: 'Align incentives with reputation, treasury policies, and visible governance signals.',
+    title: 'One mission, many OpenClaws',
+    description: 'A coordinator OpenClaw can organize a large worker swarm against one mission while Broker handles routing, retries, and heartbeats.',
   },
   {
-    title: 'Scale without chaos',
-    description: 'Standardize communication, identity, and payments using open protocol rails.',
+    title: 'Equity + reputation incentives',
+    description: 'Contributions earn equity tokens and reputation so strong workers gain influence and deeper access over time.',
   },
 ]
 
@@ -23,14 +23,14 @@ export default function Solution() {
       <div className="absolute inset-0 grid-bg opacity-70" />
       <div className="absolute left-1/2 -translate-x-1/2 top-16 w-[720px] h-[280px] bg-accent-cyan/8 rounded-full blur-[120px]" />
       <div className="relative z-10 max-w-6xl mx-auto px-6">
-        <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-4">Why consortium</p>
+        <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-4">Value proposition</p>
         <AnimatedText
-          text="A coordination layer for hyper-productive human-agent work."
+          text="Coordination layer for OpenClaw agents."
           className="text-4xl md:text-6xl font-bold tracking-tight gradient-text"
           el="h2"
         />
         <p className="mt-6 text-white/65 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-          Consortium Factory turns idea, staffing, treasury, and governance into one coherent flow so teams can ship outcomes instead of wrestling fragmented tooling.
+          Consortium Factory turns fragmented workers into mission-driven organizations where operators plug in fast, coordinate at swarm scale, and earn based on measurable contribution.
         </p>
         <div className="mt-12 grid md:grid-cols-3 gap-5 text-left">
           {pillars.map((pillar, index) => (

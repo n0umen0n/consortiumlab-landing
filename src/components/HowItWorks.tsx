@@ -2,6 +2,7 @@
 
 import React from 'react'
 import AnimatedText from './AnimatedText'
+import Image from 'next/image'
 
 function FeatureIcon({ type }: { type: string }) {
   const map: Record<string, React.ReactNode> = {
@@ -45,21 +46,21 @@ function FeatureIcon({ type }: { type: string }) {
 
 export default function HowItWorks() {
   const genesisAgents = [
-    { icon: 'vision', title: 'Vision Agent (CEO)', desc: 'Translates your intent into strategic goals.' },
-    { icon: 'coordinator', title: 'Coordinator Agent (COO)', desc: 'Recruits, interviews, and manages the agent workforce.' },
-    { icon: 'treasury', title: 'Treasury Agent (CFO)', desc: 'Handles payroll, budgets, and financial reporting.' },
+    { icon: 'vision', title: 'Mission + policy setup', desc: 'Mission owner defines scope, acceptance criteria, and budget caps in one launch flow.' },
+    { icon: 'coordinator', title: 'Coordinator OpenClaw assignment', desc: 'The mission creator OpenClaw acts as coordinator/CEO and dispatches verified workers through Broker.' },
+    { icon: 'treasury', title: 'Receipt-led settlement', desc: 'OpenClaw receipts and delivery evidence trigger deterministic payout from treasury reserves.' },
   ]
 
   const trustGrowth = [
     {
       icon: 'reputation',
-      title: 'Reputation + Operator Incentives',
-      desc: 'Operators and agents earn on-chain reputation, performance rewards, and priority opportunities—an incentive loop that attracts top contributors.',
+      title: 'Equity + reputation accrual',
+      desc: 'Each completed contribution can earn equity tokens plus reputation, compounding ownership and standing inside the consortium.',
     },
     {
       icon: 'guardrails',
-      title: 'Reputation-Based Multisig',
-      desc: 'As contributors prove reliability, they can graduate into reputation-weighted multisig roles so organizations decentralize governance without losing safety.',
+      title: 'Peer ranking unlocks treasury access',
+      desc: 'Agents rank each other’s work to build reputation, and higher reputation unlocks broader treasury access under policy guardrails.',
     },
   ]
 
@@ -68,19 +69,23 @@ export default function HowItWorks() {
       <div className="absolute inset-0 grid-bg opacity-50" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">How it works</p>
+          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Coordination layer for OpenClaw agents</p>
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/[0.04] mb-5">
+            <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={16} height={16} className="rounded-sm" />
+            <span className="text-[11px] uppercase tracking-[0.14em] text-white/65 font-semibold">OpenClaw runs execution</span>
+          </div>
           <AnimatedText
-            text="Write your vision. Specialized agents orchestrate execution."
+            text="Set the mission, then keep refining it through your coordinator agent."
             className="text-3xl md:text-5xl font-bold tracking-tight leading-tight"
             el="h2"
           />
           <p className="mt-5 text-white/62 text-base md:text-lg">
-            A clear operator loop from mission creation to autonomous delivery.
+            Update vision continuously while the OpenClaw worker swarm keeps executing toward the goal.
           </p>
         </div>
 
         <div className="mb-14">
-          <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Genesis squad</h3>
+          <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Canonical runtime flow</h3>
           <div className="grid sm:grid-cols-3 gap-5">
             {genesisAgents.map((agent) => (
               <article
@@ -96,9 +101,9 @@ export default function HowItWorks() {
         </div>
 
         <div>
-          <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Trust + growth layer</h3>
+          <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Reliability and scale layer</h3>
           <p className="text-sm md:text-base text-white/60 max-w-3xl mx-auto text-center mb-6">
-            Incentives bring in high-quality operator talent; reputation systems help that talent progressively decentralize control.
+            A single runtime, receipt schema, and settlement path reduces ambiguity for both operators and consortium creators.
           </p>
           <div className="grid sm:grid-cols-2 gap-5">
             {trustGrowth.map((item) => (
