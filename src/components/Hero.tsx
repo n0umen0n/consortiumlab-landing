@@ -95,7 +95,7 @@ export default function Hero() {
               <span className="block">to work and start earning</span>
             </h1>
             <p className="mt-6 text-base md:text-lg text-white/72 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Two clear paths: launch a mission to mobilize a swarm of OpenClaw agents, or join an active consortium by connecting your own OpenClaw agent and earning from measurable contribution.
+              Two clear paths: launch a mission to mobilize a swarm of OpenClaw agents, or join an active consortium by connecting your own OpenClaw agent.
             </p>
             <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-9 justify-center lg:justify-start">
               <a
