@@ -5,7 +5,7 @@ import AnimatedText from './AnimatedText'
 
 const workerNodes = Array.from({ length: 36 }, (_, index) => {
   const ringIndex = index % 3
-  const radius = [20, 32, 44][ringIndex]
+  const radius = [22, 34, 44][ringIndex]
   const angle = (index / 36) * Math.PI * 2
   return {
     id: index,
@@ -16,26 +16,10 @@ const workerNodes = Array.from({ length: 36 }, (_, index) => {
   }
 })
 
-function nearestEdgePoint(x: number, y: number) {
-  const distances = {
-    left: x,
-    right: 100 - x,
-    top: y,
-    bottom: 100 - y,
-  }
-  const edge = Object.entries(distances).sort((a, b) => a[1] - b[1])[0][0]
-
-  if (edge === 'left') return { x: 1.2, y }
-  if (edge === 'right') return { x: 98.8, y }
-  if (edge === 'top') return { x, y: 1.2 }
-  return { x, y: 98.8 }
-}
-
 const trafficLanes = workerNodes.map((node) => {
-  const edgeStart = nearestEdgePoint(node.x, node.y)
   return {
     id: node.id,
-    path: `M ${edgeStart.x.toFixed(2)} ${edgeStart.y.toFixed(2)} L ${node.x.toFixed(2)} ${node.y.toFixed(2)} L 50 50`,
+    path: `M 50 50 L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
     delay: node.delay,
   }
 })
@@ -66,47 +50,29 @@ export default function OpenClawSwarm() {
               50% { transform: translateY(-3px) scale(1.06); }
             }
             @keyframes beam-pulse {
-              0%, 100% { opacity: 0.18; }
-              50% { opacity: 0.52; }
+              0%, 100% { opacity: 0.22; }
+              50% { opacity: 0.48; }
             }
             @keyframes core-glow {
               0%, 100% { box-shadow: 0 0 16px rgba(79, 125, 245, 0.35); }
               50% { box-shadow: 0 0 28px rgba(79, 125, 245, 0.65); }
             }
-            @keyframes line-draw {
-              from { stroke-dashoffset: 180; }
-              to { stroke-dashoffset: 0; }
-            }
-            @keyframes orbit-spin {
-              from { transform: translate(-50%, -50%) rotate(0deg); }
-              to { transform: translate(-50%, -50%) rotate(360deg); }
-            }
             .worker-node {
-              animation: worker-float 2.4s ease-in-out infinite;
+              animation: worker-float 2.8s ease-in-out infinite;
             }
             .beam-line {
-              stroke-dasharray: 180;
-              stroke-dashoffset: 180;
-              animation: line-draw 1.1s ease-out forwards, beam-pulse 1.8s ease-in-out infinite;
-              animation-iteration-count: 1, infinite;
+              animation: beam-pulse 2.2s ease-in-out infinite;
             }
             .core-node {
               animation: core-glow 2.6s ease-in-out infinite;
-            }
-            .orbit-ring {
-              animation: orbit-spin 28s linear infinite;
-            }
-            .orbit-ring-reverse {
-              animation-direction: reverse;
-              animation-duration: 21s;
             }
           `}</style>
 
           <div className="grid lg:grid-cols-[1.25fr,0.75fr] gap-7 items-center">
             <div className="relative h-[460px] md:h-[520px] rounded-2xl border border-white/10 bg-dark-900/40 overflow-hidden">
-              <div className="absolute left-1/2 top-1/2 w-[360px] h-[360px] rounded-full border border-white/10 orbit-ring" />
-              <div className="absolute left-1/2 top-1/2 w-[290px] h-[290px] rounded-full border border-accent-cyan/20 orbit-ring orbit-ring-reverse" />
-              <div className="absolute left-1/2 top-1/2 w-[210px] h-[210px] rounded-full border border-accent-purple/25 orbit-ring" />
+              <div className="absolute left-1/2 top-1/2 w-[370px] h-[370px] rounded-full border border-white/10 -translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute left-1/2 top-1/2 w-[280px] h-[280px] rounded-full border border-accent-cyan/20 -translate-x-1/2 -translate-y-1/2" />
+              <div className="absolute left-1/2 top-1/2 w-[200px] h-[200px] rounded-full border border-accent-purple/25 -translate-x-1/2 -translate-y-1/2" />
 
               <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
                 {trafficLanes.map((lane) => (
@@ -117,14 +83,14 @@ export default function OpenClawSwarm() {
                     fill="none"
                     stroke="rgba(79,125,245,0.46)"
                     strokeWidth="0.28"
-                    style={{ animationDelay: `${lane.delay}, ${lane.delay}` }}
+                    style={{ animationDelay: lane.delay }}
                   />
                 ))}
 
                 {trafficLanes.map((lane) => (
                   <g key={`packet-${lane.id}`}>
                     <circle r="0.6" fill="rgba(34,211,238,0.95)">
-                      <animateMotion dur="2.8s" repeatCount="indefinite" path={lane.path} begin={lane.delay} />
+                      <animateMotion dur="2.4s" repeatCount="indefinite" path={lane.path} begin={lane.delay} />
                     </circle>
                   </g>
                 ))}
