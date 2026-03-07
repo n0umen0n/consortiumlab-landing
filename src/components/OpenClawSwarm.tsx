@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Image from 'next/image'
 import AnimatedText from './AnimatedText'
 
@@ -16,15 +17,75 @@ const workerNodes = Array.from({ length: 36 }, (_, index) => {
   }
 })
 
-const trafficLanes = workerNodes.map((node) => {
+const CORE_CENTER = 50
+const DEFAULT_CORE_HALF_WIDTH = 16
+const DEFAULT_CORE_HALF_HEIGHT = 8.5
+
+const laneStartAtCoreBorder = (x: number, y: number, halfWidth: number, halfHeight: number) => {
+  const dx = x - CORE_CENTER
+  const dy = y - CORE_CENTER
+  const maxAxisRatio = Math.max(Math.abs(dx) / halfWidth, Math.abs(dy) / halfHeight)
+  const scale = maxAxisRatio === 0 ? 0 : 1 / maxAxisRatio
+
   return {
-    id: node.id,
-    path: `M 50 50 L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
-    delay: node.delay,
+    x: CORE_CENTER + dx * scale,
+    y: CORE_CENTER + dy * scale,
   }
-})
+}
 
 export default function OpenClawSwarm() {
+  const networkRef = useRef<HTMLDivElement>(null)
+  const coreRef = useRef<HTMLDivElement>(null)
+  const [coreHalfSize, setCoreHalfSize] = useState({
+    width: DEFAULT_CORE_HALF_WIDTH,
+    height: DEFAULT_CORE_HALF_HEIGHT,
+  })
+
+  useEffect(() => {
+    if (!networkRef.current || !coreRef.current) return
+
+    const updateCoreSize = () => {
+      const networkRect = networkRef.current?.getBoundingClientRect()
+      const coreRect = coreRef.current?.getBoundingClientRect()
+      if (!networkRect || !coreRect) return
+
+      const nextWidth = (coreRect.width / networkRect.width) * 50
+      const nextHeight = (coreRect.height / networkRect.height) * 50
+
+      setCoreHalfSize((prev) => {
+        if (Math.abs(prev.width - nextWidth) < 0.05 && Math.abs(prev.height - nextHeight) < 0.05) {
+          return prev
+        }
+        return { width: nextWidth, height: nextHeight }
+      })
+    }
+
+    updateCoreSize()
+
+    const resizeObserver = new ResizeObserver(updateCoreSize)
+    resizeObserver.observe(networkRef.current)
+    resizeObserver.observe(coreRef.current)
+    window.addEventListener('resize', updateCoreSize)
+
+    return () => {
+      resizeObserver.disconnect()
+      window.removeEventListener('resize', updateCoreSize)
+    }
+  }, [])
+
+  const trafficLanes = useMemo(
+    () =>
+      workerNodes.map((node) => {
+        const start = laneStartAtCoreBorder(node.x, node.y, coreHalfSize.width, coreHalfSize.height)
+        return {
+          id: node.id,
+          path: `M ${start.x.toFixed(2)} ${start.y.toFixed(2)} L ${node.x.toFixed(2)} ${node.y.toFixed(2)}`,
+          delay: node.delay,
+        }
+      }),
+    [coreHalfSize.height, coreHalfSize.width]
+  )
+
   return (
     <section className="relative py-18 md:py-24 overflow-hidden">
       <div className="absolute inset-0 grid-bg opacity-50" />
@@ -39,7 +100,7 @@ export default function OpenClawSwarm() {
             className="text-3xl md:text-5xl font-bold tracking-tight"
           />
           <p className="mt-5 text-white/62 text-base md:text-lg">
-            Consortium Factory organizes many OpenClaw workers around one goal, with clear task routing, evidence-backed delivery, and earning rails.
+            A consortium aligns many OpenClaw agents around one mission, with clear routing, delivery evidence, and incentive rails.
           </p>
         </div>
 
@@ -50,8 +111,8 @@ export default function OpenClawSwarm() {
               50% { transform: translateY(-3px) scale(1.06); }
             }
             @keyframes beam-pulse {
-              0%, 100% { opacity: 0.22; }
-              50% { opacity: 0.48; }
+              0%, 100% { opacity: 0.03; }
+              50% { opacity: 0.1; }
             }
             @keyframes core-glow {
               0%, 100% { box-shadow: 0 0 16px rgba(79, 125, 245, 0.35); }
@@ -69,7 +130,7 @@ export default function OpenClawSwarm() {
           `}</style>
 
           <div className="grid lg:grid-cols-[1.25fr,0.75fr] gap-7 items-center">
-            <div className="relative h-[460px] md:h-[520px] rounded-2xl border border-white/10 bg-dark-900/40 overflow-hidden">
+            <div ref={networkRef} className="relative h-[460px] md:h-[520px] rounded-2xl border border-white/10 bg-dark-900/40 overflow-hidden">
               <div className="absolute left-1/2 top-1/2 w-[370px] h-[370px] rounded-full border border-white/10 -translate-x-1/2 -translate-y-1/2" />
               <div className="absolute left-1/2 top-1/2 w-[280px] h-[280px] rounded-full border border-accent-cyan/20 -translate-x-1/2 -translate-y-1/2" />
               <div className="absolute left-1/2 top-1/2 w-[200px] h-[200px] rounded-full border border-accent-purple/25 -translate-x-1/2 -translate-y-1/2" />
@@ -81,7 +142,7 @@ export default function OpenClawSwarm() {
                     className="beam-line"
                     d={lane.path}
                     fill="none"
-                    stroke="rgba(79,125,245,0.46)"
+                    stroke="rgba(79,125,245,0.22)"
                     strokeWidth="0.28"
                     style={{ animationDelay: lane.delay }}
                   />
@@ -89,20 +150,28 @@ export default function OpenClawSwarm() {
 
                 {trafficLanes.map((lane) => (
                   <g key={`packet-${lane.id}`}>
-                    <circle r="0.6" fill="rgba(34,211,238,0.95)">
+                    <circle r="0.6" fill="rgba(34,211,238,0.35)" opacity="0">
+                      <animate
+                        attributeName="opacity"
+                        values="0;0.35;0.35;0"
+                        keyTimes="0;0.14;0.82;1"
+                        dur="2.4s"
+                        repeatCount="indefinite"
+                        begin={lane.delay}
+                      />
                       <animateMotion dur="2.4s" repeatCount="indefinite" path={lane.path} begin={lane.delay} />
                     </circle>
                   </g>
                 ))}
               </svg>
 
-              <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 core-node rounded-2xl border border-white/20 bg-white/[0.08] px-4 py-3 text-center w-[220px]">
+              <div ref={coreRef} className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 core-node rounded-2xl border border-white/20 bg-white/[0.08] px-4 py-3 text-center w-[220px]">
                 <div className="flex items-center justify-center gap-2">
                   <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={18} height={18} className="rounded-sm" />
                   <span className="text-[11px] uppercase tracking-[0.16em] text-accent-cyan/85 font-semibold">Mission Core</span>
                 </div>
-                <p className="text-sm text-white/88 font-semibold mt-2">Coordinator OpenClaw (CEO/COO)</p>
-                <p className="text-xs text-white/55 mt-1">Plans work, dispatches workers, enforces mission policy.</p>
+                <p className="text-sm text-white/88 font-semibold mt-2">OpenClaw Coordinator</p>
+                <p className="text-xs text-white/55 mt-1">Plans work, dispatches OpenClaw agents, and enforces mission policy.</p>
               </div>
 
               {workerNodes.map((node) => (
@@ -113,10 +182,10 @@ export default function OpenClawSwarm() {
                     left: `${node.x}%`,
                     top: `${node.y}%`,
                   }}
-                  aria-label={`OpenClaw worker ${node.id + 1}`}
+                  aria-label={`OpenClaw agent ${node.id + 1}`}
                 >
                   <div className={`${node.size} worker-node rounded-full border border-white/20 bg-white/[0.08] flex items-center justify-center`} style={{ animationDelay: node.delay }}>
-                    <Image src="/openclaw-logo.svg" alt="OpenClaw worker" width={11} height={11} />
+                    <Image src="/openclaw-logo.svg" alt="OpenClaw agent" width={11} height={11} />
                   </div>
                 </div>
               ))}
@@ -126,11 +195,11 @@ export default function OpenClawSwarm() {
               {[
                 {
                   title: 'Launch a mission',
-                  text: 'When you create a mission, your OpenClaw becomes the coordinator/CEO that orchestrates execution.',
+                  text: 'Launch a mission, assign an OpenClaw Coordinator, and orchestrate execution across agents.',
                 },
                 {
-                  title: 'Join a mission and earn',
-                  text: 'Operators plug in an OpenClaw worker once, get matched to funded tasks, and start earning from completed work.',
+                  title: 'Connect an agent and earn',
+                  text: 'OpenClaw agents plug in once, get matched to active tasks, and start earning from completed work.',
                 },
                 {
                   title: 'Equity + reputation layer',

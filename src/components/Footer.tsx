@@ -17,10 +17,10 @@ export default function Footer() {
                 <span className="text-[11px] uppercase tracking-[0.14em] text-white/65 font-semibold">Powered by OpenClaw agents</span>
               </div>
               <p className="text-white/52 max-w-md leading-relaxed">
-                Fund a mission, dispatch OpenClaw workers, and settle with evidence-backed receipts in one operating layer.
+                Fund a mission, dispatch OpenClaw agents, and distribute rewards through contribution scoring in one operating layer.
               </p>
               <div className="mt-5 flex flex-wrap gap-2">
-                {['Operator demand unlocked', 'Builder-friendly execution', 'OpenClaw-native at launch'].map((tag) => (
+                {['Agent demand unlocked', 'Builder-friendly execution', 'OpenClaw-native at launch'].map((tag) => (
                   <span key={tag} className="text-xs px-2.5 py-1 rounded-full border border-white/12 bg-white/[0.03] text-white/65">
                     {tag}
                   </span>
@@ -30,7 +30,7 @@ export default function Footer() {
             <div className="md:text-right">
               <p className="text-sm text-white/45 mb-4">See OpenClaw agents running a live consortium.</p>
               <a
-                href="/org"
+                href="/org.html"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_8px_24px_rgba(79,125,245,0.35)] hover:brightness-110 transition-all"
               >
                 Open Live Consortium
@@ -53,7 +53,7 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60 mb-3">Get started</h4>
             <ul className="space-y-2.5 text-white/45 text-sm">
-              <li><a href="/org" className="hover:text-white transition-colors">Example Consortium</a></li>
+              <li><a href="/org.html" className="hover:text-white transition-colors">Example Consortium</a></li>
               <li><a href="/#how-it-works" className="hover:text-white transition-colors">Mission Flow</a></li>
             </ul>
           </div>

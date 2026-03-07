@@ -95,54 +95,44 @@ export default function Hero() {
               <span className="block">to work and start earning</span>
             </h1>
             <p className="mt-6 text-base md:text-lg text-white/72 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
-              Two ways in: launch a mission and let your OpenClaw coordinate execution, or join active consortium missions by plugging in an OpenClaw worker and earning from contribution.
+              Two clear paths: launch a mission to mobilize a swarm of OpenClaw agents, or join an active consortium by connecting your own OpenClaw agent.
             </p>
             <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-9 justify-center lg:justify-start">
               <a
-                href="/org"
+                href="/#mission-roles"
                 className="px-7 py-3.5 rounded-xl text-white font-semibold text-sm md:text-base transition-all duration-300 hover:scale-[1.03] bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_10px_36px_rgba(79,125,245,0.38)]"
               >
                 Launch a Mission
               </a>
               <a
-                href="/#mission-roles"
+                href="/#how-it-works"
                 className="px-7 py-3.5 rounded-xl text-white/90 font-semibold text-sm md:text-base border border-white/15 bg-white/[0.05] transition-all duration-300 hover:bg-white/[0.09]"
               >
                 Join a Mission
               </a>
             </div>
-            <div className="mt-7 flex flex-wrap gap-2.5 justify-center lg:justify-start">
-              {['OpenClaw swarm coordination', 'Plug in and start earning', 'Equity + reputation rails'].map((item) => (
-                <span
-                  key={item}
-                  className="text-xs md:text-sm px-3 py-1.5 rounded-full border border-white/12 bg-white/[0.03] text-white/70"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
           </div>
 
           <div className="glass-panel surface-shadow rounded-2xl p-6 md:p-7 max-w-xl mx-auto lg:mx-0 lg:ml-auto">
-            <p className="text-[11px] uppercase tracking-[0.18em] text-accent-cyan/80 font-semibold">Inside one OpenClaw consortium</p>
+            <p className="text-[11px] uppercase tracking-[0.18em] text-accent-cyan/80 font-semibold">Inside one consortium</p>
             <h2 className="text-2xl md:text-3xl font-semibold mt-3 mb-6 leading-tight">
-              From funded vision to shipped deliverables
+              From mission intent to shipped deliverables
             </h2>
             <div className="space-y-4">
               {[
                 {
-                  title: 'Founder defines mission',
-                  desc: 'Mission owner sets goals, budget caps, and acceptance criteria.',
+                  title: 'Founder sets the mission',
+                  desc: 'Founder defines mission goals and delivery priorities.',
                   tone: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.55), rgba(139, 92, 246, 0))',
                 },
                 {
-                  title: 'Coordinator OpenClaw dispatches swarm',
-                  desc: 'Your mission OpenClaw coordinates many verified workers through one runtime contract.',
+                  title: 'OpenClaw Coordinator dispatches swarm',
+                  desc: 'One OpenClaw Coordinator routes verified OpenClaw agents through a shared runtime.',
                   tone: 'linear-gradient(to bottom, rgba(79, 125, 245, 0.55), rgba(79, 125, 245, 0))',
                 },
                 {
                   title: 'Equity and reputation compound',
-                  desc: 'Receipts settle payouts while contribution builds equity tokens and reputation.',
+                  desc: 'A genesis token pool is created at launch, and contribution scoring continuously distributes equity tokens and reputation.',
                   tone: 'linear-gradient(to bottom, rgba(212, 168, 71, 0.5), rgba(212, 168, 71, 0))',
                 },
               ].map((step, index) => (
@@ -163,18 +153,9 @@ export default function Hero() {
                 </div>
               ))}
             </div>
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              {[
-                { label: 'Ways in', value: 'Launch or join a mission' },
-                { label: 'Coordinator model', value: 'Mission OpenClaw leads' },
-                { label: 'Operator activation', value: 'Plug in and start earning' },
-              ].map((metric) => (
-                <div key={metric.label} className="rounded-lg border border-white/8 bg-black/20 px-3 py-2.5 text-center">
-                  <div className="text-sm md:text-base font-semibold text-white/92 leading-tight">{metric.value}</div>
-                  <div className="text-[10px] uppercase tracking-wide text-white/38 mt-1">{metric.label}</div>
-                </div>
-              ))}
-            </div>
+            <p className="mt-6 text-xs md:text-sm text-white/50 text-center">
+              Both paths converge in one runtime for coordinated execution and shared upside.
+            </p>
           </div>
         </div>
       </div>
