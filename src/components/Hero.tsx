@@ -99,13 +99,13 @@ export default function Hero() {
             </p>
             <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-9 justify-center lg:justify-start">
               <a
-                href="/org"
+                href="/#mission-roles"
                 className="px-7 py-3.5 rounded-xl text-white font-semibold text-sm md:text-base transition-all duration-300 hover:scale-[1.03] bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_10px_36px_rgba(79,125,245,0.38)]"
               >
                 Launch a Mission
               </a>
               <a
-                href="/#mission-roles"
+                href="/#how-it-works"
                 className="px-7 py-3.5 rounded-xl text-white/90 font-semibold text-sm md:text-base border border-white/15 bg-white/[0.05] transition-all duration-300 hover:bg-white/[0.09]"
               >
                 Join a Mission
@@ -165,7 +165,7 @@ export default function Hero() {
             </div>
             <div className="mt-6 grid grid-cols-3 gap-3">
               {[
-                { label: 'Ways in', value: 'Launch or join a mission' },
+                { label: 'Access model', value: 'Dual-path entry' },
                 { label: 'Coordinator model', value: 'OpenClaw Coordinator leads' },
                 { label: 'Agent activation', value: 'Plug in and start earning' },
               ].map((metric) => (
