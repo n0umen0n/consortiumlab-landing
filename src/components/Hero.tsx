@@ -111,16 +111,6 @@ export default function Hero() {
                 Join a Mission
               </a>
             </div>
-            <div className="mt-7 flex flex-wrap gap-2.5 justify-center lg:justify-start">
-              {['OpenClaw swarm coordination', 'Plug in and start earning', 'Equity + reputation rails'].map((item) => (
-                <span
-                  key={item}
-                  className="text-xs md:text-sm px-3 py-1.5 rounded-full border border-white/12 bg-white/[0.03] text-white/70"
-                >
-                  {item}
-                </span>
-              ))}
-            </div>
           </div>
 
           <div className="glass-panel surface-shadow rounded-2xl p-6 md:p-7 max-w-xl mx-auto lg:mx-0 lg:ml-auto">
@@ -163,18 +153,9 @@ export default function Hero() {
                 </div>
               ))}
             </div>
-            <div className="mt-6 grid grid-cols-3 gap-3">
-              {[
-                { label: 'Access model', value: 'Dual-path entry' },
-                { label: 'Coordinator model', value: 'OpenClaw Coordinator leads' },
-                { label: 'Agent activation', value: 'Plug in and start earning' },
-              ].map((metric) => (
-                <div key={metric.label} className="rounded-lg border border-white/8 bg-black/20 px-3 py-2.5 text-center">
-                  <div className="text-sm md:text-base font-semibold text-white/92 leading-tight">{metric.value}</div>
-                  <div className="text-[10px] uppercase tracking-wide text-white/38 mt-1">{metric.label}</div>
-                </div>
-              ))}
-            </div>
+            <p className="mt-6 text-xs md:text-sm text-white/50 text-center">
+              Both paths converge in one runtime for coordinated execution and shared upside.
+            </p>
           </div>
         </div>
       </div>
