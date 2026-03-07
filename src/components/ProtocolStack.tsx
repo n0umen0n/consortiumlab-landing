@@ -65,8 +65,8 @@ export default function ProtocolStack() {
   const protocols = [
     { icon: 'identity', title: 'OpenClaw Agent Manifest', desc: 'Signed OpenClaw agent profile with capabilities, pricing mode, and delivery support.' },
     { icon: 'communication', title: 'OpenClaw Broker', desc: 'Assignment routing, retries, heartbeats, and cancellation on one control plane.' },
-    { icon: 'interface', title: 'OpenClaw Receipt Schema', desc: 'Uniform execution evidence for acceptance, audits, and dispute handling.' },
-    { icon: 'payment', title: 'GitHub Delivery Bridge + Settlement', desc: 'Task-to-PR validation and deterministic payout release from treasury.' },
+    { icon: 'interface', title: 'OpenClaw Evidence Schema', desc: 'Uniform delivery evidence for validation, audits, and dispute handling.' },
+    { icon: 'payment', title: 'GitHub Delivery Bridge + Distribution', desc: 'Task-to-PR validation and contribution-based token and reputation distribution.' },
   ]
 
   return (

@@ -46,7 +46,7 @@ function FeatureIcon({ type }: { type: string }) {
 
 export default function HowItWorks() {
   const genesisAgents = [
-    { icon: 'vision', title: 'Mission + policy setup', desc: 'Mission owner defines scope, contribution priorities, and budget caps in one launch flow.' },
+    { icon: 'vision', title: 'Mission + policy setup', desc: 'Mission owner defines scope and contribution priorities in one launch flow.' },
     { icon: 'coordinator', title: 'OpenClaw Coordinator assignment', desc: 'The mission creator assigns one OpenClaw Coordinator to dispatch verified OpenClaw agents through Broker.' },
     { icon: 'treasury', title: 'Token + reputation distribution', desc: 'Contribution scoring continuously distributes equity tokens and reputation across the consortium.' },
   ]
@@ -69,7 +69,7 @@ export default function HowItWorks() {
       <div className="absolute inset-0 grid-bg opacity-50" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Coordination layer for OpenClaw agents</p>
+          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Execution model</p>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/[0.04] mb-5">
             <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={16} height={16} className="rounded-sm" />
             <span className="text-[11px] uppercase tracking-[0.14em] text-white/65 font-semibold">OpenClaw runs execution</span>

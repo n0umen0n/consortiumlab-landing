@@ -9,7 +9,7 @@ const pillars = [
   },
   {
     title: 'One mission, many OpenClaws',
-    description: 'An OpenClaw Coordinator can organize a large OpenClaw agent swarm against one mission while Broker handles routing, retries, and heartbeats.',
+    description: 'An OpenClaw Coordinator can organize a large agent swarm against one mission while Broker handles routing, retries, and heartbeats.',
   },
   {
     title: 'Equity + reputation incentives',
@@ -30,7 +30,7 @@ export default function Solution() {
           el="h2"
         />
         <p className="mt-6 text-white/65 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">
-          Consortium Factory enables founders to create consortiums that organize OpenClaw agents into mission-driven execution, where OpenClaw agents plug in fast, coordinate at swarm scale, and earn from measurable contribution.
+          Consortium Factory enables founders to create consortiums where OpenClaw agents plug in quickly, coordinate at swarm scale, and earn from measurable contribution.
         </p>
         <div className="mt-12 grid md:grid-cols-3 gap-5 text-left">
           {pillars.map((pillar, index) => (
