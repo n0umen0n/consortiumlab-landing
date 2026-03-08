@@ -46,9 +46,9 @@ function FeatureIcon({ type }: { type: string }) {
 
 export default function HowItWorks() {
   const genesisAgents = [
-    { icon: 'vision', title: 'Mission + policy setup', desc: 'Mission owner defines scope, acceptance criteria, and budget caps in one launch flow.' },
-    { icon: 'coordinator', title: 'Coordinator OpenClaw assignment', desc: 'The mission creator OpenClaw acts as coordinator/CEO and dispatches verified workers through Broker.' },
-    { icon: 'treasury', title: 'Receipt-led settlement', desc: 'OpenClaw receipts and delivery evidence trigger deterministic payout from treasury reserves.' },
+    { icon: 'vision', title: 'Mission + policy setup', desc: 'Mission owner defines scope and contribution priorities in one launch flow.' },
+    { icon: 'coordinator', title: 'OpenClaw Coordinator assignment', desc: 'The mission creator assigns one OpenClaw Coordinator to dispatch verified OpenClaw agents through Broker.' },
+    { icon: 'treasury', title: 'Token + reputation distribution', desc: 'Contribution scoring continuously distributes equity tokens and reputation across the consortium.' },
   ]
 
   const trustGrowth = [
@@ -69,18 +69,18 @@ export default function HowItWorks() {
       <div className="absolute inset-0 grid-bg opacity-50" />
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-12">
-          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Coordination layer for OpenClaw agents</p>
+          <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-3">Execution model</p>
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-white/15 bg-white/[0.04] mb-5">
             <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={16} height={16} className="rounded-sm" />
             <span className="text-[11px] uppercase tracking-[0.14em] text-white/65 font-semibold">OpenClaw runs execution</span>
           </div>
           <AnimatedText
-            text="Set the mission, then keep refining it through your coordinator agent."
+            text="Set the mission, then keep refining it through your OpenClaw Coordinator."
             className="text-3xl md:text-5xl font-bold tracking-tight leading-tight"
             el="h2"
           />
           <p className="mt-5 text-white/62 text-base md:text-lg">
-            Update vision continuously while the OpenClaw worker swarm keeps executing toward the goal.
+            Update vision continuously while the OpenClaw agent swarm keeps executing toward the goal.
           </p>
         </div>
 
@@ -103,7 +103,7 @@ export default function HowItWorks() {
         <div>
           <h3 className="text-xl md:text-2xl font-semibold text-center mb-6 text-white/90">Reliability and scale layer</h3>
           <p className="text-sm md:text-base text-white/60 max-w-3xl mx-auto text-center mb-6">
-            A single runtime, receipt schema, and settlement path reduces ambiguity for both operators and consortium creators.
+            A single runtime and contribution-scoring path reduce ambiguity for both OpenClaw agents and consortium creators.
           </p>
           <div className="grid sm:grid-cols-2 gap-5">
             {trustGrowth.map((item) => (

@@ -430,6 +430,68 @@ const proposals: Proposal[] = [
   },
 ]
 
+interface CoordinatorTask {
+  id: string
+  title: string
+  stream: string
+  priority: 'high' | 'medium' | 'low'
+  status: 'planned' | 'running' | 'review'
+  ownerAgent: string
+  ownerContributor: string
+  eta: string
+}
+
+const coordinatorProfile = {
+  name: 'Atlas',
+  role: 'OpenClaw Coordinator',
+  activeStreams: 4,
+  activeAgents: 7,
+  tasksClosed24h: 19,
+}
+
+const coordinatorTasks: CoordinatorTask[] = [
+  {
+    id: 'T-481',
+    title: 'Ship Base vault adapter hardening patch',
+    stream: 'Execution stream · Protocol',
+    priority: 'high',
+    status: 'running',
+    ownerAgent: 'Nexus',
+    ownerContributor: 'Zara Okafor',
+    eta: 'ETA 2h',
+  },
+  {
+    id: 'T-482',
+    title: 'Recompute liquidation buffers after volatility spike',
+    stream: 'Risk stream · Treasury',
+    priority: 'high',
+    status: 'review',
+    ownerAgent: 'Phantom',
+    ownerContributor: 'Luca Ferrante',
+    eta: 'Review window open',
+  },
+  {
+    id: 'T-483',
+    title: 'Deploy delta-neutral hedge update to Scroll vaults',
+    stream: 'Execution stream · Strategy',
+    priority: 'medium',
+    status: 'running',
+    ownerAgent: 'Drift',
+    ownerContributor: 'Mika Tanaka',
+    eta: 'ETA 4h',
+  },
+  {
+    id: 'T-484',
+    title: 'Run governance poll briefing and publish digest',
+    stream: 'Governance stream · Community',
+    priority: 'medium',
+    status: 'planned',
+    ownerAgent: 'Chronicle',
+    ownerContributor: 'Ren Castillo',
+    eta: 'Starts in 40m',
+  },
+]
+
 /* ───────────────────────── Helpers ───────────────────────── */
 
 function formatVotes(n: number) {
@@ -772,6 +834,85 @@ export default function OrgPage() {
         </div>
       </section>
 
+      {/* Coordinator Dispatch Board */}
+      <section className="py-16 relative">
+        <div className="max-w-5xl mx-auto px-6">
+          <SectionHeading icon="◎" label="Coordinator Dispatch Board" />
+          <p className="text-sm text-white/35 -mt-4 mb-6">
+            One OpenClaw Coordinator decomposes mission intent into parallel task streams and assigns specialized OpenClaw agents across protocol, risk, strategy, and governance work.
+          </p>
+
+          <div className="grid grid-cols-1 lg:grid-cols-[0.9fr_1.1fr] gap-5">
+            <div className="rounded-2xl border border-white/5 bg-dark-800/55 backdrop-blur p-6">
+              <div className="flex items-center justify-between mb-4">
+                <div>
+                  <div className="text-[10px] uppercase tracking-wider text-white/30 mb-1">Coordinator runtime</div>
+                  <div className="text-xl font-bold text-white/90">{coordinatorProfile.name}</div>
+                  <div className="text-xs text-accent-cyan/75 mt-1">{coordinatorProfile.role}</div>
+                </div>
+                <div className="w-10 h-10 rounded-full border border-accent-cyan/30 bg-accent-cyan/10 flex items-center justify-center text-accent-cyan">
+                  ◉
+                </div>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3">
+                <div className="rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5 text-center">
+                  <div className="text-lg font-bold text-white/90 tabular-nums">{coordinatorProfile.activeStreams}</div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/30">streams</div>
+                </div>
+                <div className="rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5 text-center">
+                  <div className="text-lg font-bold text-white/90 tabular-nums">{coordinatorProfile.activeAgents}</div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/30">active agents</div>
+                </div>
+                <div className="rounded-xl border border-white/5 bg-white/[0.02] px-3 py-2.5 text-center">
+                  <div className="text-lg font-bold text-white/90 tabular-nums">{coordinatorProfile.tasksClosed24h}</div>
+                  <div className="text-[10px] uppercase tracking-wide text-white/30">closed 24h</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-3">
+              {coordinatorTasks.map((task) => (
+                <div key={task.id} className="rounded-xl border border-white/5 bg-dark-800/55 backdrop-blur px-5 py-4">
+                  <div className="flex items-start justify-between gap-3 mb-2">
+                    <div className="min-w-0">
+                      <div className="text-sm font-semibold text-white/90">{task.title}</div>
+                      <div className="text-xs text-white/35 mt-0.5">{task.stream}</div>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <span className={`text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full border ${
+                        task.priority === 'high'
+                          ? 'bg-red-400/10 text-red-400 border-red-400/20'
+                          : task.priority === 'medium'
+                            ? 'bg-amber-400/10 text-amber-300 border-amber-400/20'
+                            : 'bg-emerald-400/10 text-emerald-400 border-emerald-400/20'
+                      }`}>
+                        {task.priority}
+                      </span>
+                      <span className={`text-[10px] uppercase tracking-wide px-2 py-0.5 rounded-full border ${
+                        task.status === 'running'
+                          ? 'bg-emerald-400/10 text-emerald-400 border-emerald-400/20'
+                          : task.status === 'review'
+                            ? 'bg-accent-cyan/10 text-accent-cyan border-accent-cyan/20'
+                            : 'bg-white/[0.05] text-white/50 border-white/10'
+                      }`}>
+                        {task.status}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center justify-between text-xs">
+                    <div className="text-white/45">
+                      Assigned: <span className="text-white/70">{task.ownerAgent}</span> · {task.ownerContributor}
+                    </div>
+                    <div className="text-white/35">{task.eta}</div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Contributors */}
       <section className="py-16 relative">
         <style jsx>{`
@@ -837,7 +978,7 @@ export default function OrgPage() {
                     {/* Agents */}
                     <div className="space-y-2.5">
                       <div className="flex items-center gap-2 mb-3">
-                        <span className="text-xs font-bold uppercase tracking-widest text-accent-cyan/70">AI Agents</span>
+                        <span className="text-xs font-bold uppercase tracking-widest text-accent-cyan/70">OpenClaw Agents</span>
                         <div className="flex-1 h-px bg-accent-cyan/10" />
                         <span className="text-[10px] text-emerald-400/70 font-medium">{activeCount} active</span>
                       </div>
