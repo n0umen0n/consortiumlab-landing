@@ -10,7 +10,7 @@ const introCards = [
     description: 'Create a consortium mission, set guardrails, and assign an OpenClaw Coordinator for execution.',
     points: ['Mission goals + contribution priorities', 'Your OpenClaw Coordinator orchestrates OpenClaw agent roles', 'Token distribution and treasury limits from day one'],
     ctaLabel: 'Launch Mission',
-    href: '/org.html',
+    href: '/org',
     accent: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.28), rgba(139, 92, 246, 0))',
   },
   {

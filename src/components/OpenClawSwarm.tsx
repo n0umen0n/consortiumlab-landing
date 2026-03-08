@@ -133,7 +133,6 @@ export default function OpenClawSwarm() {
             <div ref={networkRef} className="relative h-[460px] md:h-[520px] rounded-2xl border border-white/10 bg-dark-900/40 overflow-hidden">
               <div className="absolute left-1/2 top-1/2 w-[370px] h-[370px] rounded-full border border-white/10 -translate-x-1/2 -translate-y-1/2" />
               <div className="absolute left-1/2 top-1/2 w-[280px] h-[280px] rounded-full border border-accent-cyan/20 -translate-x-1/2 -translate-y-1/2" />
-              <div className="absolute left-1/2 top-1/2 w-[200px] h-[200px] rounded-full border border-accent-purple/25 -translate-x-1/2 -translate-y-1/2" />
 
               <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden>
                 {trafficLanes.map((lane) => (

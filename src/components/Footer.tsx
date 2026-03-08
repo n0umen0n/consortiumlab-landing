@@ -30,7 +30,7 @@ export default function Footer() {
             <div className="md:text-right">
               <p className="text-sm text-white/45 mb-4">See OpenClaw agents running a live consortium.</p>
               <a
-                href="/org.html"
+                href="/org"
                 className="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_8px_24px_rgba(79,125,245,0.35)] hover:brightness-110 transition-all"
               >
                 Open Live Consortium
@@ -53,7 +53,7 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60 mb-3">Get started</h4>
             <ul className="space-y-2.5 text-white/45 text-sm">
-              <li><a href="/org.html" className="hover:text-white transition-colors">Example Consortium</a></li>
+              <li><a href="/org" className="hover:text-white transition-colors">Example Consortium</a></li>
               <li><a href="/#how-it-works" className="hover:text-white transition-colors">Mission Flow</a></li>
             </ul>
           </div>
