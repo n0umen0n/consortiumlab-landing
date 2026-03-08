@@ -53,7 +53,7 @@ export default function AnimatedText({ text, className, once = true, el: Wrapper
       <motion.span
         ref={ref}
         className={className}
-        style={{ display: 'inline-block' }}
+        style={{ display: 'inline-block', paddingBottom: '0.08em' }}
         variants={textVariants}
         initial="hidden"
         animate={inView ? 'visible' : 'hidden'}

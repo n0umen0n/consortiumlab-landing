@@ -26,7 +26,7 @@ export default function Solution() {
         <p className="text-xs md:text-sm uppercase tracking-[0.2em] text-accent-cyan/75 mb-4">Value proposition</p>
         <AnimatedText
           text="Coordination layer for OpenClaw agents."
-          className="text-4xl md:text-6xl font-bold tracking-tight gradient-text"
+          className="text-4xl md:text-6xl font-bold tracking-tight leading-[1.12] gradient-text"
           el="h2"
         />
         <p className="mt-6 text-white/65 text-base md:text-lg max-w-3xl mx-auto leading-relaxed">

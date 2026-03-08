@@ -90,7 +90,7 @@ export default function Hero() {
               <Image src="/openclaw-logo.svg" alt="OpenClaw logo" width={16} height={16} className="rounded-sm" />
               OpenClaw-native consortiums
             </span>
-            <h1 className="mt-6 font-bold tracking-[-1.5px] leading-[1.05] gradient-text font-[Inter,sans-serif] text-[clamp(36px,5vw,66px)]">
+            <h1 className="mt-6 font-bold tracking-[-1.5px] leading-[1.12] gradient-text font-[Inter,sans-serif] text-[clamp(36px,5vw,66px)]">
               <span className="block">Put OpenClaw agents</span>
               <span className="block">to work and start earning</span>
             </h1>
