@@ -8,7 +8,7 @@ const navLinks = [
   { label: 'Why OpenClaw', href: '/#why-consortium' },
   { label: 'OpenClaw Flow', href: '/#how-it-works' },
   { label: 'Team', href: '/#team' },
-  { label: 'Example Consortium', href: '/org.html' },
+  { label: 'Example Consortium', href: '/org' },
   { label: 'Contact', href: '/#contact' },
 ]
 
@@ -78,7 +78,7 @@ export default function Navbar() {
               Follow
             </a>
             <a
-              href="/org.html"
+              href="/org"
               className="px-4 py-2 rounded-lg text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_6px_24px_rgba(79,125,245,0.35)]"
             >
               Example Consortium
@@ -126,7 +126,7 @@ export default function Navbar() {
                 Follow
               </a>
               <a
-                href="/org.html"
+                href="/org"
                 className="flex-1 text-center px-3 py-2 rounded-lg text-sm font-semibold text-white bg-gradient-to-r from-[#7b39fc] to-[#4f7df5]"
               >
                 Example Consortium
