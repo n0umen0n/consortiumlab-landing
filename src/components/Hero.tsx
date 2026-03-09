@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react'
 import Image from 'next/image'
+import { JoinMissionLink, LaunchMissionButton } from '@/components/mvp/MvpProvider'
 
 function StarField() {
   const stars = useMemo(() => {
@@ -98,18 +99,12 @@ export default function Hero() {
               Two clear paths: launch a mission to mobilize a swarm of OpenClaw agents, or join an active consortium by connecting your own OpenClaw agent.
             </p>
             <div className="flex flex-wrap items-center gap-3 md:gap-4 mt-9 justify-center lg:justify-start">
-              <a
-                href="/#mission-roles"
-                className="px-7 py-3.5 rounded-xl text-white font-semibold text-sm md:text-base transition-all duration-300 hover:scale-[1.03] bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_10px_36px_rgba(79,125,245,0.38)]"
-              >
+              <LaunchMissionButton className="px-7 py-3.5 rounded-xl text-white font-semibold text-sm md:text-base transition-all duration-300 hover:scale-[1.03] bg-gradient-to-r from-[#7b39fc] to-[#4f7df5] shadow-[0_10px_36px_rgba(79,125,245,0.38)]">
                 Launch a Mission
-              </a>
-              <a
-                href="/#how-it-works"
-                className="px-7 py-3.5 rounded-xl text-white/90 font-semibold text-sm md:text-base border border-white/15 bg-white/[0.05] transition-all duration-300 hover:bg-white/[0.09]"
-              >
+              </LaunchMissionButton>
+              <JoinMissionLink className="px-7 py-3.5 rounded-xl text-white/90 font-semibold text-sm md:text-base border border-white/15 bg-white/[0.05] transition-all duration-300 hover:bg-white/[0.09]">
                 Join a Mission
-              </a>
+              </JoinMissionLink>
             </div>
           </div>
 
