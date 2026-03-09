@@ -1,75 +1,104 @@
-# UI Specification: Consortium Factory
+# UI Specification: Consortium Factory MVP (Single Consortium)
 
-Status: Draft v2 (implementation-ready)  
-Audience: Frontend agent, product design, PM  
-Last updated: 2026-03-04
-
----
-
-## 0) Scope and intent
-
-This document defines the complete UI for the MVP web app so frontend implementation can start immediately without additional design clarification.
-
-Primary UX goals:
-- Make consortium creation feel AI-native (chat-first, but structured).
-- Make consortium operations legible at a glance (data-dense, action-oriented dashboards).
-- Keep visual identity premium and futuristic ("cloud intelligence"), while still accessible and production-safe.
+Status: Draft v4 (implementation-ready)
+Audience: frontend implementation, product, design
+Last updated: 2026-03-06
 
 ---
 
-## 1) 2026 design direction (research-informed)
+## 0) Purpose and MVP definition
 
-Direction chosen for this product:
-1. AI-native interface patterns: streaming responses, explicit "thinking/working" states, and confidence/trace surfaces.
-2. Data-dense operational layouts: bento grids, compact tables, integrated task/action panels.
-3. Glassmorphism 2.0: restrained blur + crisp borders + strong contrast, not decorative haze.
-4. Tokenized design system: strict variable-driven color, spacing, type, motion, and state styling.
-5. Accessibility by default: WCAG 2.2 AA, visible focus, keyboard-first interaction, reduced motion support.
+This spec defines the complete MVP UI for Consortium Factory with a strict single-consortium scope.
 
----
+MVP operating model:
+- Exactly one consortium exists in the product.
+- Consortium mission: build Consortium Factory.
+- Your OpenClaw instance is the initial and primary coordinator.
+- Any operator with OpenClaw can plug in quickly to contribute work.
+- Reputation runs in the background using `base-respect-game` contracts, with clear UI visibility for work, reputation, and equity.
 
-## 2) Information architecture and routing
-
-## 2.1 Global top-level routes
-
-1. `/consortiums` - all created consortiums (default logged-in home)
-2. `/launch` - launch consortium flow (Vision Agent chat)
-3. `/consortium/[consortiumId]` - dedicated page per consortium
-4. `/operator/[operatorId]` - public operator profile
-5. `/creator/me` - private consortium creator profile
-6. `/notifications` - inbox + approvals
-7. `/docs` - generated documentation center
-8. `/tasks/[taskId]` - task detail deep-link
-9. `/settings` - account, integrations, preferences
-
-## 2.2 App shell
-
-- Left rail navigation (collapsible to icon-only).
-- Top bar with:
-  - global search / command palette trigger (`Cmd/Ctrl + K`)
-  - environment badge (MVP)
-  - wallet/profile menu
-- Right side contextual drawer system:
-  - Vision Agent drawer (global or consortium-scoped)
-  - notifications quick panel
-
-## 2.3 Permission model surfaces (UI)
-
-- Viewer: read-only on most pages.
-- Operator: can manage own agents and view own earnings.
-- Consortium Creator: full edit access to own consortium pages and private profile.
-- Private routes:
-  - `/creator/me` must be only visible to authenticated creator who owns that profile.
+MVP constraint:
+- New consortium launch is disabled in MVP.
+- Any "Launch Mission" CTA opens a `Coming Soon` modal and reroutes the user toward joining the first consortium.
 
 ---
 
-## 3) Design system specification
+## 1) Product scope and non-goals
 
-Use CSS variables for all tokens. No hard-coded colors in components.
+## 1.1 In scope (must ship in MVP)
 
-## 3.1 Color tokens (light theme: "Cloud")
+1. Landing page (`/`) with current OpenClaw-first messaging.
+2. Single consortium HQ (`/org`) as the main operating surface.
+3. Worker onboarding ("join mission"), task/work visibility, and settlement evidence.
+4. Reputation and equity visibility:
+   - work contributions
+   - ranking cycles
+   - RESPECT outcomes
+   - top member visibility
+5. Governance transparency (proposal list and status).
 
-### Base and text
+## 1.2 Out of scope (defer past MVP)
+
+1. Multi-consortium creation and discovery.
+2. Multi-tenant creator profiles and cross-consortium dashboards.
+3. Advanced settings/integration marketplace.
+4. Full governance authoring for every contract action.
+
+---
+
+## 2) Copy and CTA alignment with current landing page
+
+Narrative anchors to preserve:
+1. "OpenClaw-native consortiums"
+2. "Put OpenClaw agents to work and start earning"
+3. "Two ways in: launch a mission or join a mission"
+4. "One mission can coordinate a swarm of OpenClaw agents"
+5. "Equity + reputation rails"
+
+MVP CTA language:
+- Primary visible CTA text can remain `Launch a Mission`, but behavior is modal-only (no launch flow yet).
+- Secondary CTA: `Join a Mission`.
+- Tertiary CTA: `Open Live Consortium`.
+
+Modal copy (exact):
+- Title: `Launching a new consortium is coming soon`
+- Body: `Currently you can join the first consortium and start contributing with OpenClaw today.`
+- Primary button: `Join First Consortium`
+- Secondary button: `Close`
+
+---
+
+## 3) UX direction (2026 style baseline)
+
+Design direction targets modern 2026 product UX:
+1. **High-clarity glassmorphism**: restrained blur, crisp borders, strong hierarchy, zero decorative haze.
+2. **Operational density with readability**: bento information blocks, compact tables, progressive disclosure.
+3. **AI-native trust patterns**: clear system states, timestamps, provenance, and explainable score surfaces.
+4. **Conversion-first interaction**: every major section has a clear next action.
+5. **Premium motion language**: subtle depth and continuity motion, never distracting.
+6. **Accessibility by default**: WCAG 2.2 AA, keyboard-first, reduced-motion safe.
+
+---
+
+## 4) Design system specification
+
+Use tokens only; no ad-hoc hardcoded values in components.
+
+## 4.1 Color system
+
+### Dark theme (default, "Orbit")
+
+- `--bg-canvas: #070B14`
+- `--bg-subtle: #0D1324`
+- `--bg-elevated: rgba(17, 24, 42, 0.72)`
+- `--bg-solid: #121A30`
+- `--text-primary: #EEF3FF`
+- `--text-secondary: #B7C1DC`
+- `--text-tertiary: #8A95B6`
+- `--border-soft: rgba(135, 155, 211, 0.24)`
+- `--border-strong: rgba(162, 180, 230, 0.42)`
+
+### Light theme (optional, "Cloud")
 
 - `--bg-canvas: #F6F9FF`
 - `--bg-subtle: #EEF3FF`
@@ -78,125 +107,88 @@ Use CSS variables for all tokens. No hard-coded colors in components.
 - `--text-primary: #0A1022`
 - `--text-secondary: #3D4763`
 - `--text-tertiary: #68708B`
-- `--text-inverse: #F6F8FF`
 - `--border-soft: rgba(120, 138, 184, 0.24)`
 - `--border-strong: rgba(88, 108, 160, 0.42)`
 
-### Brand and accent
+### Brand and semantic tokens
 
-- `--brand-600: #485BFA`
-- `--brand-500: #5F72FF` (primary interactive)
+- `--brand-500: #5F72FF`
 - `--brand-400: #8192FF`
 - `--accent-cyan: #47D9FF`
-- `--accent-mint: #3CE5C0`
 - `--accent-violet: #A58BFF`
-- `--accent-fuchsia: #E987FF`
-
-### Semantic
-
+- `--accent-gold: #D4A847`
 - `--success: #19C98A`
 - `--warning: #FFB547`
 - `--danger: #FF5D7A`
 - `--info: #45A8FF`
 
-### Data viz
+### Gradients and glass
 
-- `--chart-1: #5F72FF`
-- `--chart-2: #47D9FF`
-- `--chart-3: #3CE5C0`
-- `--chart-4: #A58BFF`
-- `--chart-5: #FFB547`
-- `--chart-6: #FF7EC2`
-
-## 3.2 Color tokens (dark theme: "Eclipse")
-
-- `--bg-canvas: #070B14`
-- `--bg-subtle: #0D1324`
-- `--bg-elevated: rgba(17, 24, 42, 0.70)`
-- `--bg-solid: #121A30`
-- `--text-primary: #EEF3FF`
-- `--text-secondary: #B7C1DC`
-- `--text-tertiary: #8A95B6`
-- `--border-soft: rgba(135, 155, 211, 0.24)`
-- `--border-strong: rgba(162, 180, 230, 0.40)`
-
-Brand/semantic hue stays same family; adjust contrast in implementation where needed.
-
-## 3.3 Gradient and glass tokens
-
+- `--gradient-primary: linear-gradient(135deg, #7B39FC 0%, #4F7DF5 100%)`
 - `--gradient-hero: linear-gradient(135deg, #5F72FF 0%, #47D9FF 48%, #A58BFF 100%)`
-- `--gradient-aurora: radial-gradient(1200px 500px at 20% -10%, rgba(71, 217, 255, 0.32), transparent 60%), radial-gradient(900px 420px at 80% -10%, rgba(165, 139, 255, 0.28), transparent 62%)`
-- `--glass-bg: rgba(255, 255, 255, 0.62)` (light), `rgba(17, 24, 42, 0.62)` (dark)
-- `--glass-border: rgba(255, 255, 255, 0.58)` (light), `rgba(167, 186, 236, 0.30)` (dark)
-- `--glass-blur: 18px`
+- `--glass-bg: rgba(255, 255, 255, 0.05)` on dark
+- `--glass-border: rgba(255, 255, 255, 0.14)` on dark
+- `--glass-blur: 16px`
 
-## 3.4 Typography
+## 4.2 Typography
 
-- Primary UI font: `Inter Variable, Inter, system-ui, sans-serif`
-- Display headings: `Sora Variable, Inter, system-ui, sans-serif`
-- Mono/terminal/logs: `JetBrains Mono, ui-monospace, monospace`
+- Display/headline: `Inter Variable, Inter, system-ui, sans-serif`
+- UI body: `Inter Variable, Inter, system-ui, sans-serif`
+- Data/log mono: `JetBrains Mono, ui-monospace, monospace`
 
 Type scale:
-- Display XL: 56/60, 700
-- Display L: 40/46, 700
-- H1: 32/38, 650
-- H2: 24/30, 650
-- H3: 20/26, 600
+- Display XL: 64/68, 700
+- Display L: 48/54, 700
+- H1: 36/42, 680
+- H2: 28/34, 650
+- H3: 22/28, 620
 - Body L: 18/28, 450
 - Body: 16/24, 450
 - Body S: 14/20, 500
 - Caption: 12/16, 500
 
-## 3.5 Spacing and layout tokens
+## 4.3 Spacing and layout
 
-- Spacing scale: 4, 8, 12, 16, 24, 32, 40, 56, 72
+- Spacing scale: 4, 8, 12, 16, 20, 24, 32, 40, 56, 72
 - Grid: 12 columns desktop, 8 tablet, 4 mobile
-- Max content width: 1440px
-- Standard page paddings:
+- Max content width: 1280px (marketing), 1440px (dashboard)
+- Standard paddings:
   - desktop: 32px
   - tablet: 24px
   - mobile: 16px
 
-## 3.6 Shape, borders, shadows
+## 4.4 Radii, borders, shadows
 
-- Radii:
-  - `--radius-sm: 10px`
-  - `--radius-md: 14px`
-  - `--radius-lg: 20px`
-  - `--radius-xl: 28px`
-  - `--radius-pill: 999px`
-- Borders: default 1px; emphasized 1.5px for focused elements.
-- Shadows:
-  - `--shadow-sm: 0 2px 8px rgba(14, 22, 45, 0.08)`
-  - `--shadow-md: 0 10px 28px rgba(14, 22, 45, 0.14)`
-  - `--shadow-lg: 0 20px 56px rgba(14, 22, 45, 0.18)`
+- `--radius-sm: 10px`
+- `--radius-md: 14px`
+- `--radius-lg: 20px`
+- `--radius-xl: 28px`
+- `--radius-pill: 999px`
 
-## 3.7 Motion tokens
+Shadows:
+- `--shadow-sm: 0 2px 8px rgba(14, 22, 45, 0.10)`
+- `--shadow-md: 0 10px 28px rgba(14, 22, 45, 0.16)`
+- `--shadow-lg: 0 20px 56px rgba(14, 22, 45, 0.22)`
 
-- Durations:
-  - fast: 120ms
-  - normal: 220ms
-  - deliberate: 360ms
-- Easing:
-  - default: `cubic-bezier(0.2, 0.8, 0.2, 1)`
-  - exit: `cubic-bezier(0.4, 0, 1, 1)`
-- Motion patterns:
-  - hover lift: translateY(-1px) + subtle shadow
-  - panel enter: opacity + 8px translate
-  - no parallax loops by default
-- Respect `prefers-reduced-motion: reduce` across all animated elements.
+## 4.5 Motion
+
+- Durations: 120ms, 220ms, 360ms
+- Easing: `cubic-bezier(0.2, 0.8, 0.2, 1)`
+- Hover: +1px lift and shadow refinement
+- Drawer/modal entry: opacity + 12px translate
+- Respect `prefers-reduced-motion: reduce`
 
 ---
 
-## 4) Component library specification
+## 5) Component specifications
 
-## 4.1 Buttons
+## 5.1 Buttons
 
 Variants:
-- Primary: filled brand gradient, white text
-- Secondary: glass background + border
-- Ghost: text only + hover tint
-- Destructive: danger background
+1. `primary` (gradient filled, white text)
+2. `secondary` (glass fill + border)
+3. `ghost` (text + hover tint)
+4. `danger` (solid danger)
 
 Sizes:
 - L (48px height), M (40px), S (32px)
@@ -204,431 +196,275 @@ Sizes:
 States required:
 - default, hover, active, focus-visible, disabled, loading
 
-## 4.2 Inputs and forms
+Rules:
+- Primary CTA per surface must be unique.
+- Loading state uses inline spinner + locked width to avoid layout shift.
 
-- Input height: 44px default.
-- Label always visible above field (no placeholder-only labels).
-- Helper and error text below field.
-- Invalid state uses danger border + 3:1 contrast compliant focus ring.
+## 5.2 Modal (Coming Soon modal is required)
 
-## 4.3 Cards and panels
+Anatomy:
+- header (title + close icon)
+- body (short explanatory text)
+- footer actions (primary + secondary)
 
-- Use glass card as default for operational modules.
-- Card anatomy:
-  - header (title, metadata, actions)
-  - content
-  - footer (optional)
-- Standard padding: 20px desktop, 16px mobile.
+Behavior:
+- Triggered by all MVP `Launch Mission` CTAs.
+- Focus trap enabled.
+- `Esc` closes.
+- Click outside closes (except when `loading`).
+- First focus lands on primary button.
 
-## 4.4 Tables
+## 5.3 Cards and data panels
 
-- Dense row height: 44px
-- Comfortable row height: 52px
-- Sticky table headers for long lists.
-- Row quick actions on hover and keyboard focus.
+- Glass card default for dashboard modules.
+- Header with title + optional metadata chip.
+- Body can include table/list/chart.
+- Optional footer for CTA or timestamp.
 
-## 4.5 Status chips
+## 5.4 Tables
+
+- Dense row: 44px, comfortable row: 52px
+- Sticky header for long lists.
+- Row hover + keyboard focus states.
+- Pagination optional in MVP; virtualized lists not required.
+
+## 5.5 Status chips
 
 Required statuses:
-- `active`, `idle`, `running`, `blocked`, `completed`, `failed`, `needed`, `archived`
+- `online`, `offline`, `pending`, `approved`, `removed`
+- `submission_open`, `ranking_open`, `processing`, `settled`, `needs_attention`
 
-Each chip uses color + icon + text (not color-only signaling).
-
-## 4.6 Log console
-
-- Monospace body, 13px.
-- Optional color accents per severity.
-- Must support filters: source agent, date range, severity, task id.
-- Copy line, open linked task, and export actions.
-
-## 4.7 Chat surfaces (Vision Agent)
-
-- Message bubble max width: 78%.
-- Assistant messages can stream token-by-token.
-- Explicit assistant states:
-  - idle
-  - thinking
-  - drafting plan
-  - awaiting confirmation
-  - dispatched to coordinator
-- Composer supports text, attachments, and slash intents (for example `/update-mission`, `/add-social`, `/create-marketing-doc`).
+Each chip requires icon + text + color.
 
 ---
 
-## 5) Page-level specs
+## 6) Information architecture and routing (single consortium)
 
-## 5.1 Page: All created consortiums (`/consortiums`)
+Top-level routes:
+1. `/` - marketing and entry actions
+2. `/org` - single consortium HQ
 
-Purpose: browse, filter, and launch new consortiums.
+In-page `/org` tabs:
+1. `Overview`
+2. `Work`
+3. `Reputation & Equity`
+4. `Governance`
+5. `Treasury`
 
-### Layout
-
-- Top hero row:
-  - title: "Consortiums"
-  - subtitle: short operational summary
-  - primary CTA: `Launch Consortium`
-  - secondary CTA: `Import Existing`
-- Filter row:
-  - search by name/symbol
-  - status filter
-  - chain filter
-  - treasury range
-  - active agents range
-- View toggle:
-  - `Card view` (default for discovery)
-  - `Table view` (power users)
-
-### Consortium card fields (required)
-
-- Consortium name + avatar/logo
-- 1-line mission
-- token symbol (if launched)
-- treasury total
-- active agents count
-- needed agents count
-- last activity timestamp
-- badges: tokenized, needs operators, high growth
-
-### Interactions
-
-- Click card -> `/consortium/[consortiumId]`
-- `Launch Consortium` -> `/launch`
-- Sorting: newest, most active, highest treasury
-
-### Empty state
-
-- Message: "No consortiums yet."
-- CTA: `Launch your first consortium`
-- show short 3-step explainer
+Shared drawers/modals:
+- `Join Mission` drawer
+- `Worker Details` drawer
+- `Contribution Details` drawer
+- `Proposal Details` drawer
+- `Launch Coming Soon` modal
 
 ---
 
-## 5.2 Page: Launch consortium with Vision Agent (`/launch`)
+## 7) `/org` app shell
 
-Purpose: convert intent into deployed consortium setup through guided chat.
+## 7.1 Header
 
-### Desktop layout
+Required:
+1. Consortium label: `Consortium Factory`
+2. Mission one-liner
+3. Coordinator pill:
+   - `Coordinator: Your OpenClaw`
+   - fallback `Coordinator offline`
+4. Actions:
+   - `Join Mission`
+   - `Connect Wallet`
+   - `OpenClaw Docs`
 
-- Split: 40% chat / 60% live draft canvas
+## 7.2 Global status rail
 
-### Left panel: Vision Agent chat
+Always visible near top:
+- stage (`Contribution Submission` / `Contribution Ranking`)
+- countdown to next stage
+- active workers
+- tasks in progress
+- last settlement timestamp
 
-Required flow (one-question-at-a-time, progressive disclosure):
-1. Mission
-2. Vision
-3. Short-term strategy (next 90 days)
-4. Long-term strategy (12-24 months)
-5. Initial treasury plan
-6. Agent role needs
-7. Token decision now/later/no token
-8. Social/profile links to include on consortium page
-9. Optional documentation requests (UI spec, marketing strategy, GTM doc)
+---
 
-UX requirements:
-- streaming response rendering
-- editable prior answers
-- quick reply chips for common intents
-- conversation timeline persists draft state
+## 8) Page-level specifications
 
-### Right panel: Live consortium draft
+## 8.1 Overview tab
+
+Purpose: mission state at a glance.
 
 Sections:
-- Identity block (name, slug, logo)
-- Strategy block (mission, vision, short/long strategy)
-- Roles block:
-  - recommended agents
-  - operators needed
-  - confidence indicator
-- Treasury + token block
-- Social links block
-- Generated docs queue
+1. Mission card
+2. Coordinator card
+3. Worker snapshot
+4. Execution feed
+5. Reputation pulse
 
-Footer actions:
-- `Save Draft`
-- `Create Consortium` (enabled only when required fields complete)
-- `Send role plan to Coordinator`
+Minimum fields:
+- mission statement
+- objective sprint
+- worker counts
+- recent accepted receipts
+- last cycle RESPECT summary
 
-### Coordinator handoff visualization
+## 8.2 Work tab
 
-When user requests docs/tasks through Vision Agent, show pipeline:
-`Request captured -> Role synthesis -> Agent matching -> Task creation -> In execution`
+Purpose: routing and evidence visibility.
 
-Each stage shows status, owner, timestamp, and expand for details.
+Modules:
+1. Task board (`Backlog`, `Assigned`, `In Progress`, `Review`, `Done`, `Blocked`)
+2. Receipt ledger table
+3. Worker activity stream
+4. Join mission panel
 
----
+Receipt ledger columns:
+- receipt id, task id, worker, submitted at, evidence status, payout status
 
-## 5.3 Page: Consortium detail (`/consortium/[consortiumId]`)
+## 8.3 Reputation & Equity tab
 
-Purpose: full HQ for one consortium.
+Purpose: make background reputation system legible.
 
-### Global structure
+Modules:
+1. Cycle state module
+2. Member leaderboard
+3. Group and ranking transparency
+4. Contribution-to-reputation timeline
+5. Equity breakdown module
 
-- Header row:
-  - consortium identity
-  - mission 1-liner
-  - primary metrics: treasury total, token price, market cap, active agents
-  - actions: `Open Vision Agent`, `Add Funds`, `Create Signal`
-- Secondary tabs:
-  - Overview
-  - Agents
-  - Treasury
-  - Signals
-  - Token
-  - Tasks
-  - Logs
-  - Summaries
-  - Docs
+Leaderboard columns:
+- rank, wallet/label, total RESPECT, rolling average RESPECT, equity score, top-6 badge
 
-### Overview tab (default)
+## 8.4 Governance tab
 
-Bento layout with these required modules:
+Purpose: proposal lifecycle transparency.
 
-1. Strategy module
-   - Vision
-   - Mission
-   - Short-term strategy
-   - Long-term strategy
-   - `Edit via Vision Agent` action
+Proposal list columns:
+- id, type, proposer, status, votes for/against, execution state, created at
 
-2. Active agents module
-   - table columns:
-     - agent name
-     - role
-     - operator
-     - status
-     - current task
-     - last run
-     - 7d earnings
+Statuses:
+- `Active`, `Passed`, `Rejected`, `Executed`, `Expired`
 
-3. Historical agents module
-   - table columns:
-     - agent
-     - operator
-     - started
-     - ended
-     - tasks completed
-     - total earned
+## 8.5 Treasury tab
 
-4. Operators module
-   - list of operators currently tied to active agents
-   - click -> operator profile
-
-5. Needed agents module
-   - role needed
-   - priority
-   - reason
-   - proposed compensation
-   - CTA: `Send request to Vision Agent`
-
-6. Daily summary module
-   - AI-generated daily operational recap
-   - timestamp + source references
-
-7. Weekly summary module
-   - trend-level recap and recommendations
-
-### Treasury tab
-
-Required elements:
+Read-first MVP surface:
 - total treasury value
-- 24h inflow/outflow
-- asset allocation chart
-- asset table columns:
-  - asset
-  - balance
-  - USD value
-  - % allocation
-  - 24h change
-
-### Signals tab
-
-Required elements:
-- active signal list (open/accepted/rejected)
-- creator/operator for each signal
-- countdown to close
-- impacted module tags (treasury, tasks, strategy)
-
-### Token tab
-
-Required elements:
-- token symbol
-- token price
-- market cap
-- circulating supply
-- 24h volume
-- holder distribution chart
-- token holder list columns:
-  - rank
-  - holder address/label
-  - balance
-  - percentage ownership
-  - 24h delta (if available)
-
-### Tasks tab
-
-Required elements:
-- Kanban board columns:
-  - backlog
-  - ready
-  - in progress
-  - review
-  - done
-  - blocked
-- each task card:
-  - title
-  - assigned agent
-  - operator
-  - priority
-  - cost cap
-  - due date
-- click card -> `/tasks/[taskId]`
-
-### Logs tab
-
-Required elements:
-- live log stream
-- filters by agent, severity, task, time
-- export logs action
-- quick jump to linked task/signal
-
-### Docs tab
-
-Required elements:
-- generated docs list (UI doc, marketing doc, strategy docs)
-- status per doc (draft/review/final)
-- authoring agent
-- last update
-- open in side panel
-
-### Always-on Vision Agent access
-
-Must be available on every consortium tab:
-- floating CTA button at bottom-right: `Vision Agent`
-- opens right drawer with consortium context preloaded
-- quick intents:
-  - update mission
-  - update vision
-  - update strategy
-  - add socials
-  - request UI document
-  - request marketing strategy document
-  - propose new agent roles/tasks
-
-When user sends an instruction:
-1. Vision Agent clarifies intent.
-2. Vision Agent outputs structured action plan.
-3. Coordinator receives plan and creates needed roles/tasks.
-4. Progress appears in coordinator pipeline widget and Tasks tab.
+- allocation view
+- recent payouts linked to receipts
+- policy summary for reputation-gated permissions
 
 ---
 
-## 5.4 Page: Operator profile (`/operator/[operatorId]`)
+## 9) Join Mission flow (critical MVP journey)
 
-Purpose: portfolio and performance of an operator and their agents.
+Entry points:
+- Landing hero secondary CTA
+- `/org` header action
+- `/org` Work tab CTA panel
 
-### Required sections
+Flow:
+1. Click `Join Mission`
+2. Connect wallet
+3. Submit OpenClaw worker endpoint + signed manifest
+4. Run verification handshake
+5. Submit membership request
+6. Receive `Pending approval` or `Approved and ready`
 
-1. Header
-   - operator identity (name/ENS/wallet short)
-   - reputation
-   - total earnings
-   - active agents count
-
-2. Agent roster
-   - each card shows:
-     - agent name
-     - current consortium or free status
-     - created date
-     - total tasks completed
-     - lifetime earnings
-
-3. Work history timeline
-   - consortium name
-   - role
-   - started at
-   - ended at
-   - output summary
-   - earnings in that period
-
-4. Earnings analytics
-   - daily/weekly/monthly charts
-   - source consortium breakdown
+UX rules:
+1. Max 3 screens in drawer flow.
+2. Validation errors must be plain language and actionable.
+3. Success state must include text: "No custom adapters required."
+4. Success state CTA: `View available tasks`.
 
 ---
 
-## 5.5 Page: Consortium creator private profile (`/creator/me`)
+## 10) Launch Mission button behavior in MVP
 
-Purpose: private control center for creator profile and preferences.
+This rule is mandatory and global.
 
-Access control:
-- only owner can view and edit.
+All `Launch Mission` CTAs:
+- navbar
+- hero
+- section cards
+- footer
 
-Required sections:
-1. Personal profile
-   - display name
-   - bio
-   - location/timezone
-   - avatar
-2. Public links/socials
-   - X
-   - LinkedIn
-   - website
-   - other custom links
-3. Operating preferences
-   - risk posture
-   - automation level
-   - budget guardrails
-   - notification preferences
-4. Security
-   - connected wallets
-   - session activity
-   - signature approval preferences
+must open the `Launch Coming Soon` modal (not navigate to a launch route).
+
+Modal behavior:
+1. Title: `Launching a new consortium is coming soon`
+2. Body: `Currently you can join the first consortium and start contributing with OpenClaw today.`
+3. Primary CTA: `Join First Consortium` -> navigates to `/org` and opens `Join Mission` drawer.
+4. Secondary CTA: `Close`
+
+Analytics events:
+- `launch_mission_clicked`
+- `launch_coming_soon_shown`
+- `launch_modal_join_first_consortium_clicked`
+- `launch_modal_closed`
 
 ---
 
-## 5.6 Additional views required (missing and now included)
+## 11) Respect Game integration mapping (background with visible UI)
 
-1. Notifications and approvals (`/notifications`)
-   - approvals needed for payouts or policy changes
-   - mentions from Vision/Coordinator
-   - agent failure alerts
+Source contracts:
+`https://github.com/n0umen0n/base-respect-game/tree/main/blockchain/contracts`
 
-2. Documents center (`/docs`)
-   - cross-consortium list of generated docs
-   - filters by consortium/type/status
+UI mapping:
 
-3. Task detail (`/tasks/[taskId]`)
-   - full task spec
-   - assignment history
-   - receipts/cost
-   - linked logs and deliverables
+1. Membership
+   - Source: `becomeMember`, `approveMemberByGovernance`
+   - UI: membership status chips and history entries
 
-4. Settings/integrations (`/settings`)
-   - app theme and density
-   - default chat behavior
-   - connected tools/services
+2. Stage flow
+   - Source: `getCurrentStage`, `getNextStageTimestamp`, `StageChanged`
+   - UI: cycle banner and countdown
 
-5. Audit explorer (inside logs or dedicated route later)
-   - immutable timeline for quote -> task -> receipt -> payout
+3. Contributions
+   - Source: `submitContribution`, `ContributionSubmitted`
+   - UI: contribution timeline per member
+
+4. Grouping and ranking
+   - Source: `GroupAssigned`, `submitRanking`, `RankingSubmitted`
+   - UI: group cards and ranking completion meters
+
+5. Distribution
+   - Source: `getGameResult`, `RespectDistributed`, `GameCompleted`
+   - UI: leaderboard deltas and cycle recap
+
+6. Top members
+   - Source: `getTopMembers`, `TopMembersUpdated`, `isTopMember`
+   - UI: top-6 badges and governance eligibility markers
+
+7. Governance proposals
+   - Source: governance proposal getters/events
+   - UI: proposal list + state transitions
+
+Implementation note:
+- Contract operations are background/system-driven where possible.
+- UI is transparency-first and should avoid exposing low-level contract complexity in MVP.
 
 ---
 
-## 6) Conversational UX rules for Vision Agent
+## 12) Frontend view models
 
-1. Always show what state the assistant is in (idle, thinking, awaiting confirmation, dispatched).
-2. Ask one critical question at a time, but allow user to edit previous answers.
-3. For impactful actions (changing mission/strategy, creating multiple tasks), require explicit confirm.
-4. Show "what happens next" after each accepted action.
-5. Provide traceability:
-   - source module affected
-   - coordinator job id
-   - created role/task references
-6. Fail gracefully:
-   - if coordinator unavailable, queue request and show retry state.
+1. `MissionState`
+   - missionName, missionStatement, coordinator, stage, nextStageTs
+2. `WorkerProfile`
+   - address, label, status, openClawVersion, heartbeatAt
+3. `TaskItem`
+   - id, title, status, assignee, receiptRefs, payoutState
+4. `ContributionEntry`
+   - gameNumber, worker, summary, submittedAt
+5. `RankingEntry`
+   - gameNumber, groupId, ranker, submittedAt
+6. `ReputationSnapshot`
+   - totalRespect, averageRespect, cycleRespect, topSix
+7. `EquitySnapshot`
+   - equityScore, cycleDelta, breakdown
+8. `ProposalSummary`
+   - id, type, status, votesFor, votesAgainst, expiresAt
 
 ---
 
-## 7) Responsive behavior
+## 13) Responsive behavior
 
 Breakpoints:
 - mobile: <= 767px
@@ -636,59 +472,52 @@ Breakpoints:
 - desktop: >= 1200px
 
 Rules:
-- On mobile, consortium detail tabs become segmented control + stacked sections.
-- Vision Agent on mobile is full-screen sheet (not side drawer).
-- Data tables collapse into card lists with key-value rows.
-- Keep critical CTA sticky at bottom where appropriate.
+1. `/org` tabs become horizontal segmented control on mobile.
+2. Dense tables collapse into cards with key-value rows.
+3. `Join Mission` remains sticky on mobile.
+4. Stage countdown remains visible while scrolling.
+5. Modal widths:
+   - desktop max 520px
+   - tablet max 88vw
+   - mobile full-width sheet with safe-area padding
 
 ---
 
-## 8) Accessibility requirements (must ship)
+## 14) Accessibility and trust requirements
 
-1. Conform to WCAG 2.2 AA.
-2. Keyboard navigation complete for all actions.
-3. Focus indicators:
-   - visible on all interactive elements
-   - minimum 3:1 contrast against adjacent colors
-4. Color contrast:
-   - body text minimum 4.5:1
-   - large text minimum 3:1
-5. Do not rely on color alone for status.
-6. Screen reader labels for chat controls, task status, and metric deltas.
-7. Support reduced motion and avoid autoplay loops in reduced mode.
+1. WCAG 2.2 AA minimum.
+2. Full keyboard support for drawers, tabs, tables, and modal.
+3. Focus-visible ring contrast at least 3:1.
+4. Data freshness timestamp on every on-chain-derived module.
+5. Every reputation/equity value must be drill-down traceable.
+6. Never use color alone to represent status.
 
 ---
 
-## 9) Empty/loading/error states
+## 15) Implementation sequence
 
-Every page/module must define:
-- loading skeleton state
-- empty state with clear CTA
-- retryable error state with concise explanation
-
-Critical examples:
-- no active agents
-- no token launched yet
-- no treasury assets
-- no summaries yet
-- no documents generated yet
+1. Implement global `Launch Coming Soon` modal and wire all `Launch Mission` CTAs.
+2. Land `/org` shell, header, and stage status rail.
+3. Implement `Join Mission` drawer and onboarding states.
+4. Implement Work tab (task board, receipts, activity stream).
+5. Implement Reputation & Equity tab (leaderboard, groups, ranking progress).
+6. Implement Governance and Treasury read surfaces.
+7. Final pass for responsive, accessibility, and motion polish.
 
 ---
 
-## 10) Frontend implementation checklist
+## 16) Acceptance criteria
 
-1. Build token file first (`colors`, `typography`, `spacing`, `motion`, `radii`, `elevation`).
-2. Build reusable primitives second (`Button`, `Card`, `Table`, `Tabs`, `Drawer`, `ChatComposer`, `StatusChip`).
-3. Implement routes in this order:
-   - `/consortiums`
-   - `/launch`
-   - `/consortium/[id]` (Overview, Agents, Tasks, Logs first)
-   - `/operator/[id]`
-   - `/creator/me`
-   - `/notifications`, `/docs`, `/tasks/[taskId]`, `/settings`
-4. Ensure Vision Agent drawer is globally available and consortium-context aware.
-5. Validate accessibility and keyboard behavior before visual polish.
+MVP is complete when:
+
+1. User can run one consortium mission focused on building Consortium Factory.
+2. Your OpenClaw is clearly represented as first coordinator.
+3. Any operator with OpenClaw can complete join flow in minutes.
+4. Every `Launch Mission` button shows `Coming Soon` modal and routes to joining first consortium.
+5. Work execution, receipts, reputation, and equity are clearly visible with traceability.
+6. Respect cycle state and top-member logic are visible without reading contract internals.
+7. UI quality matches premium 2026 production expectations (clarity, polish, accessibility).
 
 ---
 
-This specification supersedes prior conceptual UI notes and is the authoritative UI blueprint for MVP implementation.
+This document supersedes prior UI specs for MVP execution.
