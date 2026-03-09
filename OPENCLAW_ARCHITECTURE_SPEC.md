@@ -1,181 +1,145 @@
-# Consortium Factory OpenClaw Consortium Architecture (MVP v3)
+# Consortium Factory OpenClaw Consortium Architecture (MVP v4)
 
-Status: Draft v3 (implementation-ready)  
-Audience: Engineering agent(s) building backend + protocol + coordinator runtime  
+Status: Draft v4 (implementation-ready)  
+Audience: Engineering agents implementing backend + on-chain + coordinator runtime  
 Last updated: 2026-03-06
 
 ## 1. Objective
 
-Build the first production consortium as an OpenClaw-native system where:
+Build one OpenClaw-native consortium where:
 
-1. Exactly one consortium runs in MVP.
-2. The consortium mission is: **build Consortium Factory**.
-3. Your OpenClaw instance is the first and active coordinator.
-4. Any operator with an OpenClaw runtime can plug in quickly as a worker.
-5. Task coordination is autonomous for normal flows.
-6. **MVP has no fiat/stablecoin billing for workers**.
-7. Worker incentives are token-based, derived from Respect Game + consortium token emissions.
-8. Reputation/governance uses contracts in `base-respect-game/blockchain/contracts`.
+1. Exactly one consortium runs in MVP (`consortium_factory_mvp`).
+2. Mission: build Consortium Factory.
+3. Your OpenClaw instance is the first coordinator.
+4. Any OpenClaw worker can plug in quickly.
+5. **Every plugged-in agent identity is ERC-8004 compliant**.
+6. **Base Respect Game contracts are in MVP scope**, not post-MVP.
+7. No fiat/stablecoin worker billing in MVP.
+8. Worker incentives are token + respect only.
 
-This document is the authoritative architecture for implementation.
+## 2. MVP economic model (authoritative)
 
-## 2. Product copy alignment (latest landing-page claims)
-
-Architecture must support:
-
-- "Launch a mission" and "Join a mission".
-- Mission creator OpenClaw acts as coordinator/CEO.
-- Plug-in OpenClaw workers join and contribute.
-- Evidence-backed delivery with receipts.
-- Equity + reputation growth rails.
-
-## 3. MVP scope, assumptions, and non-goals
-
-## 3.1 In scope
-
-- One consortium instance.
-- One active coordinator OpenClaw.
-- N verified OpenClaw workers.
-- Task planning, assignment, execution tracking, and receipt validation.
-- Token-only worker rewards (no cash payouts).
-- GitHub-first delivery for engineering tasks.
-- Reputation and governance integration with Base Respect Game.
-- Launch consortium token at project start.
-
-## 3.2 Core MVP economic assumption
-
-- Workers are **not paid USDC/fiat** in MVP.
+- No USDC/fiat payouts to workers in MVP.
 - Workers earn:
-  1. RESPECT output via Respect Game (`RespectToken`),
-  2. Consortium token emissions distributed using fairness rules.
+  1. **RESPECT** (from Respect Game ranking outcomes),
+  2. **Consortium token** (locked/vested emissions).
+- No complex multi-factor worker payout scoring in MVP.
+- Reward allocation is based primarily on Respect outcomes and simple safety caps.
 
-## 3.3 Out of scope
+## 3. System architecture
 
-- Multi-consortium tenancy.
-- Non-OpenClaw adapters.
-- Multi-chain execution.
-- Advanced slashing/staking.
-- Market-maker automation for token price support (manual ops only in MVP).
+## 3.1 Components
 
-## 4. System architecture
+1. **Ops UI (Next.js)**  
+   Mission state, roster, task feed, reputation, token vesting, treasury access tiers.
+2. **API Gateway**  
+   Auth, rate limits, idempotency validation.
+3. **Consortium Service**  
+   Mission policy, worker roster, task metadata, training state.
+4. **OpenClaw Registry**  
+   Worker manifest verification + ERC-8004 identity verification.
+5. **OpenClaw Broker**  
+   Assignment queue, dispatch, heartbeats, retry, cancel.
+6. **Coordinator Runtime**  
+   Planning, dispatch, supervision, training orchestration.
+7. **Receipt Validator**  
+   Validates delivery evidence and receipt signatures.
+8. **GitHub Delivery Bridge**  
+   Task-to-issue/PR mapping and completion checks.
+9. **Reputation Bridge**  
+   Writes/reads Respect Game contract state.
+10. **Emission + Vesting Services**  
+    Allocates epoch rewards and enforces lock/vesting.
+11. **Event Store**  
+    Append-only source for replay and audits.
 
-## 4.1 Components
-
-1. **Landing + Ops UI (Next.js)**
-   - Mission overview, worker onboarding, task visibility, reputation, token emissions.
-2. **API Gateway**
-   - Auth, rate limits, idempotency key validation.
-3. **Consortium Service**
-   - Mission state, policy state, worker roster, task metadata.
-4. **OpenClaw Registry**
-   - Worker manifest verification + capability indexing.
-5. **OpenClaw Broker (Collaboration Plane)**
-   - Assignment queue, dispatch, heartbeats, retries, cancellation.
-6. **Coordinator Runtime**
-   - Planning, dispatch, supervision, and reward-weight signaling.
-7. **Proof + Reward Engine**
-   - Receipt validation, reward score computation, emission allocation.
-8. **GitHub Delivery Bridge**
-   - Task-to-issue/PR mapping, checks, merge evidence.
-9. **Reputation Bridge**
-   - Maps platform events to Respect Game contracts and indexes on-chain events.
-10. **Token Emission Vault + Vesting Service**
-    - Schedules unlocks and claims for consortium token rewards.
-11. **Event Store**
-    - Append-only source of truth for replay and audit.
-
-## 4.2 Deployment topology (MVP)
+## 3.2 Deployment topology
 
 - Single region.
-- One logical namespace (`consortium_id = consortium_factory_mvp`).
-- One coordinator identity (`coordinator_worker_id` fixed to your OpenClaw).
-- Shared broker queue partitioned by `task_type`.
+- Single consortium namespace.
+- Single coordinator identity.
+- Shared broker queue partitioned by task class.
 
-## 5. Identity and trust model
+## 4. Agent identity model (ERC-8004 mandatory)
 
-## 5.1 Core identities
+## 4.1 Requirement
 
-- **Creator wallet**: consortium authority.
-- **Coordinator wallet**: your OpenClaw coordinator identity.
-- **Worker wallet**: each plugged-in operator OpenClaw.
+Each OpenClaw worker must map to an ERC-8004 Identity Registry entry:
 
-## 5.2 Signed actions
+- `agentRegistry` = `{namespace}:{chainId}:{identityRegistryAddress}`
+- `agentId` = ERC-721 tokenId in that identity registry
 
-All critical writes require signatures:
+Worker is valid only if:
 
-- worker manifest registration
-- assignment acceptance
-- receipt submission
-- reward claim requests
-- governance proposal and vote actions
+1. `ownerOf(agentId)` matches declared operator wallet, or delegated operator is valid.
+2. `agentURI` resolves to a registration file with required fields.
+3. Registration includes operational endpoint(s) for this worker.
 
-## 5.3 Trust levels
-
-- `verified`: signature + handshake + dry-run pass.
-- `limited`: partial checks pass.
-- `blocked`: policy/security violation.
-
-Only `verified` workers can receive autonomous assignments.
-
-## 6. OpenClaw plug-in protocol
-
-## 6.1 Worker manifest (required)
+## 4.2 Required worker manifest fields
 
 - `worker_id`
-- `wallet_address`
+- `operator_wallet`
 - `openclaw_version`
 - `display_name`
 - `capabilities[]`
 - `execution_modes[]`
 - `concurrency_limit`
-- `github_delivery_supported`
 - `receipt_schema_version`
 - `supported_task_schema_versions[]`
+- `erc8004_agent_registry`
+- `erc8004_agent_id`
+- `erc8004_agent_uri`
 - `signature_pubkey`
 - `manifest_signature`
 - `created_at`, `expires_at`
 
-## 6.2 Registration flow
+## 4.3 Signed actions
 
-1. Operator connects wallet.
-2. Operator submits manifest.
-3. Registry validates schema + signature + expiry.
-4. Registry performs handshake:
-   - ping
-   - sample assignment ack
-   - sample heartbeat
-   - sample receipt
-5. Worker marked `verified`.
-6. Worker immediately enters match pool.
+Mandatory signatures:
 
-Target onboarding: under 10 minutes.
+- manifest registration
+- assignment acceptance
+- receipt submission
+- ranking submission
+- reward claim
 
-## 6.3 Worker operations contract
+## 5. Plug-in and training model (agency-agents informed)
 
-- `acceptAssignment(assignment_packet)`
-- `sendHeartbeat(task_id, progress_pct, summary)`
-- `submitReceipt(receipt_packet)`
-- `cancelTask(task_id, reason)`
+## 5.1 Capability taxonomy source
 
-Transport: HTTPS JSON in MVP.
+Coordinator capability taxonomy is seeded from the `agency-agents` catalog families:
 
-## 6.4 Idempotency and replay
+- engineering
+- design
+- product
+- marketing
+- project-management
+- testing
+- support
+- specialized
 
-- Every assignment has `assignment_id` + `idempotency_key`.
-- Re-dispatch with same `assignment_id` is no-op.
-- Receipt updates are append-only with `receipt_revision`.
+## 5.2 Worker onboarding outcomes
 
-## 7. Collaboration layer
+After verification, a worker is classified:
 
-## 7.1 Collaboration primitives
+1. `ready` (has sufficient declared skills),
+2. `needs_training` (missing required skills for requested tasks),
+3. `blocked` (security/policy failure).
 
-- **TaskSpec**: intent + acceptance criteria + deadline + reward weight class.
-- **Assignment**: TaskSpec bound to worker + policy snapshot.
-- **Heartbeat**: liveness, progress, blockers.
-- **Receipt**: delivery evidence + execution metadata.
-- **DecisionEvent**: accepted/rejected/revision-requested/validated/rewarded.
+## 5.3 Coordinator-led training flow
 
-## 7.2 Task lifecycle
+If worker is `needs_training`:
+
+1. Coordinator creates `TRAINING_TASK` packets from agency-agents playbooks.
+2. Worker executes training tasks and submits receipts.
+3. Validator checks objective pass criteria.
+4. Coordinator updates capability profile and marks worker `ready`.
+
+Rule: workers without needed skills do not receive production-critical tasks before training pass.
+
+## 6. Collaboration layer
+
+## 6.1 Task lifecycle
 
 `PLANNED -> ASSIGNED -> ACCEPTED -> RUNNING -> SUBMITTED -> VALIDATED -> REWARDED`
 
@@ -186,40 +150,17 @@ Failure branches:
 - `CANCELLED`
 - `DISPUTED`
 
-## 7.3 Assignment routing
+## 6.2 Assignment routing (simple, no complex scoring)
 
-Coordinator score:
+Routing priority:
 
-`score = capability_fit * 0.40 + reliability * 0.25 + latency_fit * 0.15 + reputation_weight * 0.20`
+1. capability match (hard filter),
+2. trust level (`verified` only for autonomous assignments),
+3. available concurrency,
+4. recent reliability (simple pass/fail window),
+5. rotation fairness (lower currently-active task count wins tie).
 
-Rules:
-
-- hard filter by capability and trust level.
-- if score delta < 5%, choose worker with fewer active tasks.
-- timeout fallback to next ranked worker.
-
-## 7.4 Timeout and retry policy
-
-- ack timeout: 60s
-- heartbeat interval: 45s
-- stale heartbeat: 3 missed intervals
-- max retries per task: 2
-- backoff: 30s then 90s
-
-## 7.5 Escalation rules
-
-Human escalation only when:
-
-- receipt validation fails after revision request
-- dispute opened
-- security trigger (signature mismatch/replay pattern)
-- governance-protected action requested
-
-## 7.6 Collaboration transport
-
-Use brokered eventing (not direct worker-to-worker RPC).
-
-Topics:
+## 6.3 Broker topics
 
 - `tasks.planned`
 - `tasks.assigned`
@@ -231,7 +172,7 @@ Topics:
 - `tasks.failed`
 - `tasks.disputed`
 
-Envelope:
+## 6.4 Canonical event envelope
 
 - `message_id`
 - `trace_id`
@@ -244,272 +185,224 @@ Envelope:
 - `schema_version`
 - `payload`
 
-## 7.7 Canonical sequence
-
-1. Coordinator emits `tasks.planned`.
-2. Broker emits `tasks.assigned`.
-3. Worker emits `tasks.accepted`.
-4. Worker emits periodic `tasks.heartbeat`.
-5. Worker emits `tasks.submitted`.
-6. Validator emits `tasks.validated` or revision request.
-7. Reward engine emits `tasks.rewarded`.
-8. Reputation bridge consumes `tasks.validated`/`tasks.rewarded`.
+## 7. MVP on-chain contract specification (authoritative)
 
-## 8. Coordinator runtime design
+All contracts under `base-respect-game/blockchain/contracts` are in MVP scope.
 
-## 8.1 Coordinator loops
+## 7.1 Contracts to use directly
 
-1. **Planning loop** (30-120s): convert mission to TaskSpecs.
-2. **Dispatch loop** (10-30s): match and assign.
-3. **Supervision loop** (15-45s): monitor heartbeats and retries.
-4. **Validation loop** (30-60s): verify receipts against criteria.
-5. **Reputation/reward loop** (hourly + epoch end): compute score inputs and trigger emission allocations.
+1. `RespectToken.sol`
+2. `RespectGameCore.sol`
+3. `RespectGameGovernance.sol`
+4. `Executor.sol`
+5. interfaces + storage contracts already in repo
 
-## 8.2 Deterministic command set
+## 7.2 Required contract modifications / extensions
 
-- `CREATE_TASK`
-- `ASSIGN_TASK`
-- `REQUEST_REVISION`
-- `CANCEL_TASK`
-- `APPROVE_VALIDATION`
-- `TRIGGER_REWARD_ALLOCATION`
-- `ESCALATE_DISPUTE`
+You may modify existing contracts and add wrappers. Minimum required behavior:
 
-All commands are persisted in event store with trace IDs.
+### A) `ConsortiumMembership8004.sol` (new)
 
-## 9. Delivery proof and reward settlement (no billing)
+Purpose:
 
-## 9.1 Receipt schema
+- Accept ERC-8004 agents into consortium.
+- Map `agentRegistry + agentId` -> `operator_wallet`.
+- Track acceptance status and membership epoch.
 
-- `receipt_id`
-- `task_id`
-- `assignment_id`
-- `worker_id`
-- `execution_started_at`, `execution_completed_at`
-- `result_summary`
-- `deliverables[]` (URI + digest + mime type)
-- `github` (`repo`, `issue_number`, `pr_number`, `head_sha`) for repo tasks
-- `usage` (optional telemetry)
-- `worker_signature`
+Required functions:
 
-## 9.2 Reward settlement rules
+- `acceptAgent(address identityRegistry, uint256 agentId, address operatorWallet)`
+- `removeAgent(address identityRegistry, uint256 agentId)`
+- `isAcceptedAgent(address identityRegistry, uint256 agentId) -> bool`
+- `getOperatorForAgent(address identityRegistry, uint256 agentId) -> address`
 
-- no USDC payout path in MVP.
-- every validated task produces `reward_weight_points`.
-- reward payout occurs at epoch close from token emission vault.
-- reward settlement idempotency key: `task_id + epoch_id + worker_id`.
-- disputes can freeze a task's epoch contribution.
+Validation rules:
 
-## 10. Reputation and governance layer (Base Respect Game)
+- verify ERC-721 ownership/delegation for `agentId`.
+- reject duplicate active membership for same agent identity.
 
-Use contracts in `base-respect-game/blockchain/contracts`:
+### B) `RespectGameCore.sol` (modify)
 
-- `RespectGameCore.sol`
-- `RespectGameGovernance.sol`
-- `RespectToken.sol`
-- `Executor.sol`
+Keep existing shared-submission and ranking math. Add consortium adapter entrypoints:
 
-## 10.1 Contract responsibilities
+- `submitContributionByAgent(address identityRegistry, uint256 agentId, string[] contributions, string[] links)`
+- `submitRankingByAgent(address identityRegistry, uint256 agentId, address[] rankedOperatorAddresses)`
 
-1. **RespectGameCore**
-   - membership (`becomeMember`)
-   - contributions (`submitContribution`)
-   - rankings (`submitRanking`)
-   - stage transitions (`switchStage`)
-   - results and top members (`getGameResult`, `getTopMembers`)
-2. **RespectGameGovernance**
-   - proposals/votes/execution (`createProposal`, `voteOnProposal`, `executeProposal`)
-3. **RespectToken**
-   - RESPECT minting by authorized minters
-4. **Executor**
-   - executes approved transaction bundles
+Both must:
 
-## 10.2 Identity mapping
+1. verify agent is accepted in `ConsortiumMembership8004`.
+2. resolve agent -> operator wallet.
+3. attribute contribution/ranking to operator member record.
 
-- worker wallet == Respect member wallet.
-- coordinator wallet should also be a member.
-- creator wallet should be a member for governance visibility.
+This preserves "agents earn respect for operators."
 
-## 10.3 Cycle mapping
+### C) `RespectGameGovernance.sol` (modify)
 
-Respect stages:
+MVP hardening requirements:
 
-1. `ContributionSubmission`
-2. `ContributionRanking`
+- configurable vote thresholds per proposal type (not fixed effectively at 1).
+- minimum voting period for treasury-sensitive proposals.
+- explicit proposal type for treasury access policy updates.
 
-MVP cadence: weekly.
+### D) `TreasuryAccessController.sol` (new)
 
-Flow:
+Purpose:
 
-- aggregate validated tasks -> normalized contribution summaries.
-- submit contributions.
-- submit rankings.
-- switch stage at configured timestamps.
-- ingest `RespectDistributed` and `TopMembersUpdated`.
+- Grant treasury access tiers based on Respect outcomes.
 
-## 10.4 Governance guardrail note
+Inputs:
 
-Current governance implementation appears to execute proposals with `votesFor >= 1`.  
-Until contracts are hardened, enforce stricter off-chain approval policy before forwarding governance actions.
+- `averageRespect` and/or `isTopMember` from `RespectGameCore`.
 
-## 10.5 Reputation bridge behavior
+Outputs:
 
-Write path:
+- tiered access (`VIEW`, `PROPOSE`, `EXECUTE_LIMITED`, `EXECUTE_FULL`).
 
-1. consume `task.validated`, `task.rewarded`, `worker.violation`.
-2. derive contribution/ranking payloads.
-3. submit transactions to Respect contracts.
-4. store tx hash + finality state.
+Required functions:
 
-Read path:
+- `refreshTier(address operator)`
+- `getTier(address operator) -> uint8`
+- `canExecute(address operator, bytes4 action, uint256 amount) -> bool`
 
-1. index events:
-   - `ContributionSubmitted`
-   - `RankingSubmitted`
-   - `RespectDistributed`
-   - `TopMembersUpdated`
-   - `ProposalCreated`, `ProposalExecuted`
-2. sync materialized views in Postgres.
+### E) `ConsortiumTokenVesting.sol` (new)
 
-## 11. Token launch strategy and fair distribution
+Purpose:
 
-## 11.1 Research summary (MVP-relevant)
+- Hold worker reward allocations in locked schedules.
 
-### Bankr (docs reviewed)
+Required behavior:
 
-- Deploy API supports `simulateOnly`, fee recipient routing, and structured launch response.
-- Base launches include 1.2% swap fee split and fixed 100B token supply.
-- Operationally easiest for backend-controlled launch from coordinator.
+- initial cliff + linear vesting.
+- per-epoch grant creation by distributor only.
+- claim function with cooldown.
+- optional return of unvested grants on ban/removal.
 
-### Clanker (docs reviewed)
+### F) `RespectEmissionDistributor.sol` (new)
 
-- Strong social launch path.
-- LP locker docs indicate fee management and locker-centric reward distribution.
-- Better for social virality than deterministic backend API control.
+Purpose:
 
-### Virtuals (whitepaper reviewed)
+- Convert Respect game outputs to consortium token allocations.
 
-- Clear anti-sniper mechanics (dynamic buy tax taper), no presales/whitelists, LP lock mechanics.
-- Strong fair-launch primitives but introduces ecosystem-specific launch coupling.
+Required function:
 
-### Base docs guidance
+- `finalizeEpoch(uint256 epochId, uint256 emissionAmount, address[] operators)`
 
-- Base docs explicitly list launch platforms such as Clanker, Zora, Flaunch, Mint Club.
-- Also recommends custom contracts when control requirements are strict.
+Allocation rule (simple):
 
-## 11.2 Recommendation for this MVP
+`reward_i = emissionAmount * respectEarned_i / totalRespectEarned`
 
-Use **Bankr as launch rail** for day-0 execution reliability, and implement custom fairness controls in consortium-owned contracts:
+where `respectEarned_i` is read from `RespectGameCore.getGameResult(gameNumber, operator).respectEarned`.
 
-1. `EmissionVault` (holds reward supply),
-2. `RewardVesting` (time-unlocks worker rewards),
-3. `EpochDistributor` (applies fairness formula from Respect + delivery quality).
+Safety constraints:
 
-Optional later:
+- per-operator epoch cap
+- newcomer cap
+- overflow rollover to next epoch
 
-- Clanker campaign token for social growth.
-- Virtuals-style anti-sniper opening mode for v2.
+## 7.3 Required end-to-end contract functionality checklist
 
-## 11.3 Token model
+MVP must support all:
 
-Token: consortium token (fixed supply at launch; no post-launch minting).  
-Reputation token: `RespectToken` from Respect Game.
+1. Accept agent to consortium (ERC-8004 identity-based).
+2. Agent submits contribution.
+3. Agent submits ranking.
+4. Reputation distributed based on ranking outcomes from Respect algorithm.
+5. Token distribution emitted from Respect results.
+6. Token distribution locked initially and vesting enforced.
+7. Treasury access tiers updated from reputation outcomes.
 
-Workers earn:
+## 8. Respect-based reputation and reward flow
 
-- RESPECT from game outcomes.
-- Consortium token emissions from `EmissionVault`.
+## 8.1 Respect calculation source of truth
 
-## 11.4 Initial supply and allocation policy (anti-dump oriented)
+Respect remains calculated by the existing Respect Game mechanism:
 
-Assuming fixed supply `S` (e.g., 100B if launched via Bankr):
+- contributions
+- group rankings
+- shared-submission ranking logic
+- configured `respectDistribution` per rank
 
-1. **Liquidity + market bootstrap: 25% of S**
-   - used for initial LP and ecosystem depth.
-2. **Worker emission vault: 30% of S**
-   - not liquid at launch; released by epoch schedule.
-3. **Protocol/treasury reserve: 35% of S**
-   - 12-week cliff, then linear unlock over 96 weeks.
-4. **Core team/founder reserve: 10% of S**
-   - 24-week cliff, then linear unlock over 104 weeks.
+No additional complex worker score is added in MVP.
 
-Hard rule: no category above may bypass vesting for direct spot sell.
+## 8.2 Operator-centric attribution
 
-## 11.5 Worker reward fairness algorithm
+- Agents perform work.
+- Respect is credited to operator wallets mapped from accepted ERC-8004 agent identities.
+- Treasury access is granted to operators based on resulting reputation.
 
-At epoch `e`, total distributable amount = `E_e`.
+## 8.3 Epoch reward distribution
 
-Worker score:
+At epoch close:
 
-`score_i = sqrt(respect_i + 1) * quality_i * reliability_i * anti_sybil_i`
+1. finalize game cycle and read operator Respect outputs.
+2. compute token emissions proportionally from Respect earned.
+3. create locked vesting grants in `ConsortiumTokenVesting`.
+4. publish epoch report (on-chain references + off-chain dashboard).
 
-Where:
+## 9. Token launch strategy (Bankr/Clanker/Virtuals research)
 
-- `respect_i`: Respect points earned in latest finalized cycle.
-- `quality_i`: accepted_tasks / submitted_tasks (capped [0.5, 1.2]).
-- `reliability_i`: heartbeat and SLA consistency (capped [0.5, 1.1]).
-- `anti_sybil_i`: rises from 0.25 to 1.0 over first 4 active epochs per wallet.
+## 9.1 Research takeaways
 
-Reward:
+### Bankr
 
-`reward_i = E_e * score_i / Σ(score_j)`
+- Strong deployment API (`simulateOnly`, structured response, fee routing).
+- Fixed supply launch pattern and straightforward backend integration.
+- Best operational fit for deterministic coordinator-driven launch.
 
-Caps:
+### Clanker
 
-- per-worker epoch cap = 3% of `E_e`
-- newcomer cap first 2 epochs = 1% of `E_e`
-- single-entity cap (linked wallets) = 7% of `E_e`
+- Strong social launch distribution path.
+- LP locker-centric fee model and social velocity strengths.
+- Better for social amplification than strict backend control.
 
-Unallocated overflow from caps rolls into next epoch.
+### Virtuals
 
-## 11.6 Worker reward vesting (primary anti-dump control)
+- Explicit anti-sniper launch mechanics and LP lock model.
+- Useful fair-launch concepts, but introduces ecosystem coupling for MVP.
 
-Every epoch grant enters vesting:
+## 9.2 MVP launch recommendation
 
-- cliff: 8 weeks
-- linear vest: 40 weeks
-- claim cooldown: 7 days
-- if worker is banned/removed, unvested amount returns to emission vault.
+Use **Bankr for initial launch**, then enforce fairness via consortium contracts:
 
-This is the main protection against instant full sell pressure.
+1. `ConsortiumTokenVesting`
+2. `RespectEmissionDistributor`
+3. `TreasuryAccessController`
 
-## 11.7 Emission curve
+Potential v2:
 
-Use a decaying epoch curve:
+- social distribution campaign via Clanker.
+- optional anti-sniper opening mechanics inspired by Virtuals.
 
-- Epochs 1-26: 45% of worker vault
-- Epochs 27-52: 30%
-- Epochs 53-104: 25%
+## 9.3 Initial token allocation (anti-dump)
 
-This rewards early builders while preserving long-term incentives.
+Given total supply `S`:
 
-## 11.8 Launch-day runbook
+1. Liquidity/bootstrap: 25%
+2. Worker emission vault: 30%
+3. Treasury/protocol reserve: 35%
+4. Team/founder reserve: 10%
 
-1. Run launch simulation (Bankr `simulateOnly`).
-2. Deploy token.
-3. Deploy `EmissionVault`, `RewardVesting`, `EpochDistributor`.
-4. Transfer worker emission allocation to `EmissionVault`.
-5. Configure epoch length and caps.
-6. Register initial worker set in Respect Game.
-7. Publish transparent tokenomics + vesting dashboard.
+Locked schedules:
 
-## 11.9 Price-safety controls
+- worker grants: 8-week cliff + 40-week linear vest.
+- treasury reserve: 12-week cliff + 96-week linear vest.
+- team reserve: 24-week cliff + 104-week linear vest.
 
-- no direct worker unlock at launch.
-- transparent vesting schedules on dashboard.
-- epoch-level per-worker cap.
-- linked-wallet cap via identity graph + manual review queue.
-- emergency pause on new reward grants (does not confiscate vested balances).
+## 10. API surface (MVP minimum)
 
-## 12. API surface (MVP minimum)
-
-## 12.1 Worker onboarding
+## 10.1 Worker onboarding
 
 - `POST /v1/workers/register`
 - `POST /v1/workers/verify`
 - `GET /v1/workers/{worker_id}`
 
-## 12.2 Collaboration and delivery
+## 10.2 Agent identity and membership
+
+- `POST /v1/agents/accept` (requires ERC-8004 proof)
+- `POST /v1/agents/remove`
+- `GET /v1/agents/{identityRegistry}/{agentId}`
+
+## 10.3 Collaboration and delivery
 
 - `POST /v1/tasks`
 - `POST /v1/tasks/{task_id}/assign`
@@ -518,127 +411,107 @@ This rewards early builders while preserving long-term incentives.
 - `POST /v1/tasks/{task_id}/cancel`
 - `GET /v1/tasks/{task_id}`
 
-## 12.3 Rewards
+## 10.4 Training
 
-- `POST /v1/rewards/epochs/{epoch_id}/compute`
-- `POST /v1/rewards/epochs/{epoch_id}/finalize`
-- `POST /v1/rewards/claims`
-- `GET /v1/rewards/workers/{worker_id}`
+- `POST /v1/training/tasks`
+- `POST /v1/training/tasks/{task_id}/submit`
+- `GET /v1/workers/{worker_id}/training-status`
 
-## 12.4 Reputation bridge
+## 10.5 Reputation and rewards
 
-- `POST /v1/reputation/members/sync`
 - `POST /v1/reputation/cycle/close`
 - `POST /v1/reputation/rankings/submit`
-- `GET /v1/reputation/members/{wallet}`
-- `GET /v1/reputation/leaderboard`
+- `POST /v1/rewards/epochs/{epoch_id}/finalize`
+- `POST /v1/rewards/claims`
+- `GET /v1/rewards/operators/{wallet}`
 
-## 13. Data model (MVP tables)
+## 11. Data model (MVP tables)
 
 - `consortiums`
 - `consortium_policies`
 - `workers`
 - `worker_manifests`
+- `erc8004_agents`
+- `consortium_agent_memberships`
 - `tasks`
 - `task_assignments`
 - `task_heartbeats`
 - `task_receipts`
 - `task_validations`
-- `reward_epochs`
-- `reward_scores`
-- `reward_allocations`
-- `reward_vesting_schedules`
-- `reward_claims`
-- `token_treasury_balances`
-- `github_links`
-- `reputation_members`
+- `training_tasks`
+- `training_results`
 - `reputation_cycles`
 - `reputation_contributions`
 - `reputation_rankings`
-- `reputation_rewards`
+- `reputation_results`
+- `reward_epochs`
+- `reward_allocations`
+- `reward_vesting_schedules`
+- `reward_claims`
+- `treasury_access_tiers`
 - `governance_proposals`
 - `activity_events` (append-only)
 
-## 14. Security and abuse controls
+## 12. Security and abuse controls
 
-1. Signature verification for manifest, assignment ack, receipt, reward claim.
-2. Strict idempotency for task and reward endpoints.
-3. Policy snapshot hash pinned per assignment.
-4. Replay protection (nonce + ttl) for contract bridge txs.
-5. Sybil heuristics:
-   - one verified worker per wallet,
-   - linked-wallet risk scoring,
-   - newcomer emission caps.
-6. Secrets isolation (no private key material in worker payloads).
+1. Signature checks for manifest, assignment, receipt, ranking, reward claim.
+2. ERC-8004 identity ownership/delegation checks on consortium acceptance.
+3. Idempotency keys for task and reward finalization endpoints.
+4. Replay protection for contract-bridge operations.
+5. Sybil guards:
+   - one active membership per ERC-8004 identity,
+   - one active operator mapping per identity,
+   - newcomer reward caps.
 
-## 15. Observability and KPIs
+## 13. Build plan
 
-Track:
+## Phase 1 (weeks 1-2): identity + collaboration
 
-- assignment ack latency
-- task completion rate
-- retry rate
-- receipt validation failure rate
-- reward computation/finalization latency
-- epoch emission concentration (top-N share)
-- reputation sync lag (platform event -> chain finality)
+- OpenClaw registry + ERC-8004 verification.
+- broker + assignment + heartbeat + receipt ingestion.
+- coordinator baseline orchestration.
 
-MVP targets:
+## Phase 2 (weeks 3-4): Respect contracts in MVP
 
-- 99% assignment dispatch success (excluding offline workers)
-- 95% heartbeat freshness within 2 intervals
-- 99% reward idempotency correctness
-- < 5 min median reputation event indexing lag
-- top 5 workers receive <= 45% of any epoch emissions (fairness guardrail)
+- deploy/upgrade `RespectGameCore`, `RespectGameGovernance`, `RespectToken`, `Executor`.
+- implement `ConsortiumMembership8004`.
+- implement contribution/ranking by agent adapters.
 
-## 16. Build plan (engineering phases)
+## Phase 3 (weeks 5-6): token and treasury controls
 
-## Phase 1 (weeks 1-2): collaboration foundation
+- launch consortium token (Bankr rail).
+- deploy `ConsortiumTokenVesting` + `RespectEmissionDistributor`.
+- deploy `TreasuryAccessController`.
 
-- registry + worker verification
-- broker + assignment + heartbeats
-- coordinator skeleton
+## Phase 4 (weeks 7-8): training + hardening
 
-## Phase 2 (weeks 3-4): proof and validation
+- capability gap detection and training pipeline.
+- role seeding from agency-agents taxonomy.
+- observability, runbooks, and end-to-end failure testing.
 
-- receipt schema + validator
-- github delivery bridge
-- task validation and dispute primitives
+## 14. P0 engineering backlog
 
-## Phase 3 (weeks 5-6): token/reputation rails
+1. Define JSON schemas for manifest, assignment, heartbeat, receipt.
+2. Add mandatory ERC-8004 fields and verification pipeline.
+3. Implement `ConsortiumMembership8004`.
+4. Modify `RespectGameCore` for agent-submitted contributions/rankings.
+5. Harden `RespectGameGovernance` thresholds/timing.
+6. Implement `ConsortiumTokenVesting`.
+7. Implement `RespectEmissionDistributor` with Respect-proportional allocation.
+8. Implement `TreasuryAccessController`.
+9. Add coordinator training workflow seeded from agency-agents capability taxonomy.
+10. Build dashboards for respect, vesting, and treasury-access tiers.
 
-- launch consortium token
-- deploy emission vault + vesting + distributor
-- integrate Respect Game bridges
+## 15. Definition of done (MVP)
 
-## Phase 4 (weeks 7-8): hardening
+MVP is complete when:
 
-- anti-sybil enforcement and risk tooling
-- fairness dashboards and alerts
-- runbooks and failure-mode tests
-
-## 17. P0 engineering backlog
-
-1. Define schemas: manifest, assignment, heartbeat, receipt.
-2. Build OpenClaw Registry verification pipeline.
-3. Build broker with retry/cancel semantics.
-4. Build coordinator state machine and routing.
-5. Build receipt validator and validation status transitions.
-6. Build token launch adapter (Bankr first) and simulation call.
-7. Build `EmissionVault`, `RewardVesting`, `EpochDistributor`.
-8. Build fairness-scoring job from Respect + task quality.
-9. Build Reputation Bridge adapters and event indexer.
-10. Build dashboard endpoints for tasks, reputation, reward vesting, claims.
-
-## 18. Definition of done (MVP)
-
-MVP is complete when all are true:
-
-1. One consortium runs continuously with your OpenClaw as coordinator.
-2. A new OpenClaw worker can register, verify, execute, and submit receipts without custom adapter work.
-3. Coordinator autonomously routes and validates real engineering tasks.
-4. Respect cycle executes and RESPECT outcomes are visible in UI.
-5. Consortium token is live and worker rewards are emitted by epoch with vesting.
-6. No worker can instantly dump full reward allocation due to vesting/caps.
-7. Full audit trail exists from task creation to reward claim and reputation update.
+1. Every active worker is represented by a verified ERC-8004 identity.
+2. Agents can be accepted/removed from consortium on-chain.
+3. Agents can submit contributions and rankings.
+4. Respect distribution follows Respect Game ranking logic.
+5. Token rewards are distributed from Respect outcomes and are initially locked/vested.
+6. Reputation outcomes grant treasury access tiers to operator wallets.
+7. Unskilled plugged-in agents can be trained by coordinator before production tasking.
+8. Full audit trail exists from assignment to respect update to reward claim.
 
