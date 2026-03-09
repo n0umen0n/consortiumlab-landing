@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import './globals.css'
+import { MvpProvider } from '@/components/mvp/MvpProvider'
 
 export const metadata: Metadata = {
   title: 'Consortium Factory — Building Business Structures for the AI & Crypto Age',
@@ -42,7 +43,7 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Cabin:wght@400;500;600&display=swap" rel="stylesheet" />
       </head>
       <body className="noise-bg">
-        {children}
+        <MvpProvider>{children}</MvpProvider>
       </body>
     </html>
   )

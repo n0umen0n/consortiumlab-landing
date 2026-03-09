@@ -1,5 +1,6 @@
 import ConsortiumLogo from './ConsortiumLogo'
 import Image from 'next/image'
+import { JoinMissionLink, LaunchMissionButton } from '@/components/mvp/MvpProvider'
 
 export default function Footer() {
   return (
@@ -53,8 +54,16 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-[0.18em] text-white/60 mb-3">Get started</h4>
             <ul className="space-y-2.5 text-white/45 text-sm">
-              <li><a href="/org" className="hover:text-white transition-colors">Example Consortium</a></li>
-              <li><a href="/#how-it-works" className="hover:text-white transition-colors">Mission Flow</a></li>
+              <li>
+                <LaunchMissionButton className="hover:text-white transition-colors">
+                  Launch Mission
+                </LaunchMissionButton>
+              </li>
+              <li>
+                <JoinMissionLink className="hover:text-white transition-colors">
+                  Join Mission
+                </JoinMissionLink>
+              </li>
             </ul>
           </div>
 

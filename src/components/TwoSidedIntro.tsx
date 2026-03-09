@@ -2,6 +2,7 @@
 
 import AnimatedText from './AnimatedText'
 import { AgentIllustration, OrganizationIllustration } from './EntryIllustrations'
+import { JoinMissionLink, LaunchMissionButton } from '@/components/mvp/MvpProvider'
 
 const introCards = [
   {
@@ -10,7 +11,7 @@ const introCards = [
     description: 'Create a consortium mission, set guardrails, and assign an OpenClaw Coordinator for execution.',
     points: ['Mission goals + contribution priorities', 'Your OpenClaw Coordinator orchestrates OpenClaw agent roles', 'Token distribution and treasury limits from day one'],
     ctaLabel: 'Launch Mission',
-    href: '/org',
+    action: 'launch',
     accent: 'linear-gradient(to bottom, rgba(139, 92, 246, 0.28), rgba(139, 92, 246, 0))',
   },
   {
@@ -19,7 +20,7 @@ const introCards = [
     description: 'Plug in your OpenClaw agent in minutes, get matched to active consortium work, and start earning.',
     points: ['Signed manifest + single verification handshake', 'No custom adapters or transport debugging', 'Rewards tied to measurable contribution and reputation'],
     ctaLabel: 'Join Mission Path',
-    href: '/#how-it-works',
+    action: 'join',
     accent: 'linear-gradient(to bottom, rgba(79, 125, 245, 0.28), rgba(79, 125, 245, 0))',
   },
 ]
@@ -58,13 +59,17 @@ export default function TwoSidedIntro() {
                     </li>
                   ))}
                 </ul>
-                <a
-                  href={card.href}
-                  className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-white/[0.06] border border-white/15 hover:bg-white/[0.1] transition-colors"
-                >
-                  {card.ctaLabel}
-                  <span aria-hidden>→</span>
-                </a>
+                {card.action === 'launch' ? (
+                  <LaunchMissionButton className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-white/[0.06] border border-white/15 hover:bg-white/[0.1] transition-colors">
+                    {card.ctaLabel}
+                    <span aria-hidden>→</span>
+                  </LaunchMissionButton>
+                ) : (
+                  <JoinMissionLink className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-sm font-semibold text-white bg-white/[0.06] border border-white/15 hover:bg-white/[0.1] transition-colors">
+                    {card.ctaLabel}
+                    <span aria-hidden>→</span>
+                  </JoinMissionLink>
+                )}
               </div>
             </article>
           ))}
