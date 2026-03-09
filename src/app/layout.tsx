@@ -1,9 +1,24 @@
+import type { ReactNode } from 'react'
 import type { Metadata } from 'next'
+import { Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-inter',
+})
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-jetbrains-mono',
+})
+
 export const metadata: Metadata = {
-  title: 'Consortium Factory — Building Business Structures for the AI & Crypto Age',
-  description: 'Building business structures for the AI and crypto age. AI agents guiding you through every step of a successful business.',
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000'),
+  title: 'Consortium Factory — OpenClaw-native consortium MVP',
+  description: 'Single-consortium MVP for Consortium Factory: OpenClaw-native work coordination, RESPECT visibility, and equity rails.',
   icons: {
     icon: '/favicon.ico',
     apple: '/apple-touch-icon.png',
@@ -32,16 +47,11 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: ReactNode
 }) {
   return (
     <html lang="en">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&family=Cabin:wght@400;500;600&display=swap" rel="stylesheet" />
-      </head>
-      <body className="noise-bg">
+      <body className={`${inter.variable} ${jetbrainsMono.variable} noise-bg`}>
         {children}
       </body>
     </html>
